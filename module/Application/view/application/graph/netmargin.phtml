@@ -1,0 +1,127 @@
+    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+    var option = {
+        backgroundColor:'#353535',
+        textStyle: {
+            color:'#ccc',
+        },
+        color:["#349B2E","#FE7F0E","#1F78B4"],
+        title: {
+            text: '净利润',
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        tooltip: {
+            formatter:function(obj) {
+                var result = obj.seriesName+"<br/>"+obj.name+": " +obj.value;
+                if(obj.seriesIndex != 2){
+                    result += "%";
+                }
+                return result;
+            },
+        },
+        grid: {
+        },
+        legend: {
+            data:['净利润','净利润-同比增长','净利润-环比增长'],
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        xAxis: {
+            data: ["13Q1","13Q2","13Q3","13Q4",
+                   "14Q1","14Q2","14Q3","14Q4",
+                   "14Q1","14Q2","14Q3","14Q4",],
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+        },
+        yAxis:[
+        {
+            type:'value',
+            name:'存货(CNY百万)',
+            splitNumber:'5',
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            scale:true,
+            boundaryGap: ['5%', '5%'],
+        },
+        {
+            type:'value',
+            name:'百分比',
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                },
+                formatter: '{value}%',
+            },
+            splitLine:{
+                show:false,
+            },
+            scale:true,
+            boundaryGap: ['5%', '5%'],
+        },
+        ],
+        series: [
+        {
+            name: '净利润-同比增长',
+            type: 'line',
+            yAxisIndex:'1',
+            data: [59, 42, 73, 71, 
+                   19,15, 120, 94,
+                   96,50, 62, 92,],
+        },
+        {
+            name: '净利润-环比增长',
+            type: 'line',
+            yAxisIndex:'1',
+            data: [69, 22, 53, 91, 
+                   39,75, 10, 34,
+                   46,70, 72, 62,],
+        },
+        {
+            name: '净利润',
+            type: 'bar',
+            stack:'1',
+            data: [200, 300, 360, 500, 
+                   400,500, 280, 300,
+                   400,500, 280, 300],
+        },
+        ],
+    };
+    myChart.setOption(option);

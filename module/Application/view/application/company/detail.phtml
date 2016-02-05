@@ -1,0 +1,205 @@
+<div class="back-color-1 company-content-body">
+    <div class="row">
+        <div class="small-6 columns company-detail-title">
+            <span>腾讯控股</span>
+            <span>0700.HK</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="back-color-white company-detail-filter">
+
+            <div class="row"><div class="small-6 small-centered columns"><div class="row">
+                <div class="small-4 index-cal-title-box small-centered columns">
+                    <div class="company-cal-title-innerbox">
+                        <div>全部图表</div>
+                    </div>
+                </div>
+            </div></div></div>
+
+            <div class="row">
+              <div class="small-10 small-centered columns"><div class="row">
+              <div class="page-divider-2"></div>
+              <div class="row">
+                  <div class="small-4 columns">
+                      <div class="company-cal-title-innerbox">
+                          <div>收入利润</div>
+                      </div>
+                  </div>
+                  <div class="small-4 columns">
+                      <div class="company-cal-title-innerbox">
+                          <div>资产负债</div>
+                      </div>
+                  </div>
+                  <div class="small-4 columns">
+                      <div class="company-cal-title-innerbox">
+                          <div>重要Ratio</div>
+                      </div>
+                  </div>
+              </div>
+              </div></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="company-detail-graph" id="company_detail_graph_1"></div>
+        <div class="company-detail-graph" id="company_detail_graph_2"></div>
+        <div class="company-detail-graph" id="company_detail_graph_3"></div>
+        <div class="company-detail-graph" id="company_detail_graph_4"></div>
+        <div class="company-detail-graph" id="company_detail_graph_5"></div>
+        <div class="company-detail-graph" id="company_detail_graph_6"></div>
+        <div class="company-detail-graph" id="company_detail_graph_7"></div>
+        <div class="company-detail-graph" id="company_detail_graph_8"></div>
+        <div class="company-detail-graph" id="company_detail_graph_9"></div>
+        <div class="company-detail-graph" id="company_detail_graph_10"></div>
+        <div class="company-detail-graph" id="company_detail_graph_11"></div>
+        <div class="company-detail-graph" id="company_detail_graph_12"></div>
+        <div class="company-detail-graph" id="company_detail_graph_13"></div>
+        <div class="company-detail-graph" id="company_detail_graph_14"></div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.ajax({
+                type:'GET',
+                url: '../graph/coststructure',
+                data: {
+                    "divId":"company_detail_graph_1",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/inventoryturnover',
+                data: {
+                    "divId":"company_detail_graph_2",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/noncurrentliability',
+                data: {
+                    "divId":"company_detail_graph_3",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/noncurrentassets',
+                data: {
+                    "divId":"company_detail_graph_4",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/assetsliabilityrate',
+                data: {
+                    "divId":"company_detail_graph_5",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/earnedprofit',
+                data: {
+                    "divId":"company_detail_graph_6",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/netmargin',
+                data: {
+                    "divId":"company_detail_graph_7",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/profitmargin',
+                data: {
+                    "divId":"company_detail_graph_8",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/cashliability',
+                data: {
+                    "divId":"company_detail_graph_9",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/liquidity',
+                data: {
+                    "divId":"company_detail_graph_10",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/currentassets',
+                data: {
+                    "divId":"company_detail_graph_11",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/income',
+                data: {
+                    "divId":"company_detail_graph_12",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/receivableturnover',
+                data: {
+                    "divId":"company_detail_graph_13",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+            $.ajax({
+                type:'GET',
+                url: '../graph/assetsrate',
+                data: {
+                    "divId":"company_detail_graph_14",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
+        });
+    </script>
+</div>

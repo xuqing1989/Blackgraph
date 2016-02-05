@@ -1,0 +1,85 @@
+    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+    var option = {
+        backgroundColor:'#353535',
+        textStyle: {
+            color:'#ccc',
+        },
+        color:["#FE7F0E","#1F78B4","#555"],
+        title: {
+            text: '资产/总资产%',
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        tooltip: {
+            formatter:"{a}<br/>{b}: {c}%",
+        },
+        grid: {
+        },
+        legend: {
+            data:['流动资产/总资产','有形资产/总资产'],
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        xAxis: {
+            data: ["13Q1","13Q2","13Q3","13Q4",
+                   "14Q1","14Q2","14Q3","14Q4",
+                   "14Q1","14Q2","14Q3","14Q4",],
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+        },
+        yAxis:[
+        {
+            type:'value',
+            name:'CNY百万',
+            splitNumber:'5',
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                },
+                formatter: '{value}%',
+            },
+            scale:true,
+        }],
+        series: [
+        {
+            name: '有形资产/总资产',
+            type: 'line',
+            data: [50, 40, 76, 70, 
+                   90,15, 18, 90,
+                   90,50, 28, 90,]
+        },
+        {
+            name: '流动资产/总资产',
+            type: 'line',
+            data: [100, 20, 16, 20, 
+                   30,20, 80, 20,
+                   20,40, 28, 30],
+        },
+        ],
+    };
+    myChart.setOption(option);

@@ -18,4 +18,23 @@ class IndexController extends AbstractActionController
     {
         return new ViewModel();
     }
+
+    public function testAction()
+    {
+        $host = "https://api.wmcloud.com/data/v1";
+        $api = "/api/fundamental/getFdmtBS.json";
+        $ch = curl_init();
+        $timeout = 5;
+        curl_setopt ($ch, CURLOPT_HTTPHEADER, Array("Authorization: Bearer 0f2fb0eb5ab384166febe5e243e2be6ea53c279220fcb0746f2fd79cde38091a"));
+        curl_setopt ($ch, CURLOPT_URL, 'https://api.wmcloud.com/data/v1/api/fundamental/getFdmtBS.json?ticker=600887&beginDate=20141231&endDate=20151231');
+        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $file_contents = curl_exec($ch);
+        curl_close($ch);
+        echo $file_contents;
+        $file_contents = json_decode($file_contents);
+        $this->viewModel = new ViewModel;
+        $this->viewModel->setTerminal(true);
+        return $this->viewModel;
+    }
 }

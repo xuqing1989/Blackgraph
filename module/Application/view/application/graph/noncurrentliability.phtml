@@ -1,0 +1,85 @@
+    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+    var option = {
+        backgroundColor:'#353535',
+        textStyle: {
+            color:'#ccc',
+        },
+        color:["#FE7F0E","#1F78B4","#555"],
+        title: {
+            text: '非流动负债',
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        tooltip: {},
+        grid: {
+        },
+        legend: {
+            data:['长期借款','其他非流动负债'],
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        xAxis: {
+            data: ["13Q1","13Q2","13Q3","13Q4",
+                   "14Q1","14Q2","14Q3","14Q4",
+                   "14Q1","14Q2","14Q3","14Q4",],
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+        },
+        yAxis:[
+        {
+            type:'value',
+            name:'CNY百万',
+            splitNumber:'5',
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            scale:true,
+        }],
+        series: [
+        {
+            name: '其他非流动负债',
+            type: 'bar',
+            stack:'1',
+            data: [50, 40, 76, 70, 
+                   90,150, 128, 90,
+                   90,150, 128, 90,]
+        },
+        {
+            name: '长期借款',
+            type: 'bar',
+            stack:'1',
+            data: [100, 200, 160, 200, 
+                   300,200, 180, 200,
+                   200,400, 280, 300],
+
+        },
+        ],
+    };
+    myChart.setOption(option);

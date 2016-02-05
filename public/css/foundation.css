@@ -1723,9 +1723,9 @@ meta.foundation-mq-topbar {
       z-index: 98; }
 
 .top-bar {
-  background: #333333;
-  height: 2.8125rem;
-  line-height: 2.8125rem;
+  background: #868686;
+  height: 60px;
+  line-height: 60px;
   margin-bottom: 0;
   overflow: hidden;
   position: relative; }
@@ -1755,7 +1755,9 @@ meta.foundation-mq-topbar {
         top: -1px; } }
   .top-bar .title-area {
     margin: 0;
-    position: relative; }
+    position: relative;
+    height: 100%;
+  }
   .top-bar .name {
     font-size: 16px;
     height: 2.8125rem;
@@ -1840,12 +1842,12 @@ meta.foundation-mq-topbar {
     height: 1px;
     width: 100%; }
   .top-bar-section ul li {
-    background: #333333; }
+    background: #868686; }
     .top-bar-section ul li > a {
       color: #FFFFFF;
       display: block;
       font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-      font-size: 0.8125rem;
+      font-size: 1.2rem;
       font-weight: normal;
       padding-left: 0.9375rem;
       padding: 12px 0 12px 0.9375rem;
@@ -2040,7 +2042,7 @@ meta.foundation-mq-topbar {
 
 @media only screen and (min-width: 40.0625em) {
   .top-bar {
-    background: #333333;
+    background: #868686;
     overflow: visible; }
     .top-bar:before, .top-bar:after {
       content: " ";
@@ -2062,10 +2064,10 @@ meta.foundation-mq-topbar {
     .top-bar select,
     .top-bar .button,
     .top-bar button {
-      font-size: 0.875rem;
-      height: 1.75rem;
+      font-size: 1.2rem;
+      height: 60px;
       position: relative;
-      top: 0.53125rem; }
+      top: 0.9rem; }
     .top-bar.expanded {
       background: #333333; }
 
@@ -2090,8 +2092,8 @@ meta.foundation-mq-topbar {
       background: #222222;
       color: #FFFFFF; }
     .top-bar-section li:not(.has-form) a:not(.button) {
-      background: #333333;
-      line-height: 2.8125rem;
+      background: #868686;
+      line-height: 60px;
       padding: 0 0.9375rem; }
       .top-bar-section li:not(.has-form) a:not(.button):hover {
         background-color: #555555;

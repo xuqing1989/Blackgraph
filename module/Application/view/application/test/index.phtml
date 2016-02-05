@@ -1,0 +1,19 @@
+<div style="margin:50px">
+<input placeholder="输入API，包括参数" style="height:55px;width:500px;border:1px solid #333" id="test_api" /><button id="test_search">查询</button>
+<div>查询过后将以下所有数据复制，粘贴到<a href="http://www.bejson.com/" target="_blank">JSON格式解析</a>进行格式规范化，以便查看。</div>
+<div><textarea id="test_result" style="height:400px"></textarea></div>
+<script type="text/javascript">
+    $('#test_search').click(function(){
+        $.ajax({
+            type:'GET',
+            url: '../test/test',
+            data: {
+                "api":$('#test_api').val(),
+            },
+            success: function(result) {
+                $('#test_result').val(result);
+            }
+        });
+    });
+</script>
+</div>

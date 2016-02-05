@@ -1,0 +1,132 @@
+    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+    var option = {
+        backgroundColor:'#353535',
+        textStyle: {
+            color:'#ccc',
+        },
+        color:["#1F78B4","#FE7F0E","#555"],
+        title: {
+            text: '应收周转',
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        tooltip: {},
+        grid: {
+        },
+        legend: {
+            data:['应收','应收周转天数'],
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        xAxis: {
+            data: ["13Q1","13Q2","13Q3","13Q4",
+                   "14Q1","14Q2","14Q3","14Q4",
+                   "14Q1","14Q2","14Q3","14Q4",],
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+        },
+        yAxis:[
+        {
+            type:'value',
+            name:'应收(CNY百万)',
+            splitNumber:'5',
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            scale:true,
+            boundaryGap: ['5%', '5%'],
+        },
+        {
+            type:'value',
+            name:'应收周转天数',
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            splitLine:{
+                show:false,
+            },
+            scale:true,
+            boundaryGap: ['5%', '5%'],
+        },
+        ],
+        series: [
+        {
+            name: '应收',
+            type: 'bar',
+            stack:'1',
+            data: [200, 300, 360, 500, 
+                   400,500, 280, 300,
+                   400,500, 280, 300],
+            markLine : {
+                name :"平均值",
+                lineStyle: {
+                    normal:{
+                        color:'#777',
+                    },
+                },
+                data : [
+                    {type : 'average', name : '平均值'}
+                ]
+            },
+        },
+        {
+            name: '应收周转天数',
+            type: 'line',
+            yAxisIndex:'1',
+            data: [5, 4, 7, 7, 
+                   1,15, 12, 9,
+                   9,10, 12, 9,],
+            markLine : {
+                name : "平均值",
+                lineStyle: {
+                    normal:{
+                        color:'#777',
+                    },
+                },
+                data : [
+                    {type : 'average', name : '平均值'}
+                ]
+            },
+        },
+        ],
+    };
+    myChart.setOption(option);

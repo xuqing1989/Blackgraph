@@ -1,0 +1,116 @@
+    var myChart = echarts.init(document.getElementById('test_graph'));
+    var option = {
+        backgroundColor:'#353535',
+        textStyle: {
+            color:'#ccc',
+        },
+        color:["#FE7F0E","#1F78B4","#349B2E"],
+        title: {
+            text: '腾讯控股-资产(13Q1-15Q3)',
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        tooltip: {},
+        gird: {
+            borderColor:'#ccc',
+        },
+        legend: {
+            data:['流动资产','非流动资产','流动资产/非流动资产'],
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        xAxis: {
+            data: ["13Q1","13Q2","13Q3","13Q4",
+                   "14Q1","14Q2","14Q3","14Q4",
+                   "14Q1","14Q2","14Q3","14Q4",],
+            axisTick: {
+                lineStyle: {
+                    color: '#ccc'
+                }
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#ccc'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            }
+        },
+        yAxis:[
+        {
+            type:'value',
+            name:'资产(CNY百万)',
+            splitNumber:'5',
+            axisTick: {
+                lineStyle: {
+                    color: '#ccc'
+                }
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#ccc'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            scale:true,
+        },
+        {
+            type:'value',
+            name:'流动资产/非流动资产',
+            axisTick: {
+                lineStyle: {
+                    color: '#ccc'
+                }
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#ccc'
+                }
+            },
+            splitLine:{
+                show:false,
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+        }],
+        series: [
+        {
+            name: '非流动资产',
+            type: 'bar',
+            stack:'资产',
+            data: [50, 40, 76, 70, 
+                   90,100, 110, 90,
+                   90,100, 110, 90,]
+        },
+        {
+            name: '流动资产',
+            type: 'bar',
+            stack:'资产',
+            data: [20, 30, 36, 50, 
+                   40,70, 10, 30,
+                   40,70, 10, 30]
+        },
+        {
+            name: '流动资产/非流动资产',
+            type: 'line',
+            yAxisIndex:'1',
+            data: [0.1, 0.2, 0.45, 0.3, 
+                   0.5,0.77, 0.9,0.3,
+                   0.5,0.77, 0.9,0.3,
+                   0.5,0.77, 0.9,0.3,
+                   0.5,0.77, 0.9,0.3,]
+        }],
+    };
+    myChart.setOption(option);

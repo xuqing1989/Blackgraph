@@ -73,7 +73,10 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller\Test' => 'Application\Controller\TestController',
+            'Application\Controller\Company' => 'Application\Controller\CompanyController',
+            'Application\Controller\Graph' => 'Application\Controller\GraphController',
         ),
     ),
     'view_manager' => array(
@@ -87,6 +90,7 @@ return array(
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            'data/blank'             => __DIR__ . '/../view/data/blank.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

@@ -2,8 +2,9 @@
 
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <?php echo $this->headTitle('黑图 - 用图表解读金融'); ?>
 
         <?php echo $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -11,45 +12,59 @@
         ?>
 
         <!-- Le styles -->
-        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/icon.png'))
                         ->prependStylesheet($this->basePath('css/style.css'))
-                        ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
-                        ->prependStylesheet($this->basePath('css/bootstrap.min.css')) ?>
+			->prependStylesheet($this->basePath('css/foundation.css'))
+			->prependStylesheet($this->basePath('css/custom.css'))
+	    ?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()
-            ->prependFile($this->basePath('js/bootstrap.min.js'))
+            ->prependFile($this->basePath('js/foundation.min.js'))
             ->prependFile($this->basePath('js/jquery.min.js'))
+            ->prependFile($this->basePath('js/echarts.min.js'))
             ->prependFile($this->basePath('js/respond.min.js'), 'text/javascript', array('conditional' => 'lt IE 9',))
-            ->prependFile($this->basePath('js/html5shiv.js'),   'text/javascript', array('conditional' => 'lt IE 9',))
-        ; ?>
-
+            ->prependFile($this->basePath('js/html5shiv.js'),   'text/javascript', array('conditional' => 'lt IE 9',));
+        ?>
+        <script src="../js/vendor/modernizr.js"></script>
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><img src="<?php echo $this->basePath('img/zf2-logo.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Skeleton Application') ?></a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
-                    </ul>
-                </div><!--/.nav-collapse -->
-            </div>
+	<div class="small-12 large-9 large-centered columns " style="min-width:1000px">
+        <nav class="top-bar back-color-3" role="navigation">
+		<ul class="title-area">
+           <li class="title-logo">
+               <a href="../"><img src="../img/logo3.png"/></a>
+           </li>
+		</ul>
+        <div class="top-bar-section row">
+        <ul class="left title-area top-bar-menu">
+          <li><a href="#">市场</a></li>
+          <li><a href="../company">公司</a></li>
+          <li><a href="#">财报日历</a></li>
+        </ul>
+        <ul class="right title-area">
+          <li><input class="top-bar-search" placeholder="搜索公司名/代码" /></li>
+          <li><a href="#" class="font-color-3">登录</a></li>
+        </ul>
+        </div>
         </nav>
         <div class="container">
             <?php echo $this->content; ?>
-            <hr>
-            <footer>
-                <p>&copy; 2005 - <?php echo date('Y') ?> by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
+            <footer class="foot-bar back-color-3">
+                <div class="small-3 large-2 columns"><img src="../img/qr.jpg" /></div>
+                <div class="small-9 large-10 columns">
+                    <div class="row foot-bar-menu collapse">
+                        <div class="small-2 columns"><a href="#">常见问题</a></div>
+                        <div class="small-2 columns"><a href="#">联系方式</a></div>
+                        <div class="small-2 columns end"><a href="#">关于我们</a></div>
+                    </div>
+                    <div class="row foot-bar-text">声明：转载请注明。本网站不作任何投资建议。投资决策需建立在独立思考之上。</div>
+                    <div class="row foot-bar-text">备案信息：2016-201X</div>
+                </div>
             </footer>
         </div> <!-- /container -->
+
+	</div>
         <?php echo $this->inlineScript() ?>
     </body>
 </html>

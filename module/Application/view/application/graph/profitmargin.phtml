@@ -1,0 +1,92 @@
+    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+    var option = {
+        backgroundColor:'#353535',
+        textStyle: {
+            color:'#ccc',
+        },
+        color:["#349B2E","#FE7F0E","#1F78B4"],
+        title: {
+            text: '利润率',
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        tooltip: {
+            formatter:'{a}<br/>{b}: {c}%',
+        },
+        grid: {
+        },
+        legend: {
+            data:['净利率','毛利率','经营利润率'],
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        xAxis: {
+            data: ["13Q1","13Q2","13Q3","13Q4",
+                   "14Q1","14Q2","14Q3","14Q4",
+                   "14Q1","14Q2","14Q3","14Q4",],
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+        },
+        yAxis:[
+        {
+            type:'value',
+            name:'百分比',
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                },
+                formatter: '{value}%',
+            },
+            scale:true,
+        },
+        ],
+        series: [
+        {
+            name: '净利率',
+            type: 'line',
+            data: [59, 42, 73, 71, 
+                   19,15, 120, 94,
+                   96,50, 62, 92,],
+        },
+        {
+            name: '经营利润率',
+            type: 'line',
+            data: [69, 22, 53, 91, 
+                   39,75, 10, 34,
+                   46,70, 72, 62,],
+        },
+        {
+            name: '毛利率',
+            type: 'line',
+            data: [20, 30, 36, 50, 
+                   40,50, 28, 30,
+                   40,50, 28, 30],
+        },
+        ],
+    };
+    myChart.setOption(option);
