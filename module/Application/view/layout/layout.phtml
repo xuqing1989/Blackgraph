@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <?php echo $this->headTitle('黑图 - 用图表解读金融'); ?>
+        <?php echo $this->headTitle('减法 - 简单明了看财报'); ?>
 
         <?php echo $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -29,39 +29,21 @@
         <script src="../js/vendor/modernizr.js"></script>
     </head>
     <body>
-	<div class="small-12 large-9 large-centered columns " style="min-width:1000px">
-        <nav class="top-bar back-color-3" role="navigation">
-		<ul class="title-area">
-           <li class="title-logo">
-               <a href="../"><img src="../img/logo3.png"/></a>
-           </li>
-		</ul>
-        <div class="top-bar-section row">
-        <ul class="left title-area top-bar-menu">
-          <li><a href="#">市场</a></li>
-          <li><a href="../company">公司</a></li>
-          <li><a href="#">财报日历</a></li>
-        </ul>
-        <ul class="right title-area">
-          <li><input class="top-bar-search" placeholder="搜索公司名/代码" /></li>
-          <li><a href="#" class="font-color-3">登录</a></li>
-        </ul>
+	<div style="min-width:1000px">
+        <div class="layout-topbar">
+            <div class="row" style="height:100%">
+                <div class="small-2 columns layout-topbar-title">
+                    <div>减法</div>
+                    <div>简单明了看财报</div>
+                </div>
+                <a href="#"><div class="small-2 columns layout-topbar-menu left">财报日历</div></a>
+                <a href="#"><div class="small-2 columns layout-topbar-menu left">公司</div></a>
+                <div class="small-1 columns layout-topbar-wx right">微信群</div>
+                <div class="small-4 columns layout-topbar-search right"><input class="right" placeholder="搜索股票代码/公司名" /></div>
+            </div>
         </div>
-        </nav>
         <div class="container">
             <?php echo $this->content; ?>
-            <footer class="foot-bar back-color-3">
-                <div class="small-3 large-2 columns"><img src="../img/qr.jpg" /></div>
-                <div class="small-9 large-10 columns">
-                    <div class="row foot-bar-menu collapse">
-                        <div class="small-2 columns"><a href="#">常见问题</a></div>
-                        <div class="small-2 columns"><a href="#">联系方式</a></div>
-                        <div class="small-2 columns end"><a href="#">关于我们</a></div>
-                    </div>
-                    <div class="row foot-bar-text">声明：转载请注明。本网站不作任何投资建议。投资决策需建立在独立思考之上。</div>
-                    <div class="row foot-bar-text">备案信息：2016-201X</div>
-                </div>
-            </footer>
         </div> <!-- /container -->
 
 	</div>
