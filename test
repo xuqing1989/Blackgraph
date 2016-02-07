@@ -1,1 +1,0 @@
-curl -H 'Authorization: Bearer 0f2fb0eb5ab384166febe5e243e2be6ea53c279220fcb0746f2fd79cde38091a' -v "https://api.wmcloud.com/data/v1/api/fundamental/getFdmtBS.json?ticker=600887&beginDateRep=20150930&endDateRep=20151231"
