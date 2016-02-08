@@ -1,7 +1,16 @@
 <!doctype html>
-<html class="no-js" lang="en">
-    
-    <script>
-      $(document).foundation();
-    </script>
-</html>
+<div class="index-body">
+    <div class="row">
+        <div class="index-cal-body">
+            <div class="row">
+                <div class="small-12 columns" id="test1"></div>
+            </div>
+        </div>
+    </div>
+</div>    
+<script>
+    $(document).foundation();
+    $("#test1").datepicker({
+        numberOfMonths:3,
+    });
+</script>
