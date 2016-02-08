@@ -1,16 +1,43 @@
-<!doctype html>
+<script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
+<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css" />
 <div class="index-body">
     <div class="row">
         <div class="index-cal-body">
-            <div class="row">
-                <div class="small-12 columns" id="test1"></div>
-            </div>
+            <div class="small-1 columns"><button id="test1">&lt;</button></div>
+            <div class="small-10 columns" id="test2"></div>
+            <div class="small-1 columns" id="test3" style="text-align:right"><button id="test3">&gt;</button></div>
         </div>
     </div>
 </div>    
 <script>
     $(document).foundation();
-    $("#test1").datepicker({
-        numberOfMonths:3,
+    var cal = new CalHeatMap();
+    cal.init({
+        itemSelector: "#test2",
+        domain: "month",
+        subDomain: "x_day",
+        data: "../data/calendar",
+        dataType: "json",
+        start: new Date(moment().year(), moment().month(), 0),
+        cellSize: 30,
+        cellPadding: 5,
+        domainGutter: 30,
+        range: 3,
+        domainDynamicDimension: false,
+        previousSelector: "#test1",
+        nextSelector: "#test3",
+        domainLabelFormat: function(date) {
+            moment.locale("zh-cn");
+            return moment(date).format("MMMM").toUpperCase();
+        },
+        subDomainTextFormat: "%d",
+        legend: [5, 10, 15, 20],
+        legendColors: {
+            empty:"#FFF",
+            min:"#EEE",
+            max:"#111",
+        }
     });
 </script>

@@ -77,6 +77,7 @@ return array(
             'Application\Controller\Test' => 'Application\Controller\TestController',
             'Application\Controller\Company' => 'Application\Controller\CompanyController',
             'Application\Controller\Graph' => 'Application\Controller\GraphController',
+            'Application\Controller\Data' => 'Application\Controller\DataController',
         ),
     ),
     'view_manager' => array(
