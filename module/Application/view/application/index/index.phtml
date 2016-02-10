@@ -1,7 +1,7 @@
 <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
-<script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/cal-heatmap/3.3.11/cal-heatmap.min.js"></script>
 <script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
-<link rel="stylesheet" href="//cdn.jsdelivr.net/cal-heatmap/3.3.10/cal-heatmap.css" />
+<link rel="stylesheet" href="../css/cal-heatmap.css" />
 <div class="index-body">
     <div class="row">
         <div class="index-cal-body">
@@ -22,7 +22,7 @@
         dataType: "json",
         start: new Date(moment().year(), moment().month(), 0),
         cellSize: 30,
-        cellPadding: 5,
+        cellPadding: 3,
         domainGutter: 30,
         range: 3,
         domainDynamicDimension: false,
@@ -32,12 +32,11 @@
             moment.locale("zh-cn");
             return moment(date).format("MMMM").toUpperCase();
         },
+        label: {
+            position:'top',
+        },
         subDomainTextFormat: "%d",
-        legend: [5, 10, 15, 20],
-        legendColors: {
-            empty:"#FFF",
-            min:"#EEE",
-            max:"#111",
-        }
+        legend: [10, 30, 50, 100],
+        highlight:["now"],
     });
 </script>
