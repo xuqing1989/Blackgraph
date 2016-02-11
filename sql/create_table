@@ -1,0 +1,14 @@
+use blackgraph;
+
+create table report_info (
+    ticker char(6) primary key,
+    house char(2) not null,
+    industry_id int,
+    subindustry_id int,
+    flag int,
+    market_cup decimal(8,4),
+    ttm decimal(8,4),
+    report_year int,
+    report_type char(2),
+    release_date date
+)
