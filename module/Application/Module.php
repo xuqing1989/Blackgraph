@@ -9,6 +9,9 @@
 
 namespace Application;
 
+use Application\Model\ReportTable;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
@@ -33,6 +36,20 @@ class Module
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
+            ),
+        );
+    }
+
+    public function getServiceConfig()
+    {
+        return array (
+            'factories' => array (
+                'Application\Model\ReportTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('report_info',$dbAdapter);
+                    $table = new ReportTable($tableGateway);
+                    return $table;
+                },
             ),
         );
     }
