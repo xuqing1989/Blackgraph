@@ -14,6 +14,8 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
+    protected $reportTable;
+
     public function indexAction()
     {
         return new ViewModel();
@@ -36,5 +38,14 @@ class IndexController extends AbstractActionController
         $this->viewModel = new ViewModel;
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
+    }
+
+    public function getReportTable()
+    {
+        if(!$this->reportTable) {
+            $sm = $this->getServiceLocator();
+            $this->reportTable = $sm -> get('Application\Model\ReportTable');
+        }
+        return $this->reportTable;
     }
 }
