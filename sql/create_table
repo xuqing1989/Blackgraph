@@ -3,6 +3,7 @@ use blackgraph;
 create table report_info (
     ticker char(6) primary key,
     house char(2) not null,
+    name varchar(20) not null,
     industry_id int,
     subindustry_id int,
     flag int,

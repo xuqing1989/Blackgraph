@@ -40,6 +40,39 @@ class IndexController extends AbstractActionController
         return $this->viewModel;
     }
 
+    public function test2Action(){
+        $filename = "/var/www/html/test_data/report_sample.csv";
+        $handle = fopen($filename,"r");
+        while(!feof($handle)) {
+            $line = fgets($handle,2048);
+            if(empty($line))break;
+            $lineArray = explode(',',$line);
+            $tickerObj = explode('.',$lineArray[0]);
+            $flag = 0;
+            if($lineArray[4] == '是') {
+                $flag = 1;
+            }
+            $sql_report = array(
+                              'ticker' => $tickerObj[0],
+                              'house' => $tickerObj[1],
+                              'name' => $lineArray[1],
+                              'industry_id' => '',
+                              'subindustry_id' => '',
+                              'flag' => $flag,
+                              'market_cup' => $lineArray[5],
+                              'ttm' => $lineArray[6],
+                              'report_year' => substr($lineArray[7],0,2),
+                              'report_type' => substr($lineArray[7],2),
+                              'release_date' => $lineArray[8],
+                          );
+            $this -> getReportTable() -> addReport($sql_report);
+        }
+        fclose($handle);
+        $this->viewModel = new ViewModel();
+        $this->viewModel->setTerminal(true);
+        return $this->viewModel;
+    }
+
     public function getReportTable()
     {
         if(!$this->reportTable) {

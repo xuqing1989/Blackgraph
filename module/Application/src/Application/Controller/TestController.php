@@ -29,15 +29,31 @@ class TestController extends AbstractActionController
     }
 
     public function test2Action(){
-        $ch = curl_init();
-        $timeout = 15;
-        $host = "http://52.74.124.55:8080/finance/GetPublish?startDate=20160201&endDate=20160506";
-        curl_setopt ($ch, CURLOPT_URL, $host);
-        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $file_contents = curl_exec($ch);
-        curl_close($ch);
-        echo $file_contents;
+        $filename = "/var/www/html/test_data/report_sample.csv";
+        $handle = fopen($filename,"r");
+        while(!feof($handle)) {
+            $line = fgets($handle,2048);
+            if(empty($line))break;
+            $lineArray = explode(',',$line);
+            $tickerObj = explode('.',$lineArray[0]);
+            $flag = 0;
+            if($lineArray[4] == '是') {
+                $flag = 1;
+            }
+            $sql_report = array(
+                              'ticker' => $tickerObj[0],
+                              'house' => $tickerObj[1],
+                              'industry_id' => '',
+                              'subindustry_id' => '',
+                              'flag' => $flag,
+                              'market_cup' => $lineArray[5],
+                              'ttm' => $lineArray[6],
+                              'report_year' => substr($lineArray[7],0,1),
+                              'report_type' => substr($lineArray[7],2),
+                              'release_date' => $lineArray[8],
+                          );
+        }
+        fclose($handle);
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);
         return $this->viewModel;

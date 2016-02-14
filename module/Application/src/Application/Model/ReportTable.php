@@ -18,6 +18,10 @@ class ReportTable
         return $resultSet;
     }
 
+    public function addReport($data){
+        $this->tableGateway->insert($data);
+    }
+
     public function deleteReport($ticker) {
        $this->tableGateway->delete(array(’ticker’ => $ticker));
     }
