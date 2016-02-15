@@ -16,8 +16,28 @@ class DataController extends AbstractActionController
 {
     public function calendarAction()
     {
+        $request = $this -> getRequest();
+        $startDate = $request->getQuery('startDate')." 12:00:00";
+        $endDate = $request->getQuery('endDate')." 12:00:00";
+        $result = array();
+        for($start=strtotime($startDate); $start <= strtotime($endDate); $start += 24*3600) {
+            $reportCount = $this->getReportTable() -> reportCountByDate(date("Y-m-d",$start));
+            if($reportCount) {
+                $result[$start] = $reportCount;
+            }
+        }
+        echo json_encode($result);
         $this->viewModel = new ViewModel;
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
+    }
+
+    public function getReportTable()
+    {
+        if(!$this->reportTable) {
+            $sm = $this->getServiceLocator();
+            $this->reportTable = $sm -> get('Application\Model\ReportTable');
+        }
+        return $this->reportTable;
     }
 }

@@ -18,6 +18,11 @@ class ReportTable
         return $resultSet;
     }
 
+    public function reportCountByDate($date) {
+        $resultSet = $this->tableGateway->select(array('release_date = ?' => $date));
+        return $resultSet->count();
+    }
+
     public function addReport($data){
         $this->tableGateway->insert($data);
     }
