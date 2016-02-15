@@ -57,6 +57,16 @@
     background-color:#262626;
 }
 
+.index-cal-arrow-body {
+    height:100%;
+    padding-top:115px;
+}
+
+.index-cal-arrow-body img{
+    height:60px;
+    width:20px;
+}
+
 .index-content-body {
     padding-bottom:40px;
 }

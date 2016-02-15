@@ -5,9 +5,9 @@
 <div class="index-body">
     <div class="row">
         <div class="index-cal-body">
-            <div class="small-1 columns"><button id="test1"></button></div>
+            <div class="small-1 columns index-cal-arrow-body"><button id="cal_left"><img src="../images/arrow_left.png" /></button></div>
             <div class="small-10 columns" id="test2"></div>
-            <div class="small-1 columns" id="test3" style="text-align:right"><button id="test3"></button></div>
+            <div class="small-1 columns index-cal-arrow-body" style="text-align:right"><button id="cal_right"><img src="../images/arrow_right.png" /></button></div>
         </div>
     </div>
 </div>    
@@ -18,7 +18,7 @@
         itemSelector: "#test2",
         domain: "month",
         subDomain: "x_day",
-        data: "../data/calendar?startDate=2016-01-01&endDate=2016-03-31",
+        data: "../data/calendar?startDate={{t:start}}&endDate={{t:end}}",
         dataType: "json",
         start: new Date(moment().year(), moment().month(), 0),
         cellSize: 30,
@@ -27,12 +27,13 @@
         range: 3,
         domainDynamicDimension: false,
         domainLabelFormat: function(date) {
-            moment.locale("zh-cn");
-            return moment(date).format("MMMM").toUpperCase();
+            return moment(date).format("YYYY年MM月");
         },
         label: {
             position:'top',
         },
+        previousSelector: "#cal_left",
+        nextSelector: "#cal_right",
         subDomainTextFormat: "%d",
         subDomainTitleFormat: {
             empty:"无财报",

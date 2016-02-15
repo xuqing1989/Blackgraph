@@ -17,10 +17,10 @@ class DataController extends AbstractActionController
     public function calendarAction()
     {
         $request = $this -> getRequest();
-        $startDate = $request->getQuery('startDate')." 12:00:00";
-        $endDate = $request->getQuery('endDate')." 12:00:00";
+        $startDate = $request->getQuery('startDate');
+        $endDate = $request->getQuery('endDate');
         $result = array();
-        for($start=strtotime($startDate); $start <= strtotime($endDate); $start += 24*3600) {
+        for($start=$startDate; $start <= $endDate; $start += 24*3600) {
             $reportCount = $this->getReportTable() -> reportCountByDate(date("Y-m-d",$start));
             if($reportCount) {
                 $result[$start] = $reportCount;
