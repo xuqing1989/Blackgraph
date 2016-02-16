@@ -67,6 +67,7 @@ class IndexController extends AbstractActionController
                           );
             $this -> getReportTable() -> addReport($sql_report);
         }
+        $this -> getReportTable() -> updateReport(array('ticker'=>'000001'),'name = ?','平安银行');
         fclose($handle);
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);

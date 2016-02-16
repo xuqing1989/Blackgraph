@@ -10,36 +10,58 @@
             <div class="small-1 columns index-cal-arrow-body" style="text-align:right"><button id="cal_right"><img src="../images/arrow_right.png" /></button></div>
         </div>
     </div>
+    <div class="row">
+        <div class="index-cal-selector">
+            <div class="small-1 columns"><button class="left"><img src="../images/arrow_left.png" /></button></div>
+            <div class="small-10 columns">
+                <div class="row small-up-7">
+                    <div class="column index-cal-selector-title" id="cal_selector_1">
+                        <div>周一</div>
+                        <div class="date"></div>
+                    </div>
+                    <div class="column index-cal-selector-title" id="cal_selector_2">
+                        <div>周二</div>
+                        <div class="date"></div>
+                    </div>
+                    <div class="column index-cal-selector-title" id="cal_selector_3">
+                        <div>周三</div>
+                        <div class="date"></div>
+                    </div>
+                    <div class="column index-cal-selector-title" id="cal_selector_4">
+                        <div>周四</div>
+                        <div class="date"></div>
+                    </div>
+                    <div class="column index-cal-selector-title" id="cal_selector_5">
+                        <div>周五</div>
+                        <div class="date"></div>
+                    </div>
+                    <div class="column index-cal-selector-title" id="cal_selector_6">
+                        <div>周六</div>
+                        <div class="date"></div>
+                    </div>
+                    <div class="column index-cal-selector-title" id="cal_selector_7">
+                        <div>周日</div>
+                        <div class="date"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="small-1 right columns"><button class="right"><img src="../images/arrow_right.png" /></button></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="index-industry-seletor">
+            <div class="small-2 left columns">行业:&nbsp;<span class="index-industry-list-title" type="button" data-toggle="industry_dropdown">全部</span></div>
+            <div class="small-2 left columns">子行业:</div>
+            <div class="small-4 right columns" style="text-align:right"><input type='checkbox' />&nbsp;仅包括沪深300指数成分股</div>
+        </div>
+        <div class="dropdown-pane index-industry-list" id="industry_dropdown" data-dropdown >
+            <ul>
+                <li>test</li>
+            </ul>
+        </div>
+    </div>
 </div>    
 <script>
     $(document).foundation();
-    var cal = new CalHeatMap();
-    cal.init({
-        itemSelector: "#test2",
-        domain: "month",
-        subDomain: "x_day",
-        data: "../data/calendar?startDate={{t:start}}&endDate={{t:end}}",
-        dataType: "json",
-        start: new Date(moment().year(), moment().month(), 0),
-        cellSize: 30,
-        cellPadding: 5,
-        domainGutter: 30,
-        range: 3,
-        domainDynamicDimension: false,
-        domainLabelFormat: function(date) {
-            return moment(date).format("YYYY年MM月");
-        },
-        label: {
-            position:'top',
-        },
-        previousSelector: "#cal_left",
-        nextSelector: "#cal_right",
-        subDomainTextFormat: "%d",
-        subDomainTitleFormat: {
-            empty:"无财报",
-            filled:"{count}份财报",
-        },
-        legend: [10, 30, 50, 100],
-        highlight:["now"],
-    });
 </script>
+<script src="../js/index.js" type='text/javascript'></script>

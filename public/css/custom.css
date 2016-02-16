@@ -67,53 +67,52 @@
     width:20px;
 }
 
-.index-content-body {
-    padding-bottom:40px;
-}
-
-.index-chart-section {
-    margin-top:30px;
-    margin-bottom:8px;
-}
-
-.index-chart-title {
-    color:#353535 !important;
-    font-size: 20px;
-    font-weight:bold;
-}
-
-.index-chart-text {
-    color:#353535 !important;
-}
-
-.index-chart-text-2 {
-    color:#757575 !important;
-}
-
-.index-chart-area {
-}
-
-.index-chart-block {
-    height:160px;
-    border:1px solid #868686;
-}
-
-.index-cal-title {
-    height:150px;
-    padding:15px;
-    border: 1px solid #AFAFAF;
-}
-
-.index-cal-title-box{
-    padding: 0 20px 0 20px !important;
-}
-.index-cal-title-innerbox{
-    padding:8px 0 8px 0;
+.index-cal-selector {
     text-align:center;
+    background-color:#262626;
+    height:70px;
+    margin-top:20px;
+    padding:5px 0 5px 0;
 }
-.index-cal-title-innerbox:hover{
-    background-color:#353535 !important;
-    color:#F8F8F8;
+
+.index-cal-selector img{
+    width:20px;
+    height:60px;
+}
+
+.index-cal-selector-title {
+    margin-top:9px;
+    color:#999;
+}
+
+.index-cal-selector-title:hover, .index-cal-selector-title.actived {
+    color:#FFF;
+}
+
+.index-cal-selector-title:hover:after, .index-cal-selector-title.actived:after {
+    content:'';
+    height:3px;
+    display:block;
+    background-color: #448ACF;
+    position:relative;
+    top:5px;
+}
+
+.index-industry-seletor{
+    margin-top:20px;
+    height:30px;
+    background-color:#262626;
+    color:#999;
+    padding-top:3px;
+}
+
+.index-industry-list {
+    background-color:#262626;
+    color:#999;
+}
+
+.index-industry-list-title{
+    color:#FFF;
 }
 
 .index-cal-table {

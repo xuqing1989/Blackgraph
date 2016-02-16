@@ -27,6 +27,10 @@ class ReportTable
         $this->tableGateway->insert($data);
     }
 
+    public function updateReport($data,$where,$value) {
+        $this->tableGateway->update($data,array($where => $value));
+    }
+
     public function deleteReport($ticker) {
        $this->tableGateway->delete(array(’ticker’ => $ticker));
     }
