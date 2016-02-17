@@ -109,10 +109,27 @@
 .index-industry-list {
     background-color:#262626;
     color:#999;
+    width:115px;
+    padding: 10px 0 5px 0;
+}
+
+.index-industry-list ul {
+    list-style:none;
+    margin-left:0px;
+}
+
+.index-industry-list li{
+    padding-left:10px;
+    cursor:pointer;
+}
+
+.index-industry-list li:hover{
+    color:#FFF;
 }
 
 .index-industry-list-title{
     color:#FFF;
+    cursor:pointer;
 }
 
 .index-cal-table {

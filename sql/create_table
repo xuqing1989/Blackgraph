@@ -1,15 +1,27 @@
 use blackgraph;
 
+create table industry (
+    id int primary key NOT NULL AUTO_INCREMENT,
+    name varchar(20),
+    title varchar(10)
+);
+
+create table subindustry (
+    id int primary key NOT NULL AUTO_INCREMENT,
+    name varchar(20),
+    industry_id int references industry(id)
+);
+
 create table report_info (
     ticker char(6) primary key,
     house char(2) not null,
     name varchar(20) not null,
-    industry_id int,
-    subindustry_id int,
+    industry_id int references industry(id),
+    subindustry_id int references subindustry(id),
     flag int,
     market_cup decimal(8,4),
     ttm decimal(8,4),
     report_year int,
     report_type char(2),
     release_date date
-)
+);

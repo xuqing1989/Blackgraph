@@ -10,6 +10,8 @@
 namespace Application;
 
 use Application\Model\ReportTable;
+use Application\Model\IndustryTable;
+use Application\Model\SubindustryTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\ModuleRouteListener;
@@ -48,6 +50,18 @@ class Module
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $tableGateway = new TableGateway('report_info',$dbAdapter);
                     $table = new ReportTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\IndustryTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('industry',$dbAdapter);
+                    $table = new IndustryTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\SubindustryTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('subindustry',$dbAdapter);
+                    $table = new SubindustryTable($tableGateway);
                     return $table;
                 },
             ),

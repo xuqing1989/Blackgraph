@@ -15,6 +15,8 @@ use Zend\View\Model\ViewModel;
 class IndexController extends AbstractActionController
 {
     protected $reportTable;
+    protected $industryTable;
+    protected $subindustryTable;
 
     public function indexAction()
     {
@@ -52,12 +54,28 @@ class IndexController extends AbstractActionController
             if($lineArray[4] == '是') {
                 $flag = 1;
             }
+            $industry_query = $this->getIndustryTable()->fetchByName($lineArray[2])->toArray();
+            if(count($industry_query) == 0){
+                $this->getIndustryTable()->addIndustry(array('name'=>$lineArray[2]));
+                $industry_id = $this->getIndustryTable()->lastId();
+            }
+            else {
+                $industry_id = $industry_query[0]['id'];
+            }
+            $subindustry_query = $this->getSubindustryTable()->fetchByName($lineArray[3])->toArray();
+            if(count($subindustry_query) == 0) {
+                $this->getSubindustryTable()->addSubindustry(array('name'=>$lineArray[3],'industry_id'=>$industry_id));
+                $subindustry_id = $this->getSubindustryTable()->lastId();
+            }
+            else {
+                $subindustry_id = $subindustry_query[0]['id'];
+            }
             $sql_report = array(
                               'ticker' => $tickerObj[0],
                               'house' => $tickerObj[1],
                               'name' => $lineArray[1],
-                              'industry_id' => '',
-                              'subindustry_id' => '',
+                              'industry_id' => $industry_id,
+                              'subindustry_id' => $subindustry_id,
                               'flag' => $flag,
                               'market_cup' => $lineArray[5],
                               'ttm' => $lineArray[6],
@@ -81,5 +99,23 @@ class IndexController extends AbstractActionController
             $this->reportTable = $sm -> get('Application\Model\ReportTable');
         }
         return $this->reportTable;
+    }
+
+    public function getIndustryTable()
+    {
+        if(!$this->industryTable) {
+            $sm = $this->getServiceLocator();
+            $this->industryTable = $sm -> get('Application\Model\IndustryTable');
+        }
+        return $this->industryTable;
+    }
+
+    public function getSubindustryTable()
+    {
+        if(!$this->subindustryTable) {
+            $sm = $this->getServiceLocator();
+            $this->subindustryTable = $sm -> get('Application\Model\SubindustryTable');
+        }
+        return $this->subindustryTable;
     }
 }

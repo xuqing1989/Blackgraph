@@ -4,7 +4,7 @@ namespace Application\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 
-class ReportTable
+class SubindustryTable
 {
 
     protected $tableGateway;
@@ -18,20 +18,23 @@ class ReportTable
         return $resultSet;
     }
 
-    public function reportCountByDate($date) {
-        $resultSet = $this->tableGateway->select(array('release_date = ?' => $date));
-        return $resultSet->count();
+    public function fetchByName($name){
+        return $this->tableGateway->select(array('name = ?'=>$name));
     }
 
-    public function addReport($data){
+    public function lastId() {
+        return $this->tableGateway->lastInsertValue;
+    }
+
+    public function addSubindustry($data){
         $this->tableGateway->insert($data);
     }
 
-    public function updateReport($data,$where,$value) {
+    public function updateSubindustry($data,$where,$value) {
         $this->tableGateway->update($data,array($where => $value));
     }
 
-    public function deleteReport($ticker) {
-       $this->tableGateway->delete(array('ticker' => $ticker));
+    public function deleteSubindustry($id) {
+       $this->tableGateway->delete(array('id' => $id));
     }
 }

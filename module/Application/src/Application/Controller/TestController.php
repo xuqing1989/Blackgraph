@@ -14,6 +14,10 @@ use Zend\View\Model\ViewModel;
 
 class TestController extends AbstractActionController
 {
+    protected $reportTable;
+    protected $industryTable;
+    protected $subindustryTable;
+
     public function indexAction()
     {
         return new ViewModel();
@@ -28,32 +32,10 @@ class TestController extends AbstractActionController
         return new ViewModel();
     }
 
-    public function test2Action(){
-        $filename = "/var/www/html/test_data/report_sample.csv";
-        $handle = fopen($filename,"r");
-        while(!feof($handle)) {
-            $line = fgets($handle,2048);
-            if(empty($line))break;
-            $lineArray = explode(',',$line);
-            $tickerObj = explode('.',$lineArray[0]);
-            $flag = 0;
-            if($lineArray[4] == '是') {
-                $flag = 1;
-            }
-            $sql_report = array(
-                              'ticker' => $tickerObj[0],
-                              'house' => $tickerObj[1],
-                              'industry_id' => '',
-                              'subindustry_id' => '',
-                              'flag' => $flag,
-                              'market_cup' => $lineArray[5],
-                              'ttm' => $lineArray[6],
-                              'report_year' => substr($lineArray[7],0,1),
-                              'report_type' => substr($lineArray[7],2),
-                              'release_date' => $lineArray[8],
-                          );
-        }
-        fclose($handle);
+    public function test2Action() {
+        $this->getIndustryTable()->addIndustry(array('name'=>'test'));
+        $temp = $this->getIndustryTable()->lastId();
+        print_r($temp);
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
@@ -107,5 +89,30 @@ class TestController extends AbstractActionController
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
     }
+    public function getReportTable()
+    {
+        if(!$this->reportTable) {
+            $sm = $this->getServiceLocator();
+            $this->reportTable = $sm -> get('Application\Model\ReportTable');
+        }
+        return $this->reportTable;
+    }
 
+    public function getIndustryTable()
+    {
+        if(!$this->industryTable) {
+            $sm = $this->getServiceLocator();
+            $this->industryTable = $sm -> get('Application\Model\IndustryTable');
+        }
+        return $this->industryTable;
+    }
+
+    public function getSubindustryTable()
+    {
+        if(!$this->subindustryTable) {
+            $sm = $this->getServiceLocator();
+            $this->subindustryTable = $sm -> get('Application\Model\SubindustryTable');
+        }
+        return $this->subindustryTable;
+    }
 }
