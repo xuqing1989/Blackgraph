@@ -20,7 +20,13 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        return new ViewModel();
+        $industry = $this->getIndustryTable()->fetchAll()->toArray();
+        foreach($industry as $key => $value){
+            $industry[$key]['sub'] = $this->getSubindustryTable()->fetchByIndustryid($value['id'])->toArray();
+        }
+        return new ViewModel(array(
+            'industry_data' => $industry,
+        ));
     }
 
     public function testAction()

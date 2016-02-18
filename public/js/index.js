@@ -37,4 +37,21 @@ $(document).ready(function(){
     for(var i=1;i<=7;i++){
         $("#cal_selector_"+i+">.date").html(moment().day(i).format("MM-DD"));
     }
+
+    $(".industry_list_select").click(function(){
+        var industryName = $(this).html();
+        var sublist = $(this).attr('sub');
+        sublist = eval('('+sublist+')');
+        var sublistHTML = '<li>全部</li>';
+        for(var i=0;i<sublist.length;i++) {
+            sublistHTML += '<li class="subindustry_list_select">' + sublist[i]['name']+'</li>';
+        }
+        $('#subindustry_list').html(sublistHTML);
+        $('.subindustry_list_select').click(function(){
+            $("#subindustry_title").html($(this).html()+'&nbsp;&#9660;');
+            $("#subindustry_dropdown").removeClass('is-open');
+        });
+        $('#industry_dropdown').removeClass('is-open');
+        $('#industry_title').html(industryName+'&nbsp;&#9660;');
+    });
 });

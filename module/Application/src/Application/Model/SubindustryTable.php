@@ -22,6 +22,10 @@ class SubindustryTable
         return $this->tableGateway->select(array('name = ?'=>$name));
     }
 
+    public function fetchByIndustryid($id){
+        return $this->tableGateway->select(array('industry_id = ?'=>$id));
+    }
+
     public function lastId() {
         return $this->tableGateway->lastInsertValue;
     }
