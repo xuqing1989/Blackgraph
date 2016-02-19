@@ -1,3 +1,16 @@
+var indexObj = new Object();
+indexObj.report_list = function(report_date){
+    $.ajax({
+        type:'GET',
+        url: '../data/report',
+        data: {
+            "date":report_date,
+        },
+        success: function(result) {
+            $('#ajax_report_list').html(result);
+        }
+    });
+}
 $(document).ready(function(){
     var cal = new CalHeatMap();
     cal.init({
@@ -32,17 +45,23 @@ $(document).ready(function(){
         },
         legend: [10, 30, 50, 100],
         highlight:["now"],
+        onClick: function(clickDate,nb) {
+            this.highlight(clickDate);
+            indexObj.report_list(moment(clickDate).format('YYYY-MM-DD'));
+        },
     });
     $("#cal_selector_"+moment().day()).addClass('actived');
     for(var i=1;i<=7;i++){
         $("#cal_selector_"+i+">.date").html(moment().day(i).format("MM-DD"));
     }
 
+    indexObj.report_list(moment().format('YYYY-MM-DD'));
+
     $(".industry_list_select").click(function(){
         var industryName = $(this).html();
         var sublist = $(this).attr('sub');
         sublist = eval('('+sublist+')');
-        var sublistHTML = '<li>全部</li>';
+        var sublistHTML = '<li class="subindustry_list_select">全部</li>';
         for(var i=0;i<sublist.length;i++) {
             sublistHTML += '<li class="subindustry_list_select">' + sublist[i]['name']+'</li>';
         }
@@ -53,5 +72,16 @@ $(document).ready(function(){
         });
         $('#industry_dropdown').removeClass('is-open');
         $('#industry_title').html(industryName+'&nbsp;&#9660;');
+    });
+
+    $("#industry_list_all").click(function(){
+        $('#industry_dropdown').removeClass('is-open');
+        $('#subindustry_dropdown').removeClass('is-open');
+        $('#industry_title').html('全部&nbsp;&#9660;');
+        $("#subindustry_title").html('全部&nbsp;&#9660;');
+        $('#subindustry_list').html('<li class="subindustry_list_select">全部</li>');
+        $('.subindustry_list_select').click(function(){
+            $("#subindustry_dropdown").removeClass('is-open');
+        });
     });
 });

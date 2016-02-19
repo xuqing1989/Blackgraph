@@ -1,0 +1,30 @@
+<div>符合条件的股票:&nbsp;<?php echo count($report_list)?>个</div>
+    <table class="index-table-list">
+        <tbody>
+             <tr>
+                 <th>代码</th>
+                 <th>简称</th>
+                 <th>最新价</th>
+                 <th>涨跌幅</th>
+                 <th>成交额(亿)</th>
+                 <th>总市值(亿)</th>
+                 <th>市盈率</th>
+                 <th>近期披露</th>
+                 <th>日期</th>
+             </tr>
+             <?php foreach($report_list as $key=>$value): ?>
+             <tr>
+                 <td><?php echo $value['ticker'].'.'.$value['house']; ?></td>
+                 <td><?php echo $value['name'];?></td>
+                 <td><?php echo sprintf('%.2f',$value['price_now']);?></td>
+                 <td class="<?php echo $value['color']?>"><?php echo $value['price_rate'];?></td>
+                 <td><?php echo sprintf('%.2f',$value['volumn']);?></td>
+                 <td><?php echo sprintf('%.2f',$value['market_cup']);?></td>
+                 <td><?php echo sprintf('%.2f',$value['ttm']);?></td>
+                 <td><?php echo $value['report_year'].$value['report_type'];?></td>
+                 <td><?php echo $value['release_date'];?></td>
+             </tr>
+             <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

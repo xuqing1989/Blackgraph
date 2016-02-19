@@ -27,7 +27,54 @@ class DataController extends AbstractActionController
             }
         }
         echo json_encode($result);
-        $this->viewModel = new ViewModel;
+        $this->viewModel = new ViewModel();
+        $this->viewModel->setTerminal(true);
+        return $this->viewModel;
+    }
+
+    public function reportAction()
+    {
+        $request = $this -> getRequest();
+        $date = $request->getQuery('date');
+        $report_list = $this->getReportTable()->fetchByDate($date)->toArray();
+        foreach($report_list as $key=>$value) {
+            $tickerPara .= strtolower($value['house']).$value['ticker'].',';
+        }
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => "http://hq.sinajs.cn/list=".$tickerPara,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "GET",
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        $sinaApi = explode(';',$response);
+        array_pop($sinaApi);
+        foreach($sinaApi as $skey=>$svalue){
+            $sinaPredata = explode('"',$svalue);
+            $sinaData = explode(',',$sinaPredata[1]);
+            $report_list[$skey]['price_now'] = $sinaData[3];
+            $rate = abs((($sinaData[3]-$sinaData[2])/$sinaData[2])*100);
+            $rate = sprintf('%.2f',$rate).'%';
+            if($sinaData[3] > $sinaData[2]){
+                $report_list[$skey]['color'] = 'red';
+                $rate = '&#8679;&nbsp;'.$rate;
+            }
+            else {
+                $report_list[$skey]['color'] = 'green';
+                $rate = '&#8681;&nbsp;'.$rate;
+            }
+            $report_list[$skey]['price_rate'] = $rate;
+            $report_list[$skey]['volumn'] = $sinaData[9]/10000000;
+        }
+        
+        $this->viewModel = new ViewModel(array('report_list'=>$report_list));
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
     }
