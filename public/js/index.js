@@ -1,4 +1,15 @@
 var indexObj = new Object();
+
+indexObj.activeDate = new moment();
+indexObj.cal = new CalHeatMap();
+
+indexObj.loadDate = function() {
+    var theDate = indexObj.activeDate;
+    indexObj.report_list(theDate.format('YYYY-MM-DD'));
+    indexObj.cal.highlight(theDate.toDate());
+    indexObj.cal_selector(theDate);
+}
+
 indexObj.report_list = function(report_date){
     $('#ajax_report_list').html('');
     $('#ajax_loader').show();
@@ -14,9 +25,19 @@ indexObj.report_list = function(report_date){
         }
     });
 }
+
+indexObj.cal_selector = function(theDate) {
+    var selectDate = new moment(theDate);
+    $("[id^=cal_selector_]").removeClass('actived');
+    $("#cal_selector_"+selectDate.day()).addClass('actived');
+    for(var i=1;i<=7;i++){
+        $("#cal_selector_"+i+">.date").html(selectDate.day(i).format("MM-DD"));
+        $("#cal_selector_"+i+">.date").attr('full-date',selectDate.day(i).format("YYYY-MM-DD"));
+    }
+}
+
 $(document).ready(function(){
-    var cal = new CalHeatMap();
-    cal.init({
+    indexObj.cal.init({
         itemSelector: "#test2",
         domain: "month",
         subDomain: "x_day",
@@ -49,16 +70,12 @@ $(document).ready(function(){
         legend: [10, 30, 50, 100],
         highlight:["now"],
         onClick: function(clickDate,nb) {
-            this.highlight(clickDate);
-            indexObj.report_list(moment(clickDate).format('YYYY-MM-DD'));
+            indexObj.activeDate = moment(clickDate);
+            indexObj.loadDate();
         },
     });
-    $("#cal_selector_"+moment().day()).addClass('actived');
-    for(var i=1;i<=7;i++){
-        $("#cal_selector_"+i+">.date").html(moment().day(i).format("MM-DD"));
-    }
 
-    indexObj.report_list(moment().format('YYYY-MM-DD'));
+    indexObj.loadDate();
 
     $(".industry_list_select").click(function(){
         var industryName = $(this).html();
@@ -86,5 +103,20 @@ $(document).ready(function(){
         $('.subindustry_list_select').click(function(){
             $("#subindustry_dropdown").removeClass('is-open');
         });
+    });
+
+    $(".index-cal-selector-title").click(function(){
+        indexObj.activeDate = moment($(this).children('.date').attr('full-date'));
+        indexObj.loadDate();
+    });
+
+    $("#cal_selector_left").click(function(){
+        indexObj.activeDate.subtract(1,'week');
+        indexObj.loadDate();
+    });
+
+    $("#cal_selector_right").click(function(){
+        indexObj.activeDate.add(1,'week');
+        indexObj.loadDate();
     });
 });

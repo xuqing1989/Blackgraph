@@ -91,6 +91,7 @@
 .index-cal-selector-title {
     margin-top:9px;
     color:#999;
+    cursor:pointer;
 }
 
 .index-cal-selector-title:hover, .index-cal-selector-title.actived {
