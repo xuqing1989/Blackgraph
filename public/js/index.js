@@ -1,5 +1,7 @@
 var indexObj = new Object();
 indexObj.report_list = function(report_date){
+    $('#ajax_report_list').html('');
+    $('#ajax_loader').show();
     $.ajax({
         type:'GET',
         url: '../data/report',
@@ -7,6 +9,7 @@ indexObj.report_list = function(report_date){
             "date":report_date,
         },
         success: function(result) {
+            $('#ajax_loader').hide();
             $('#ajax_report_list').html(result);
         }
     });

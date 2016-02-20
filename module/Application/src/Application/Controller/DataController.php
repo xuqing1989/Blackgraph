@@ -64,11 +64,11 @@ class DataController extends AbstractActionController
             $rate = sprintf('%.2f',$rate).'%';
             if($sinaData[3] > $sinaData[2]){
                 $report_list[$skey]['color'] = 'red';
-                $rate = '&#8679;&nbsp;'.$rate;
+                $rate = '&uarr;&nbsp;'.$rate;
             }
             else {
                 $report_list[$skey]['color'] = 'green';
-                $rate = '&#8681;&nbsp;'.$rate;
+                $rate = '&darr;&nbsp;'.$rate;
             }
             $report_list[$skey]['price_rate'] = $rate;
             $report_list[$skey]['volumn'] = $sinaData[9]/10000000;
