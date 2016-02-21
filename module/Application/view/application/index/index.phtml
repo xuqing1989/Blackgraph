@@ -52,19 +52,19 @@
         <div class="index-industry-seletor">
             <div class="small-2 left columns">行业:&nbsp;<span class="index-industry-list-title" type="button" id="industry_title" data-toggle="industry_dropdown">全部&nbsp;&#9660;</span></div>
             <div class="small-4 left columns">子行业:&nbsp;<span class="index-industry-list-title" type="button" id="subindustry_title" data-toggle="subindustry_dropdown">全部&nbsp;&#9660;</span></div>
-            <div class="small-4 right columns" style="text-align:right"><input type='checkbox' />&nbsp;仅包括沪深300指数成分股</div>
+            <div class="small-4 right columns" style="text-align:right"><input type='checkbox' id="flag_checkbox" />&nbsp;仅包括沪深300指数成分股</div>
         </div>
         <div class="dropdown-pane bottom index-industry-list" id="industry_dropdown" data-dropdown >
             <ul>
-                <li id="industry_list_all">全部</li>
+                <li id="industry_list_all" sid="all">全部</li>
                 <?php foreach($industry_data as $key=>$value): ?>
-                <li class="industry_list_select" sub='<?php echo json_encode($value['sub']);?>'><?php echo $value['name'];?></li>
+                <li class="industry_list_select" sid="<?php echo $value['id'];?>" sub='<?php echo json_encode($value['sub']);?>'><?php echo $value['name'];?></li>
                 <?php endforeach; ?>
             </ul>
         </div>
         <div class="dropdown-pane index-industry-list" id="subindustry_dropdown" data-dropdown >
             <ul id="subindustry_list">
-                <li class="subindustry_list_select">全部</li>
+                <li class="subindustry_list_select" sid="all">全部</li>
             </ul>
         </div>
     </div>

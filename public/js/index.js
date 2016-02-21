@@ -2,15 +2,18 @@ var indexObj = new Object();
 
 indexObj.activeDate = new moment();
 indexObj.cal = new CalHeatMap();
+indexObj.filter = {'industry':'all',
+                   'subindustry':'all',
+                   'flag':0};
 
 indexObj.loadDate = function() {
     var theDate = indexObj.activeDate;
-    indexObj.report_list(theDate.format('YYYY-MM-DD'));
+    indexObj.report_list(theDate.format('YYYY-MM-DD'),indexObj.filter);
     indexObj.cal.highlight(theDate.toDate());
     indexObj.cal_selector(theDate);
 }
 
-indexObj.report_list = function(report_date){
+indexObj.report_list = function(report_date,filterObj){
     $('#ajax_report_list').html('');
     $('#ajax_loader').show();
     $.ajax({
@@ -18,6 +21,9 @@ indexObj.report_list = function(report_date){
         url: '../data/report',
         data: {
             "date":report_date,
+            "industry":filterObj.industry,
+            "subindustry":filterObj.subindustry,
+            "flag":filterObj.flag
         },
         success: function(result) {
             $('#ajax_loader').hide();
@@ -81,17 +87,23 @@ $(document).ready(function(){
         var industryName = $(this).html();
         var sublist = $(this).attr('sub');
         sublist = eval('('+sublist+')');
-        var sublistHTML = '<li class="subindustry_list_select">全部</li>';
+        var sublistHTML = '<li class="subindustry_list_select" sid="all">全部</li>';
         for(var i=0;i<sublist.length;i++) {
-            sublistHTML += '<li class="subindustry_list_select">' + sublist[i]['name']+'</li>';
+            sublistHTML += '<li sid="'+sublist[i]['id']+'" class="subindustry_list_select">' + sublist[i]['name']+'</li>';
         }
         $('#subindustry_list').html(sublistHTML);
         $('.subindustry_list_select').click(function(){
             $("#subindustry_title").html($(this).html()+'&nbsp;&#9660;');
             $("#subindustry_dropdown").removeClass('is-open');
+            indexObj.filter.subindustry=$(this).attr('sid');
+            indexObj.report_list(indexObj.activeDate.format('YYYY-MM-DD'),indexObj.filter);
         });
         $('#industry_dropdown').removeClass('is-open');
+        $("#subindustry_title").html('全部&nbsp;&#9660;');
         $('#industry_title').html(industryName+'&nbsp;&#9660;');
+        indexObj.filter.industry=$(this).attr('sid');
+        indexObj.filter.subindustry='all';
+        indexObj.report_list(indexObj.activeDate.format('YYYY-MM-DD'),indexObj.filter);
     });
 
     $("#industry_list_all").click(function(){
@@ -99,10 +111,13 @@ $(document).ready(function(){
         $('#subindustry_dropdown').removeClass('is-open');
         $('#industry_title').html('全部&nbsp;&#9660;');
         $("#subindustry_title").html('全部&nbsp;&#9660;');
-        $('#subindustry_list').html('<li class="subindustry_list_select">全部</li>');
+        $('#subindustry_list').html('<li class="subindustry_list_select" sid="all">全部</li>');
         $('.subindustry_list_select').click(function(){
             $("#subindustry_dropdown").removeClass('is-open');
         });
+        indexObj.filter.industry='all';
+        indexObj.filter.subindustry='all';
+        indexObj.report_list(indexObj.activeDate.format('YYYY-MM-DD'),indexObj.filter);
     });
 
     $(".index-cal-selector-title").click(function(){
@@ -118,5 +133,15 @@ $(document).ready(function(){
     $("#cal_selector_right").click(function(){
         indexObj.activeDate.add(1,'week');
         indexObj.loadDate();
+    });
+
+    $('#flag_checkbox').click(function(){
+        if($(this).is(':checked')){
+            indexObj.filter.flag=1;
+        }
+        else {
+            indexObj.filter.flag=0;
+        }
+        indexObj.report_list(indexObj.activeDate.format('YYYY-MM-DD'),indexObj.filter);
     });
 });
