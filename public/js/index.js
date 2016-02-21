@@ -11,6 +11,7 @@ indexObj.loadDate = function() {
     indexObj.report_list(theDate.format('YYYY-MM-DD'),indexObj.filter);
     indexObj.cal.highlight(theDate.toDate());
     indexObj.cal_selector(theDate);
+
 }
 
 indexObj.report_list = function(report_date,filterObj){
@@ -35,10 +36,11 @@ indexObj.report_list = function(report_date,filterObj){
 indexObj.cal_selector = function(theDate) {
     var selectDate = new moment(theDate);
     $("[id^=cal_selector_]").removeClass('actived');
-    $("#cal_selector_"+selectDate.day()).addClass('actived');
+    $("#cal_selector_"+selectDate.isoWeekday()).addClass('actived');
     for(var i=1;i<=7;i++){
-        $("#cal_selector_"+i+">.date").html(selectDate.day(i).format("MM-DD"));
-        $("#cal_selector_"+i+">.date").attr('full-date',selectDate.day(i).format("YYYY-MM-DD"));
+        //in momentjs 0 represent SUN, 6 represent SAT
+        $("#cal_selector_"+i+">.date").html(selectDate.isoWeekday(i).format("MM-DD"));
+        $("#cal_selector_"+i+">.date").attr('full-date',selectDate.isoWeekday(i).format("YYYY-MM-DD"));
     }
 }
 
@@ -47,7 +49,9 @@ $(document).ready(function(){
         itemSelector: "#test2",
         domain: "month",
         subDomain: "x_day",
-        data: "../data/calendar?startDate={{t:start}}&endDate={{t:end}}",
+        data: "../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+
+                            indexObj.filter.industry+"&subindustry="+indexObj.filter.subindustry+
+                            "&flag="+indexObj.filter.flag,
         dataType: "json",
         start: new Date(moment().year(), moment().month(), 0),
         cellSize: 30,
@@ -97,13 +101,25 @@ $(document).ready(function(){
             $("#subindustry_dropdown").removeClass('is-open');
             indexObj.filter.subindustry=$(this).attr('sid');
             indexObj.report_list(indexObj.activeDate.format('YYYY-MM-DD'),indexObj.filter);
+            indexObj.cal.update("../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+
+                                indexObj.filter.industry+"&subindustry="+indexObj.filter.subindustry+
+                                "&flag="+indexObj.filter.flag);
+            indexObj.cal.options.data = "../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+
+                                        indexObj.filter.industry+"&subindustry="+indexObj.filter.subindustry+
+                                        "&flag="+indexObj.filter.flag;
         });
         $('#industry_dropdown').removeClass('is-open');
         $("#subindustry_title").html('全部&nbsp;&#9660;');
         $('#industry_title').html(industryName+'&nbsp;&#9660;');
         indexObj.filter.industry=$(this).attr('sid');
         indexObj.filter.subindustry='all';
-        indexObj.report_list(indexObj.activeDate.format('YYYY-MM-DD'),indexObj.filter);
+        indexObj.loadDate();
+        indexObj.cal.update("../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+
+                            indexObj.filter.industry+"&subindustry="+indexObj.filter.subindustry+
+                            "&flag="+indexObj.filter.flag);
+        indexObj.cal.options.data = "../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+
+                                    indexObj.filter.industry+"&subindustry="+indexObj.filter.subindustry+
+                                    "&flag="+indexObj.filter.flag;
     });
 
     $("#industry_list_all").click(function(){
@@ -117,7 +133,13 @@ $(document).ready(function(){
         });
         indexObj.filter.industry='all';
         indexObj.filter.subindustry='all';
-        indexObj.report_list(indexObj.activeDate.format('YYYY-MM-DD'),indexObj.filter);
+        indexObj.loadDate();
+        indexObj.cal.update("../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+
+                            indexObj.filter.industry+"&subindustry="+indexObj.filter.subindustry+
+                            "&flag="+indexObj.filter.flag);
+        indexObj.cal.options.data = "../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+
+                                    indexObj.filter.industry+"&subindustry="+indexObj.filter.subindustry+
+                                    "&flag="+indexObj.filter.flag;
     });
 
     $(".index-cal-selector-title").click(function(){
@@ -142,6 +164,12 @@ $(document).ready(function(){
         else {
             indexObj.filter.flag=0;
         }
-        indexObj.report_list(indexObj.activeDate.format('YYYY-MM-DD'),indexObj.filter);
+        indexObj.loadDate();
+        indexObj.cal.update("../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+
+                            indexObj.filter.industry+"&subindustry="+indexObj.filter.subindustry+
+                            "&flag="+indexObj.filter.flag);
+        indexObj.cal.options.data = "../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+
+                                    indexObj.filter.industry+"&subindustry="+indexObj.filter.subindustry+
+                                    "&flag="+indexObj.filter.flag;
     });
 });

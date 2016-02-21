@@ -23,8 +23,29 @@ class ReportTable
         return $resultSet->count();
     }
 
-    public function fetchByDate($date) {
-        $resultSet = $this->tableGateway->select(array('release_date = ?' => $date));
+    public function fetchReport($date,$industry,$subindustry,$flag) {
+        if($flag==0) {
+            if($industry == 'all') {
+                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date));
+            }
+            else if($subindustry == 'all') {
+                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'industry_id = ?' => $industry));
+            }
+            else {
+                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'industry_id = ?' => $industry,'subindustry_id = ?' => $subindustry));
+            }
+        }
+        else {
+            if($industry == 'all') {
+                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'flag = ?'=>$flag));
+            }
+            else if($subindustry == 'all') {
+                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'industry_id = ?' => $industry,'flag = ?'=>$flag));
+            }
+            else {
+                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'industry_id = ?' => $industry,'subindustry_id = ?' => $subindustry,'flag = ?'=>$flag));
+            }
+        }
         return $resultSet;
     }
 

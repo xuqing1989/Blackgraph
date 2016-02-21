@@ -19,9 +19,14 @@ class DataController extends AbstractActionController
         $request = $this -> getRequest();
         $startDate = $request->getQuery('startDate');
         $endDate = $request->getQuery('endDate');
+        $industry = $request->getQuery('industry');
+        $subindustry = $request->getQuery('subindustry');
+        $flag = $request->getQuery('flag');
         $result = array();
+        //fix the last day lost bug
+        $endDate += 24*3600;
         for($start=$startDate; $start <= $endDate; $start += 24*3600) {
-            $reportCount = $this->getReportTable() -> reportCountByDate(date("Y-m-d",$start));
+            $reportCount = $this->getReportTable() -> fetchReport(date("Y-m-d",$start),$industry,$subindustry,$flag)->count();
             if($reportCount) {
                 $result[$start] = $reportCount;
             }
@@ -36,7 +41,10 @@ class DataController extends AbstractActionController
     {
         $request = $this -> getRequest();
         $date = $request->getQuery('date');
-        $report_list = $this->getReportTable()->fetchByDate($date)->toArray();
+        $industry = $request->getQuery('industry');
+        $subindustry = $request->getQuery('subindustry');
+        $flag = $request->getQuery('flag');
+        $report_list = $this->getReportTable()->fetchReport($date,$industry,$subindustry,$flag)->toArray();
         foreach($report_list as $key=>$value) {
             $tickerPara .= strtolower($value['house']).$value['ticker'].',';
         }
