@@ -3,7 +3,8 @@ use blackgraph;
 create table industry (
     id int primary key NOT NULL AUTO_INCREMENT,
     name varchar(20),
-    title varchar(10)
+    title varchar(10),
+    classify int
 );
 
 create table subindustry (

@@ -45,6 +45,7 @@ indexObj.cal_selector = function(theDate) {
 }
 
 $(document).ready(function(){
+    $("#menu_title_cal").addClass('actived');
     indexObj.cal.init({
         itemSelector: "#test2",
         domain: "month",

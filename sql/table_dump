@@ -1,0 +1,30 @@
+-- MySQL dump 10.13  Distrib 5.5.41, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: blackgraph
+-- ------------------------------------------------------
+-- Server version	5.5.41-0ubuntu0.14.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Dumping data for table `industry`
+--
+use blackgraph;
+LOCK TABLES `industry` WRITE;
+/*!40000 ALTER TABLE `industry` DISABLE KEYS */;
+INSERT INTO `industry` VALUES (123,'银行','y',4),(124,'房地产','f',3),(125,'医药生物','y',3),(126,'休闲服务','x',3),(127,'机械设备','j',2),(128,'综合','z',4),(129,'建筑装饰','j',2),(130,'建筑材料','j',2),(131,'家用电器','j',3),(132,'汽车','q',3),(133,'食品饮料','s',3),(134,'电子','d',2),(135,'计算机','j',3),(136,'交通运输','j',4),(137,'轻工制造','q',2),(138,'公用事业','g',4),(139,'通信','t',4),(140,'农林牧渔','n',2),(141,'商业贸易','s',3),(142,'化工','h',2),(143,'有色金属','y',1),(144,'传媒','c',3),(145,'纺织服装','f',3),(146,'采掘','c',1),(147,'非银金融','f',4),(148,'电气设备','d',2),(149,'钢铁','g',2),(150,'国防军工','g',2),(151,'未分类','w',0);
+/*!40000 ALTER TABLE `industry` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `subindustry`
+--

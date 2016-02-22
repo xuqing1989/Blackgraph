@@ -1,3 +1,7 @@
+body{
+    color:#999;
+}
+
 /*layout*/
 .layout-topbar {
     height: 70px;
@@ -20,11 +24,11 @@
     color:#999;
 }
 
-.layout-topbar-menu:hover {
+.layout-topbar-menu:hover, .layout-topbar-menu.actived {
     color:#FFF;
 }
 
-.layout-topbar-menu:hover:after {
+.layout-topbar-menu:hover:after,.layout-topbar-menu.actived:after {
     content:'';
     height:3px;
     display:block;
@@ -55,9 +59,7 @@
 }
 
 /*index*/
-.index-body{
-    color:#999;
-}
+
 
 .index-cal-body{
     height: 300px;
@@ -191,74 +193,36 @@
     border-width: 0 1px 0 0;
 }
 
-.index-cal-table-more {
-    text-align:center;
-    border: 1px solid #AFAFAF;
-    border-width: 0 1px 1px 1px;
-    background-color: #EAE8E8;
-}
+/*company-index*/
 
-/*company-list*/
-.company-content-body {
-    padding: 30px 0 30px 0;
-}
-
-.company-cal-title-innerbox{
-    padding:6px 0 6px 0;
-    text-align:center;
-    font-size:14px;
-    margin-bottom:5px;
-}
-
-.company-cal-title-innerbox:hover{
-    background-color:#353535 !important;
-    color:#F8F8F8;
-}
-
-.company-list-table-body {
-    margin-top:25px !important;
-}
-.company-list-table {
+.company-industry-table {
+    background-color:#262626;
     width:100%;
-    border:1px solid #AFAFAF;
-    border-width: 1px 0 1px 1px;
-    margin-bottom:0px;
+    margin-top:30px;
 }
 
-.company-list-table th {
-    border:1px solid #AFAFAF;
-    border-width: 0 1px 1px 0px;
-    background-color:#F8F8F8 !important;
-    text-align:center;
+.company-industry-table th {
+    font-weight:normal;
+    padding: 5px 0;
+    color:#555;
 }
 
-.company-list-table td{
-    border-right:1px solid #AFAFAF;
-}
-.company-list-table tr.odd, .company-list-table tr:nth-of-type(2n+1) {
-    background-color: #D8D8D8 !important;
-}
-.company-list-table tr.even, .company-list-table tr:nth-of-type(2n) {
-    background-color: #EAE8E8 !important;
+.company-industry-table td {
+    vertical-align:top;
+    border: 1px solid #555;
+    border-width: 1px 0 0 0;
+    padding:15px 0 10px 15px;
 }
 
-.company-list-table-bottom div {
-    padding:0;
-    font-size:14px;
-    margin-top:10px;
+.company-industry-table td .iTitle{
+    color:#FFF;
+    font-size:16px;
+    font-weight:bold;
 }
 
-.company-list-table-bottom-2 {
-    text-align:center;
-}
-
-.company-list-table-bottom-2 input{
-    width:30px;
-    text-align:center;
-}
-
-.company-list-table-bottom-3 {
-    text-align:right;
+.company-industry-table th:nth-child(1), .company-industry-table td:nth-child(1),  
+.company-industry-table th:nth-child(2), .company-industry-table td:nth-child(4) {
+    border-right: 1px solid #555;
 }
 
 /*company-detail*/
