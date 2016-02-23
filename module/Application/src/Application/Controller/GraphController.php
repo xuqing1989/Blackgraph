@@ -21,6 +21,16 @@ class GraphController extends AbstractActionController
         return $this->viewModel;
     }
 
+    public function sankeyAction()
+    {
+        $request = $this -> getRequest();
+        $divId = $request -> getQuery('divId');
+        $this->viewModel = new ViewModel();
+        $this->viewModel->setVariables(array('divId' => $divId))
+                        ->setTerminal(true);
+        return $this->viewModel;
+    }
+
     public function coststructureAction()
     {
         $request = $this -> getRequest();

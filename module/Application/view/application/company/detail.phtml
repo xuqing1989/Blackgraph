@@ -43,6 +43,7 @@
     </div>
 
     <div class="row">
+        <div class="company-detail-graph" id="company_detail_graph_0"></div>
         <div class="company-detail-graph" id="company_detail_graph_1"></div>
         <div class="company-detail-graph" id="company_detail_graph_2"></div>
         <div class="company-detail-graph" id="company_detail_graph_3"></div>
@@ -60,6 +61,16 @@
     </div>
     <script type="text/javascript">
         $(document).ready(function(){
+            $.ajax({
+                type:'GET',
+                url: '../graph/sankey',
+                data: {
+                    "divId":"company_detail_graph_0",
+                },
+                success: function(result) {
+                    eval(result);
+                }
+            });
             $.ajax({
                 type:'GET',
                 url: '../graph/coststructure',

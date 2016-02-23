@@ -1,0 +1,56 @@
+    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+    nodes=[
+      {"name": "Total",
+                itemStyle: {
+                    normal: {
+                        color:"#f00",
+                        opacity:0,
+                        borderColor:"#00f",
+                        borderWidth:2,
+                    }
+                },},
+      {"name": "Environment"},
+      {"name": "Land use"},
+      {"name": "test3"},
+      {"name": "test4"},
+      {"name": "test5"},
+      {"name": "test6"},
+      {"name": "test7"},
+      {"name": "test8"},
+   ];
+   links=[
+      {"source": "Total", "target": "Environment", "value": 20},
+      {"source": "Total", "target": "Land use", "value": 70},
+      {"source": "Total", "target": "test3", "value": 10},
+      {"source": "Environment", "target": "test4", "value": 15},
+      {"source": "Environment", "target": "test5", "value": 5},
+      {"source": "test3", "target": "test6", "value": 10},
+      {"source": "Land use", "target": "test7", "value": 50, 
+        lineStyle:{
+            normal: {
+                color:'#f00',
+                opacity:0.5,
+            }
+        },
+      },
+      {"source": "Land use", "target": "test8", "value": 20},
+      ];
+    var option = {
+        title: {
+            text: 'Sankey Diagram'
+        },
+        tooltip: {
+            trigger: 'item',
+            triggerOn: 'mousemove'
+
+        },
+        series: [
+            {
+                type: 'sankey',
+                layout:'none',
+                data: nodes,
+                links: links,
+            }
+        ],
+    };
+    myChart.setOption(option);
