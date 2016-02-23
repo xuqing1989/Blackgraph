@@ -158,6 +158,8 @@ $(document).ready(function(){
         indexObj.loadDate();
     });
 
+    $('#flag_checkbox').attr('checked',false);
+
     $('#flag_checkbox').click(function(){
         if($(this).is(':checked')){
             indexObj.filter.flag=1;
