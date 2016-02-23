@@ -1,23 +1,49 @@
 <div class="row">
-    <table class="company-industry-table">
+    <table class="company-industry-table1">
         <tbody>
             <tr>
                 <th>上游:&nbsp;原材料</th>
                 <th colspan=3>中游:&nbsp;制造</th>
                 <th colspan=3>下游:&nbsp;消费</th>
             </tr>
-            <?php for($i=0;$i<count($layout);$i++): ?>
+            <?php for($i=0;$i<count($layout1);$i++): ?>
             <tr>
-                <?php for($j=0;$j<count($layout[$i]);$j++): ?>
+                <?php for($j=0;$j<count($layout1[$i]);$j++): ?>
                 <td>
-                    <div class="iTitle"><?php echo strtoupper($layout[$i][$j]['title']).'&nbsp;'.$layout[$i][$j]['name'];?></div>
-                    <?php foreach($layout[$i][$j]['sub'] as $value): ?>
+                    <div class="iTitle"><?php echo strtoupper($layout1[$i][$j]['title']).'&nbsp;'.$layout1[$i][$j]['name'];?></div>
+                    <?php foreach($layout1[$i][$j]['sub'] as $value): ?>
                     <div><?php echo $value['name'];?></div>
                     <?php endforeach; ?>
                 </td>
                 <?php endfor; ?>
             </tr>
             <?php endfor; ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <table class="company-industry-table2">
+        <tbody>
+            <tr>
+                <th colspan=5>服务与支撑</th>
+            </tr>
+            <tr>
+                <?php for($i=1;$i<count($layout2);$i++): ?>
+                    <td>
+                    <div class="iTitle"><?php echo strtoupper($layout2[$i]['title']).'&nbsp;'.$layout2[$i]['name'];?></div>
+                    <?php foreach($layout2[$i]['sub'] as $value): ?>
+                    <div><?php echo $value['name'];?></div>
+                    <?php endforeach; ?>
+                    <?php if($i==1): ?>
+                    <div class="iTitle title-bank"><?php echo strtoupper($layout2[0]['title']).'&nbsp;'.$layout2[0]['name'];?></div>
+                    <?php foreach($layout2[0]['sub'] as $value): ?>
+                    <div><?php echo $value['name'];?></div>
+                    <?php endforeach; ?>
+                    <?php endif; ?>
+                    </td>
+                <?php endfor; ?>
+            </tr>
         </tbody>
     </table>
 </div>

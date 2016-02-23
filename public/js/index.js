@@ -149,12 +149,12 @@ $(document).ready(function(){
     });
 
     $("#cal_selector_left").click(function(){
-        indexObj.activeDate.subtract(1,'week');
+        indexObj.activeDate.subtract(1,'week').isoWeekday(1);
         indexObj.loadDate();
     });
 
     $("#cal_selector_right").click(function(){
-        indexObj.activeDate.add(1,'week');
+        indexObj.activeDate.add(1,'week').isoWeekday(1);
         indexObj.loadDate();
     });
 

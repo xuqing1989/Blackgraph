@@ -195,33 +195,37 @@ body{
 
 /*company-index*/
 
-.company-industry-table {
+.company-industry-table1, .company-industry-table2 {
     background-color:#262626;
     width:100%;
     margin-top:30px;
 }
 
-.company-industry-table th {
+.company-industry-table1 th,.company-industry-table2 th {
     font-weight:normal;
     padding: 5px 0;
     color:#555;
 }
 
-.company-industry-table td {
+.company-industry-table1 td, .company-industry-table2 td {
     vertical-align:top;
     border: 1px solid #555;
     border-width: 1px 0 0 0;
     padding:15px 0 10px 15px;
 }
 
-.company-industry-table td .iTitle{
+.company-industry-table1 td .iTitle, .company-industry-table2 td .iTitle{
     color:#FFF;
     font-size:16px;
     font-weight:bold;
 }
 
-.company-industry-table th:nth-child(1), .company-industry-table td:nth-child(1),  
-.company-industry-table th:nth-child(2), .company-industry-table td:nth-child(4) {
+.company-industry-table2 td .title-bank {
+    margin-top:30px;
+}
+
+.company-industry-table1 th:nth-child(1), .company-industry-table1 td:nth-child(1),  
+.company-industry-table1 th:nth-child(2), .company-industry-table1 td:nth-child(4) {
     border-right: 1px solid #555;
 }
 
