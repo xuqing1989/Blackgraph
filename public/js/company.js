@@ -28,6 +28,14 @@ companyObj.report_list = function(){
                 }
                 companyObj.report_list();
             });
+            $('#list_page_pre').click(function(){
+                companyObj.filter.page--;
+                companyObj.report_list();
+            });
+            $('#list_page_next').click(function(){
+                companyObj.filter.page++;
+                companyObj.report_list();
+            });
         }
     });
 }

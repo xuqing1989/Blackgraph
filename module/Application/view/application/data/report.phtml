@@ -51,16 +51,22 @@
         <?php if($page==1): ?>
         <li class="pagination-previous disabled">上一页</li>
         <?php else: ?>
-        <li class="pagination-previous"><a href="javascript:void(0)">上一页</a></li>
+        <li class="pagination-previous"><a href="javascript:void(0)" id="list_page_pre">上一页</a></li>
         <?php endif; ?>
         <!--<li class="current"><span class="show-for-sr">当前:&nbsp;</span> 1</li>-->
         <?php for($i=0;$i<count($pageSeq);$i++): ?>
-        <li><a href="javascript:void(0)" class="<?php if($page==$pageSeq[$i])echo "current";?> list_page_num"><?php echo $pageSeq[$i];?></a></li>
+        <li>
+            <?php if($pageSeq[$i] !='...'):?>
+            <a href="javascript:void(0)" class="<?php if($page==$pageSeq[$i])echo "current";?> list_page_num"><?php echo $pageSeq[$i];?></a>
+            <?php else: ?>
+            ...
+            <?php endif; ?>
+        </li>
         <?php endfor; ?>
         <?php if($page==$totalPage): ?>
         <li class="pagination-next disabled">下一页</li>
         <?php else: ?>
-        <li class="pagination-next"><a href="javascript:void(0)">下一页</a></li>
+        <li class="pagination-next"><a href="javascript:void(0)" id="list_page_next">下一页</a></li>
         <?php endif; ?>
     </ul>
 </div>
