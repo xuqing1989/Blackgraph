@@ -10,9 +10,9 @@
             <tr>
                 <?php for($j=0;$j<count($layout1[$i]);$j++): ?>
                 <td>
-                    <div class="iTitle"><?php echo strtoupper($layout1[$i][$j]['title']).'&nbsp;'.$layout1[$i][$j]['name'];?></div>
+                    <a href='../company/list?industry=<?php echo $layout1[$i][$j]['id'];?>'><div class="iTitle"><?php echo strtoupper($layout1[$i][$j]['title']).'&nbsp;'.$layout1[$i][$j]['name'];?></div></a>
                     <?php foreach($layout1[$i][$j]['sub'] as $value): ?>
-                    <div><?php echo $value['name'];?></div>
+                    <div><a href='../company/list?<?php echo 'industry='.$layout1[$i][$j]['id'].'&subindustry='.$value['id'];?>'><?php echo $value['name'];?></a></div>
                     <?php endforeach; ?>
                 </td>
                 <?php endfor; ?>
@@ -31,14 +31,14 @@
             <tr>
                 <?php for($i=1;$i<count($layout2);$i++): ?>
                     <td>
-                    <div class="iTitle"><?php echo strtoupper($layout2[$i]['title']).'&nbsp;'.$layout2[$i]['name'];?></div>
+                    <a href='../company/list?industry=<?php echo $layout2[$i]['id'];?>'><div class="iTitle"><?php echo strtoupper($layout2[$i]['title']).'&nbsp;'.$layout2[$i]['name'];?></div></a>
                     <?php foreach($layout2[$i]['sub'] as $value): ?>
-                    <div><?php echo $value['name'];?></div>
+                    <div><a href='../company/list?<?php echo 'industry='.$layout2[$i]['id'].'&subindustry='.$value['id'];?>'><?php echo $value['name'];?></div>
                     <?php endforeach; ?>
                     <?php if($i==1): ?>
-                    <div class="iTitle title-bank"><?php echo strtoupper($layout2[0]['title']).'&nbsp;'.$layout2[0]['name'];?></div>
+                    <a href='../company/list?industry=<?php echo $layout2[0]['id'];?>'><div class="iTitle title-bank"><?php echo strtoupper($layout2[0]['title']).'&nbsp;'.$layout2[0]['name'];?></div></a>
                     <?php foreach($layout2[0]['sub'] as $value): ?>
-                    <div><?php echo $value['name'];?></div>
+                    <div><a href='../company/list?<?php echo 'industry='.$layout2[0]['id'].'&subindustry='.$value['id'];?>'><?php echo $value['name'];?></a></div>
                     <?php endforeach; ?>
                     <?php endif; ?>
                     </td>
@@ -48,4 +48,6 @@
     </table>
 </div>
 
-<script src="../js/company.js" type='text/javascript'></script>
+<script type='text/javascript'>
+$("#menu_title_company").addClass('actived');
+</script>

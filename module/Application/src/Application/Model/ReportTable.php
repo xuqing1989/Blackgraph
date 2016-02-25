@@ -3,6 +3,7 @@
 namespace Application\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class ReportTable
 {
@@ -24,28 +25,25 @@ class ReportTable
     }
 
     public function fetchReport($date,$industry,$subindustry,$flag) {
-        if($flag==0) {
-            if($industry == 'all') {
-                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date));
-            }
-            else if($subindustry == 'all') {
-                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'industry_id = ?' => $industry));
-            }
-            else {
-                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'industry_id = ?' => $industry,'subindustry_id = ?' => $subindustry));
+        $queryWhere = array('release_date = ?' => $date,
+                            'industry_id = ?' => $industry,
+                            'subindustry_id = ?' => $subindustry,
+                            'flag = ?' => $flag);
+        foreach($queryWhere as $key => $value) {
+            if($value == 'all') {
+                unset($queryWhere[$key]);
             }
         }
-        else {
-            if($industry == 'all') {
-                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'flag = ?'=>$flag));
-            }
-            else if($subindustry == 'all') {
-                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'industry_id = ?' => $industry,'flag = ?'=>$flag));
-            }
-            else {
-                $resultSet = $this->tableGateway->select(array('release_date = ?' => $date,'industry_id = ?' => $industry,'subindustry_id = ?' => $subindustry,'flag = ?'=>$flag));
-            }
-        }
+        $resultSet = $this->tableGateway->select($queryWhere);
+        return $resultSet;
+    }
+
+    public function searchReport($text) {
+        $resultSet = $this->tableGateway->select(function (Select $select) use($text) {
+            $select->where->like('ticker', '%'.$text.'%')
+                          ->or
+                          ->like('name','%'.$text.'%');
+        });
         return $resultSet;
     }
 

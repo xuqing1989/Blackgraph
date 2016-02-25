@@ -44,6 +44,22 @@ class CompanyController extends AbstractActionController
         return new ViewModel(array('layout1'=>$layout1,'layout2'=>$layout2));
     }
 
+    public function listAction()
+    {
+        $request = $this -> getRequest();
+        $industry_id = $request->getQuery('industry');
+        $subindustry_id = $request->getQuery('subindustry');
+        $industryList = $this->getIndustryTable()->fetchAll()->toArray();
+        foreach($industryList as $key => $value){
+            $industryList[$key]['sub'] = $this->getSubindustryTable()->fetchByIndustryid($value['id'])->toArray();
+        }
+        return new ViewModel(array(
+            'industry_data' => $industryList,
+            'industry_id' => $industry_id,
+            'subindustry_id' => $subindustry_id,
+        ));
+    }
+
     public function detailAction()
     {
         return new ViewModel();

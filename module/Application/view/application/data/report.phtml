@@ -1,4 +1,4 @@
-<div>符合条件的股票:&nbsp;<?php echo count($report_list)?>个</div>
+<div>符合条件的股票:&nbsp;<?php echo $total_num; ?>个</div>
     <table class="index-table-list">
         <tbody>
              <tr>
@@ -28,3 +28,40 @@
         </tbody>
     </table>
 </div>
+<?php
+    $totalPage = ceil($total_num/$countPerPage);
+    $pageSeq = array();
+    if($totalPage <= 7) {
+        for($i=1;$i<=$totalPage;$i++){
+            $pageSeq[$i-1] = $i;
+        }
+    }
+    else {
+        if($page <= 3 || $page >= $totalPage - 2) {
+            $pageSeq = array(1,2,3,'...',$totalPage-2,$totalPage-1,$totalPage);
+        }
+        else {
+            $pageSeq = array(1,'...',$page-1,$page,$page+1,'...',$totalPage);
+        }
+    }
+    if($page != 'all'):
+?>
+<div class="company-list-page">
+    <ul class="pagination text-center" role="navigation" aria-label="Pagination">
+        <?php if($page==1): ?>
+        <li class="pagination-previous disabled">上一页</li>
+        <?php else: ?>
+        <li class="pagination-previous"><a href="javascript:void(0)">上一页</a></li>
+        <?php endif; ?>
+        <!--<li class="current"><span class="show-for-sr">当前:&nbsp;</span> 1</li>-->
+        <?php for($i=0;$i<count($pageSeq);$i++): ?>
+        <li><a href="javascript:void(0)" class="<?php if($page==$pageSeq[$i])echo "current";?> list_page_num"><?php echo $pageSeq[$i];?></a></li>
+        <?php endfor; ?>
+        <?php if($page==$totalPage): ?>
+        <li class="pagination-next disabled">下一页</li>
+        <?php else: ?>
+        <li class="pagination-next"><a href="javascript:void(0)">下一页</a></li>
+        <?php endif; ?>
+    </ul>
+</div>
+<?php endif; ?>

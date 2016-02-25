@@ -4,7 +4,8 @@ indexObj.activeDate = new moment();
 indexObj.cal = new CalHeatMap();
 indexObj.filter = {'industry':'all',
                    'subindustry':'all',
-                   'flag':0};
+                   'flag':'all',
+                   'page':'all'};
 
 indexObj.loadDate = function() {
     var theDate = indexObj.activeDate;
@@ -24,7 +25,8 @@ indexObj.report_list = function(report_date,filterObj){
             "date":report_date,
             "industry":filterObj.industry,
             "subindustry":filterObj.subindustry,
-            "flag":filterObj.flag
+            "flag":filterObj.flag,
+            "page":filterObj.page,
         },
         success: function(result) {
             $('#ajax_loader').hide();
@@ -165,7 +167,7 @@ $(document).ready(function(){
             indexObj.filter.flag=1;
         }
         else {
-            indexObj.filter.flag=0;
+            indexObj.filter.flag='all';
         }
         indexObj.loadDate();
         indexObj.cal.update("../data/calendar?startDate={{t:start}}&endDate={{t:end}}&industry="+

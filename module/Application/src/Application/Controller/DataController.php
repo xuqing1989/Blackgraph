@@ -45,7 +45,13 @@ class DataController extends AbstractActionController
         $industry = $request->getQuery('industry');
         $subindustry = $request->getQuery('subindustry');
         $flag = $request->getQuery('flag');
+        $page = $request->getQuery('page');
+        //config
+        $countPerPage = 50;
+
         $report_list = $this->getReportTable()->fetchReport($date,$industry,$subindustry,$flag)->toArray();
+        $total_num = count($report_list);
+        $report_list = array_splice($report_list,($page-1)*$countPerPage,50);
         foreach($report_list as $key=>$value) {
             $tickerPara .= strtolower($value['house']).$value['ticker'].',';
         }
@@ -83,7 +89,19 @@ class DataController extends AbstractActionController
             $report_list[$skey]['volumn'] = $sinaData[9]/10000000;
         }
         
-        $this->viewModel = new ViewModel(array('report_list'=>$report_list));
+        $this->viewModel = new ViewModel(array('report_list'=>$report_list,
+                                               'page' => (int)$page,
+                                               'total_num' => $total_num,
+                                               'countPerPage' => $countPerPage,
+                                              ));
+        $this->viewModel->setTerminal(true);
+        return $this->viewModel;
+    }
+
+    public function searchAction() {
+        $test_search = $this->getReportTable()->searchReport('银行')->toArray();
+        var_dump($test_search);
+        $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
     }

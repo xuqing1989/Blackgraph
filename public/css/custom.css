@@ -219,7 +219,9 @@ body{
     font-size:16px;
     font-weight:bold;
 }
-
+.company-industry-table1 td a, .company-industry-table2 td a{
+    color:#999;
+}
 .company-industry-table2 td .title-bank {
     margin-top:30px;
 }
@@ -227,6 +229,40 @@ body{
 .company-industry-table1 th:nth-child(1), .company-industry-table1 td:nth-child(1),  
 .company-industry-table1 th:nth-child(2), .company-industry-table1 td:nth-child(4) {
     border-right: 1px solid #555;
+}
+
+/*company-list*/
+.company-table-loading {
+    width:100%;
+    height:400px;
+    background-color:#262626;
+    position:relative;
+    filter:alpha(opacity=50);  
+    -moz-opacity:0.5;  
+    -khtml-opacity: 0.5;  
+    opacity: 0.5; 
+}
+
+.company-list-page {
+    margin-top:20px;
+}
+
+.company-list-page .pagination a, .company-list-page .pagination .ellipsis {
+    color:#999;
+}
+
+.company-list-page .pagination a:hover, .company-list-page .pagination .ellipsis:hover {
+    background: #262626 none repeat scroll 0 0;
+    color:#fff;
+}
+
+.company-list-page .pagination .current {
+    background: #262626 none repeat scroll 0 0;
+    color:#fff;
+}
+
+.company-list-page .disabled {
+    color:#555;
 }
 
 /*company-detail*/
