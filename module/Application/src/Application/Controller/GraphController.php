@@ -104,9 +104,28 @@ class GraphController extends AbstractActionController
     public function profitmarginAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
+        $apiData = json_decode($request -> getPost('apiData'));
+        $xAris = array();
+        $data1 = array();
+        $data2 = array();
+        $data3 = array();
+        foreach($apiData as $year => $season) {
+            foreach($season as $key => $value) {
+                $value = $value->data;
+                array_push($xAris,substr($year,2,2).'Q'.$key);
+                array_push($data1,round(($value->NIncomeAttrP / $value->tRevenue)*100,2));
+                array_push($data2,round(($value->operateProfit / $value->tRevenue)*100,2));
+                array_push($data3,round((($value->tRevenue - $value->COGS) / $value->tRevenue)*100,2));
+            }
+        }
         $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
+        $this->viewModel->setVariables(array('divId' => $divId,
+                                             'xAris' => $xAris,
+                                             'data1' => $data1,
+                                             'data2' => $data2,
+                                             'data3' => $data3,
+                                      ))
                         ->setTerminal(true);
         return $this->viewModel;
     }

@@ -77,13 +77,19 @@ class DataController extends AbstractActionController
             $report_list[$skey]['price_now'] = $sinaData[3];
             $rate = abs((($sinaData[3]-$sinaData[2])/$sinaData[2])*100);
             $rate = sprintf('%.2f',$rate).'%';
-            if($sinaData[3] > $sinaData[2]){
-                $report_list[$skey]['color'] = 'red';
-                $rate = '&uarr;&nbsp;'.$rate;
+            if($sinaData[3] == '0.00') {
+                $report_list[$skey]['color'] = '';
+                $rate = '停牌';
             }
             else {
-                $report_list[$skey]['color'] = 'green';
-                $rate = '&darr;&nbsp;'.$rate;
+                if($sinaData[3] > $sinaData[2]){
+                    $report_list[$skey]['color'] = 'red';
+                    $rate = '&uarr;&nbsp;'.$rate;
+                }
+                else {
+                    $report_list[$skey]['color'] = 'green';
+                    $rate = '&darr;&nbsp;'.$rate;
+                }
             }
             $report_list[$skey]['price_rate'] = $rate;
             $report_list[$skey]['volumn'] = $sinaData[9]/10000000;
@@ -101,6 +107,55 @@ class DataController extends AbstractActionController
     public function searchAction() {
         $test_search = $this->getReportTable()->searchReport('银行')->toArray();
         var_dump($test_search);
+        $this->viewModel = new ViewModel();
+        $this->viewModel->setTerminal(true);
+        return $this->viewModel;
+    }
+
+    public function companydataAction(){
+        $request = $this -> getRequest();
+        $ticker = $request->getQuery('ticker');
+        $company_data = $this->getReportTable()->fetchByTicker($ticker)->toArray();
+        $company_data = $company_data[0];
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://hq.sinajs.cn/list=".strtolower($company_data['house']).$company_data['ticker'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        $sinaApi = explode(';',$response);
+        array_pop($sinaApi);
+        $sinaPredata = explode('"',$sinaApi[0]);
+        $sinaData = explode(',',$sinaPredata[1]);
+        $company_data['price_now'] = $sinaData[3];
+        $rate = abs((($sinaData[3]-$sinaData[2])/$sinaData[2])*100);
+        $rate = sprintf('%.2f',$rate).'%';
+        if($sinaData[3] == '0.00') {
+            $report_list[$skey]['color'] = '';
+            $rate = '停牌';
+        }
+        else {
+            if($sinaData[3] > $sinaData[2]){
+                $report_list[$skey]['color'] = 'red';
+                $rate = '&uarr;&nbsp;'.$rate;
+            }
+            else {
+                $report_list[$skey]['color'] = 'green';
+                $rate = '&darr;&nbsp;'.$rate;
+            }
+        }
+        $company_data['price_rate'] = $rate;
+        $company_data['volumn'] = $sinaData[9]/10000000;
+        
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);
         return $this->viewModel;

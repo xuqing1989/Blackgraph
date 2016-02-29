@@ -24,6 +24,11 @@ class ReportTable
         return $resultSet->count();
     }
 
+    public function fetchByTicker($ticker) {
+        $resultSet = $this->tableGateway->select(array('ticker' => $ticker));
+        return $resultSet;
+    }
+
     public function fetchReport($date,$industry,$subindustry,$flag) {
         $queryWhere = array('release_date = ?' => $date,
                             'industry_id = ?' => $industry,

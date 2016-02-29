@@ -1,6 +1,6 @@
     var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
     var option = {
-        backgroundColor:'#353535',
+        backgroundColor:'#262626',
         textStyle: {
             color:'#ccc',
         },
@@ -23,9 +23,7 @@
             },
         },
         xAxis: {
-            data: ["13Q1","13Q2","13Q3","13Q4",
-                   "14Q1","14Q2","14Q3","14Q4",
-                   "14Q1","14Q2","14Q3","14Q4",],
+            data: <?php echo json_encode($xAris);?>,
             axisTick: {
                 lineStyle: {
                     color: '#555'
@@ -34,19 +32,25 @@
             axisLabel: {
                 textStyle: {
                     color: '#ccc'
-                }
+                },
+            },
+            axisLine: {
+                onZero:false,
             },
             splitLine: {
+                show:false,
                 lineStyle: {
                     color: ['#555']
-                }
+                },
             },
+            boundaryGap:false,
         },
         yAxis:[
         {
             type:'value',
             name:'百分比',
             splitLine: {
+                show:false,
                 lineStyle: {
                     color: ['#555']
                 }
@@ -62,30 +66,27 @@
                 },
                 formatter: '{value}%',
             },
-            scale:true,
+            scale:false,
         },
         ],
         series: [
         {
             name: '净利率',
             type: 'line',
-            data: [59, 42, 73, 71, 
-                   19,15, 120, 94,
-                   96,50, 62, 92,],
+            showAllSymbol : true,
+            data: <?php echo json_encode($data1);?>,
         },
         {
             name: '经营利润率',
             type: 'line',
-            data: [69, 22, 53, 91, 
-                   39,75, 10, 34,
-                   46,70, 72, 62,],
+            showAllSymbol : true,
+            data: <?php echo json_encode($data2);?>,
         },
         {
             name: '毛利率',
             type: 'line',
-            data: [20, 30, 36, 50, 
-                   40,50, 28, 30,
-                   40,50, 28, 30],
+            showAllSymbol : true,
+            data: <?php echo json_encode($data3);?>,
         },
         ],
     };

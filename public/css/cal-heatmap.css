@@ -87,7 +87,7 @@ Remove comment to apply this style to date with value equal to 0
 
 rect.highlight
 {
-    stroke:#8258FA;
+    stroke:#D43B4B;
     stroke-width:2
 }
 
@@ -98,13 +98,14 @@ text.highlight
 
 rect.now
 {
-    stroke: #8258FA;
+    stroke: #D43B4B;
     stroke-width:2
 }
 
 text.now
 {
-    font-weight: 800
+    font-weight: 800;
+    fill:#D43B4B;
 }
 
 .domain-background {

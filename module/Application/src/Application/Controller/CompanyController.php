@@ -16,6 +16,7 @@ class CompanyController extends AbstractActionController
 {
     protected $industryTable;
     protected $subindustryTable;
+    protected $reportTable;
 
     public function indexAction()
     {
@@ -62,7 +63,19 @@ class CompanyController extends AbstractActionController
 
     public function detailAction()
     {
-        return new ViewModel();
+        $request = $this -> getRequest();
+        $ticker = $request->getQuery('ticker');
+        if(!$ticker) {
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+        $company_data = $this->getReportTable()->fetchByTicker($ticker)->toArray();
+        $company_data = $company_data[0];
+        $company_data['industry'] = $this->getIndustryTable()->fetchById($company_data['industry_id'])->toArray();
+        $company_data['industry'] = $company_data['industry'][0];
+        $company_data['subindustry'] = $this->getSubindustryTable()->fetchById($company_data['subindustry_id'])->toArray();
+        $company_data['subindustry'] = $company_data['subindustry'][0];
+        return new ViewModel(array('company_data'=>$company_data));
     }
 
     public function getIndustryTable()
@@ -81,5 +94,14 @@ class CompanyController extends AbstractActionController
             $this->subindustryTable = $sm -> get('Application\Model\SubindustryTable');
         }
         return $this->subindustryTable;
+    }
+
+    public function getReportTable()
+    {
+        if(!$this->reportTable) {
+            $sm = $this->getServiceLocator();
+            $this->reportTable = $sm -> get('Application\Model\ReportTable');
+        }
+        return $this->reportTable;
     }
 }

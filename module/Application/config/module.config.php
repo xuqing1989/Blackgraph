@@ -78,6 +78,7 @@ return array(
             'Application\Controller\Company' => 'Application\Controller\CompanyController',
             'Application\Controller\Graph' => 'Application\Controller\GraphController',
             'Application\Controller\Data' => 'Application\Controller\DataController',
+            'Application\Controller\Api' => 'Application\Controller\ApiController',
         ),
     ),
     'view_manager' => array(

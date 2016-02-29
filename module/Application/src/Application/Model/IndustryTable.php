@@ -27,6 +27,11 @@ class IndustryTable
         return $resultSet;
     }
 
+    public function fetchById($id){
+        $resultSet = $this->tableGateway->select(array('id = ?' => $id));
+        return $resultSet;
+    }
+
     public function addIndustry($data){
         return $this->tableGateway->insert($data);
     }

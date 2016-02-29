@@ -74,6 +74,7 @@ class TestController extends AbstractActionController
         $host = "https://api.wmcloud.com/data/v1";
         $request = $this -> getRequest();
         $api = $request->getQuery('api');
+        $api = '/api/fundamental/getFdmtIS.json?ticker=600887&secID=&beginDate=20131231&endDate=20141231';
         $ch = curl_init();
         $timeout = 15;
         //echo $host.$api."<br/><br/><br/>";

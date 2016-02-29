@@ -22,6 +22,11 @@ class SubindustryTable
         return $this->tableGateway->select(array('name = ?'=>$name));
     }
 
+    public function fetchById($id){
+        $resultSet = $this->tableGateway->select(array('id = ?' => $id));
+        return $resultSet;
+    }
+
     public function fetchByIndustryid($id){
         return $this->tableGateway->select(array('industry_id = ?'=>$id));
     }

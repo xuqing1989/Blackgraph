@@ -30,7 +30,7 @@
             </tr>
             <tr>
                 <?php for($i=1;$i<count($layout2);$i++): ?>
-                    <td>
+                    <td class="w20p">
                     <a href='../company/list?industry=<?php echo $layout2[$i]['id'];?>'><div class="iTitle"><?php echo strtoupper($layout2[$i]['title']).'&nbsp;'.$layout2[$i]['name'];?></div></a>
                     <?php foreach($layout2[$i]['sub'] as $value): ?>
                     <div><a href='../company/list?<?php echo 'industry='.$layout2[$i]['id'].'&subindustry='.$value['id'];?>'><?php echo $value['name'];?></div>
