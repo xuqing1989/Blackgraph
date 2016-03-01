@@ -4,7 +4,15 @@ Global.house = '<?php echo $company_data['house'];?>';
 </script>
 
 <div class="row company-overview-body">
-    <div class="text-left"><?php echo $company_data['industry']['name']?>&nbsp;|&nbsp;<?php echo $company_data['subindustry']['name'];?></div>
+    <div class="text-left">
+        <a href="../company/list?industry=<?php echo $company_data['industry_id'];?>">
+        <?php echo $company_data['industry']['name']?>&nbsp;
+        </a>
+        |&nbsp;
+        <a href="../company/list?industry=<?php echo $company_data['industry_id'];?>&subindustry=<?php echo $company_data['subindustry_id']?>">
+        <?php echo $company_data['subindustry']['name'];?>
+        </a>
+    </div>
     <div class="small-3 columns no-padding">
         <div>
             <span class="company-overview-name"><?php echo $company_data['name'];?></span>
