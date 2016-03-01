@@ -100,4 +100,20 @@ class ApiController extends AbstractActionController
         return $this->viewModel;
     }
 
+    public function fdmtbsAction()
+    {
+        $request = $this -> getRequest();
+        $endDate = $request->getQuery('endDate');
+        $ticker = $request->getQuery('ticker');
+        $beginDate = '20100101';
+        $dataCount = 20;
+        $apiBase = '/api/fundamental/getFdmtBS.json?';
+        $apiData = $this->fetchFromApi($apiBase,array('ticker'=>$ticker,'beginDate'=>$beginDate,'endDate'=>$endDate));
+        $apiData = $this->sortResult($apiData,$dataCount);
+        echo json_encode($apiData);
+        $this->viewModel = new ViewModel();
+        $this->viewModel->setTerminal(true);
+        return $this->viewModel;
+    }
+
 }

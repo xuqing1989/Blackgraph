@@ -17,7 +17,7 @@ indexObj.loadDate = function() {
 
 indexObj.report_list = function(report_date,filterObj){
     $('#ajax_report_list').html('');
-    $('#ajax_loader').show();
+    $('.ajax_loader').show();
     $.ajax({
         type:'GET',
         url: '../data/report',
@@ -29,7 +29,7 @@ indexObj.report_list = function(report_date,filterObj){
             "page":filterObj.page,
         },
         success: function(result) {
-            $('#ajax_loader').hide();
+            $('.ajax_loader').hide();
             $('#ajax_report_list').html(result);
         }
     });

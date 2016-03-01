@@ -24,7 +24,7 @@ class GraphController extends AbstractActionController
     public function sankeyAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -34,7 +34,7 @@ class GraphController extends AbstractActionController
     public function coststructureAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -44,7 +44,7 @@ class GraphController extends AbstractActionController
     public function inventoryturnoverAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -54,7 +54,7 @@ class GraphController extends AbstractActionController
     public function noncurrentliabilityAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -64,7 +64,7 @@ class GraphController extends AbstractActionController
     public function noncurrentassetsAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -74,9 +74,25 @@ class GraphController extends AbstractActionController
     public function assetsliabilityrateAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
+        $apiData = json_decode($request -> getPost('apiData'));
+        $xAris = array();
+        $data1 = array();
+        $data2 = array();
+        foreach($apiData as $year => $season) {
+            foreach($season as $key => $value) {
+                $value = $value->data;
+                array_push($xAris,substr($year,2,2).'Q'.$key);
+                array_push($data1,round(($value->TLiab / $value->TAssets)*100,2));
+                array_push($data2,round(($value->TNCL / $value->TAssets)*100,2));
+            }
+        }
         $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
+        $this->viewModel->setVariables(array('divId' => $divId,
+                                             'xAris' => $xAris,
+                                             'data1' => $data1,
+                                             'data2' => $data2,
+                                      ))
                         ->setTerminal(true);
         return $this->viewModel;
     }
@@ -84,7 +100,7 @@ class GraphController extends AbstractActionController
     public function earnedprofitAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -94,7 +110,7 @@ class GraphController extends AbstractActionController
     public function netmarginAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -133,7 +149,7 @@ class GraphController extends AbstractActionController
     public function cashliabilityAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -143,9 +159,25 @@ class GraphController extends AbstractActionController
     public function liquidityAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
+        $apiData = json_decode($request -> getPost('apiData'));
+        $xAris = array();
+        $data1 = array();
+        $data2 = array();
+        foreach($apiData as $year => $season) {
+            foreach($season as $key => $value) {
+                $value = $value->data;
+                array_push($xAris,substr($year,2,2).'Q'.$key);
+                array_push($data1,round(($value->TCA / $value->TAssets)*100,2));
+                array_push($data2,round((($value->TCA - $value->inventories) / $value->TAssets)*100,2));
+            }
+        }
         $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
+        $this->viewModel->setVariables(array('divId' => $divId,
+                                             'xAris' => $xAris,
+                                             'data1' => $data1,
+                                             'data2' => $data2,
+                                      ))
                         ->setTerminal(true);
         return $this->viewModel;
     }
@@ -153,7 +185,7 @@ class GraphController extends AbstractActionController
     public function currentassetsAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -163,7 +195,7 @@ class GraphController extends AbstractActionController
     public function incomeAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -173,7 +205,7 @@ class GraphController extends AbstractActionController
     public function receivableturnoverAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
@@ -183,7 +215,7 @@ class GraphController extends AbstractActionController
     public function assetsrateAction()
     {
         $request = $this -> getRequest();
-        $divId = $request -> getQuery('divId');
+        $divId = $request -> getPost('divId');
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);

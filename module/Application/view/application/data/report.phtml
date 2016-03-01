@@ -18,7 +18,9 @@
                  <td class="text-left">
                      <a href='../company/detail?ticker=<?php echo $value['ticker'];?>'><?php echo $value['ticker'].'.'.$value['house']; ?></a>
                  </td>
-                 <td class="text-left"><?php echo $value['name'];?></td>
+                 <td class="text-left">
+                     <a href='../company/detail?ticker=<?php echo $value['ticker'];?>'><?php echo $value['name'];?></a>
+                 </td>
                  <td><?php echo sprintf('%.2f',$value['price_now']);?></td>
                  <td class="<?php echo $value['color']?>"><?php echo $value['price_rate'];?></td>
                  <td><?php echo sprintf('%.2f',$value['volumn']);?></td>

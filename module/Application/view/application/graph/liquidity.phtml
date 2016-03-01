@@ -1,6 +1,6 @@
-    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+    var myCharts = echarts.init(document.getElementById('<?php echo $divId;?>'));
     var option = {
-        backgroundColor:'#353535',
+        backgroundColor:'#262626',
         textStyle: {
             color:'#ccc',
         },
@@ -23,9 +23,7 @@
             },
         },
         xAxis: {
-            data: ["13Q1","13Q2","13Q3","13Q4",
-                   "14Q1","14Q2","14Q3","14Q4",
-                   "14Q1","14Q2","14Q3","14Q4",],
+            data: <?php echo json_encode($xAris);?>,
             axisTick: {
                 lineStyle: {
                     color: '#555'
@@ -34,13 +32,18 @@
             axisLabel: {
                 textStyle: {
                     color: '#ccc'
-                }
+                },
+            },
+            axisLine: {
+                onZero:false,
             },
             splitLine: {
+                show:false,
                 lineStyle: {
                     color: ['#555']
-                }
+                },
             },
+            boundaryGap:false,
         },
         yAxis:[
         {
@@ -48,6 +51,7 @@
             name:'CNY百万',
             splitNumber:'5',
             splitLine: {
+                show:false,
                 lineStyle: {
                     color: ['#555']
                 }
@@ -69,17 +73,15 @@
         {
             name: '速动比率',
             type: 'line',
-            data: [50, 40, 76, 70, 
-                   90,15, 18, 90,
-                   90,50, 28, 90,]
+            showAllSymbol:true,
+            data: <?php echo json_encode($data2);?>,
         },
         {
             name: '流动比率',
             type: 'line',
-            data: [100, 20, 16, 20, 
-                   30,20, 80, 20,
-                   20,40, 28, 30],
+            showAllSymbol:true,
+            data: <?php echo json_encode($data1);?>,
         },
         ],
     };
-    myChart.setOption(option);
+    myCharts.setOption(option);

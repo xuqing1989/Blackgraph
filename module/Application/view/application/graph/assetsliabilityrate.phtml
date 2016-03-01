@@ -1,12 +1,12 @@
     var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
     var option = {
-        backgroundColor:'#353535',
+        backgroundColor:'#262626',
         textStyle: {
             color:'#ccc',
         },
         color:["#FE7F0E","#1F78B4","#555"],
         title: {
-            text: '负债/总资产%',
+            text: '负债比率',
             textStyle: {
                 color:'#ccc',
             },
@@ -17,19 +17,20 @@
         grid: {
         },
         legend: {
-            data:['负债/资产','非流动负债/资产'],
+            data:['负债比率','长期负债比率'],
             textStyle: {
                 color:'#ccc',
             },
         },
         xAxis: {
-            data: ["13Q1","13Q2","13Q3","13Q4",
-                   "14Q1","14Q2","14Q3","14Q4",
-                   "14Q1","14Q2","14Q3","14Q4",],
+            data: <?php echo json_encode($xAris);?>,
             axisTick: {
                 lineStyle: {
                     color: '#555'
                 }
+            },
+            axisLine:{
+                onZero:false,
             },
             axisLabel: {
                 textStyle: {
@@ -37,10 +38,12 @@
                 }
             },
             splitLine: {
+                show:false,
                 lineStyle: {
                     color: ['#555']
                 }
             },
+            boundaryGap:false,
         },
         yAxis:[
         {
@@ -48,6 +51,7 @@
             name:'CNY百万',
             splitNumber:'5',
             splitLine: {
+                show:false,
                 lineStyle: {
                     color: ['#555']
                 }
@@ -67,18 +71,16 @@
         }],
         series: [
         {
-            name: '非流动负债/资产',
+            name: '长期负债比率',
             type: 'line',
-            data: [50, 40, 76, 70, 
-                   90,15, 18, 90,
-                   90,50, 28, 90,]
+            showAllSymbol:true,
+            data: <?php echo json_encode($data2);?>,
         },
         {
-            name: '负债/资产',
+            name: '负债比率',
             type: 'line',
-            data: [100, 20, 16, 20, 
-                   30,20, 80, 20,
-                   20,40, 28, 30],
+            showAllSymbol:true,
+            data: <?php echo json_encode($data1);?>,
         },
         ],
     };

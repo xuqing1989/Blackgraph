@@ -1,5 +1,6 @@
 <script type='text/javascript'>
 Global.ticker = '<?php echo $company_data['ticker'];?>';
+Global.house = '<?php echo $company_data['house'];?>';
 </script>
 
 <div class="row company-overview-body">
@@ -10,39 +11,39 @@ Global.ticker = '<?php echo $company_data['ticker'];?>';
             <span class="company-overview-code"><?php echo $company_data['ticker'].'.'.$company_data['house'];?></span>
         </div>
         <div class="company-overview-price">
-            <span class="small-3 no-padding">13.45</span>
-            <span class="small-3 no-padding">+0.22</span>
-            <span class="small-3 no-padding">+1.66%</span>
+            <span class="small-3 no-padding" id="price_now"></span>
+            <span class="small-3 no-padding" id="price_diff"></span>
+            <span class="small-3 no-padding" id="price_rate"></span>
         </div>
     </div>
     <div class="small-3 columns no-padding company-overview-title">
         <div>
             <span>成交量</span>
-            <span>2036.38万股</span>
+            <span id="volumn_now">--</span>
         </div>
         <div>
             <span>成交额</span>
-            <span>2.70亿</span>
+            <span id="count_now">--</span>
         </div>
     </div>
     <div class="small-3 columns no-padding company-overview-title">
         <div>
             <span>总市值</span>
-            <span>807.22亿</span>
+            <span><?php echo sprintf('%.2f',$company_data['market_cup']);?>亿</span>
         </div>
         <div>
             <span>市盈率TTM</span>
-            <span>20.22</span>
+            <span><?php echo sprintf('%.2f',$company_data['ttm']);?></span>
         </div>
     </div>
     <div class="small-3 columns no-padding company-overview-title">
         <div>
             <span>近期披露</span>
-            <span>15Q4</span>
+            <span><?php echo $company_data['report_year'].$company_data['report_type'];?></span>
         </div>
         <div>
             <span>披露日期</span>
-            <span>2016-3-1</span>
+            <span><?php echo $company_data['release_date'];?></span>
         </div>
     </div>
 </div>
@@ -54,9 +55,13 @@ Global.ticker = '<?php echo $company_data['ticker'];?>';
     <span>资产负债</span>
     <span>现金流量</span>
     <span>杜邦分析</span>
+    <a href="http://www.cninfo.com.cn/information/companyinfo_n.html?fulltext?<?php echo strtolower($company_data['house']).'mb'.$company_data['ticker'];?>" target='_blank'>
+        <span>公司公告</span>
+    </a>
 </div>
 
-<div class="row company-chart-body" id="chart_body_1">
-</div>
-
+<div class="row company-chart-body" id="chart_body_1"></div>
+<div class="row company-chart-body" id="chart_body_2"></div>
+<div class="row company-chart-body" id="chart_body_3"></div>
+<div class="row company-chart-body" id="chart_body_4"></div>
 <script src="../js/company_detail.js" type="text/javascript"></script>

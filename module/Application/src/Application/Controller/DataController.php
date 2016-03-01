@@ -112,15 +112,14 @@ class DataController extends AbstractActionController
         return $this->viewModel;
     }
 
-    public function companydataAction(){
+    public function sinaAction(){
         $request = $this -> getRequest();
         $ticker = $request->getQuery('ticker');
-        $company_data = $this->getReportTable()->fetchByTicker($ticker)->toArray();
-        $company_data = $company_data[0];
-
+        $house = $request->getQuery('house');
+        $company_data = array();
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://hq.sinajs.cn/list=".strtolower($company_data['house']).$company_data['ticker'],
+            CURLOPT_URL => "http://hq.sinajs.cn/list=".strtolower($house).$ticker,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -136,26 +135,31 @@ class DataController extends AbstractActionController
         array_pop($sinaApi);
         $sinaPredata = explode('"',$sinaApi[0]);
         $sinaData = explode(',',$sinaPredata[1]);
-        $company_data['price_now'] = $sinaData[3];
+        $company_data['price_now'] = round($sinaData[3],2);
+        $company_data['price_diff'] = abs(round($sinaData[3]-$sinaData[2],2));
         $rate = abs((($sinaData[3]-$sinaData[2])/$sinaData[2])*100);
         $rate = sprintf('%.2f',$rate).'%';
         if($sinaData[3] == '0.00') {
-            $report_list[$skey]['color'] = '';
             $rate = '停牌';
+            $company_data['price_diff'] = '停牌';
         }
         else {
             if($sinaData[3] > $sinaData[2]){
-                $report_list[$skey]['color'] = 'red';
                 $rate = '&uarr;&nbsp;'.$rate;
+                $company_data['price_diff'] = '+' . $company_data['price_diff'];
+                $company_data['isP'] = true;
             }
             else {
-                $report_list[$skey]['color'] = 'green';
                 $rate = '&darr;&nbsp;'.$rate;
+                $company_data['price_diff'] = '-' . $company_data['price_diff'];
+                $company_data['isP'] = false;
             }
         }
         $company_data['price_rate'] = $rate;
-        $company_data['volumn'] = $sinaData[9]/10000000;
+        $company_data['volumn'] = round($sinaData[9]/10000000,2).'万股';
+        $company_data['count'] = round($sinaData[8]/10000,2).'亿';
         
+        echo json_encode($company_data);
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
