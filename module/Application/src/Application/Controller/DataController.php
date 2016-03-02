@@ -77,7 +77,7 @@ class DataController extends AbstractActionController
             $report_list[$skey]['price_now'] = $sinaData[3];
             $rate = abs((($sinaData[3]-$sinaData[2])/$sinaData[2])*100);
             $rate = sprintf('%.2f',$rate).'%';
-            if($sinaData[3] == '0.00') {
+            if($sinaData[3] == '0.00' || $sinaData[9] == '0.00') {
                 $report_list[$skey]['color'] = '';
                 $rate = '停牌';
             }
@@ -105,8 +105,10 @@ class DataController extends AbstractActionController
     }
 
     public function searchAction() {
-        $test_search = $this->getReportTable()->searchReport('银行')->toArray();
-        var_dump($test_search);
+        $request = $this -> getRequest();
+        $text = $request->getQuery('text');
+        $searchResult = $this->getReportTable()->searchReport($text)->toArray();
+        echo json_encode($searchResult);
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
@@ -135,11 +137,11 @@ class DataController extends AbstractActionController
         array_pop($sinaApi);
         $sinaPredata = explode('"',$sinaApi[0]);
         $sinaData = explode(',',$sinaPredata[1]);
-        $company_data['price_now'] = round($sinaData[3],2);
-        $company_data['price_diff'] = abs(round($sinaData[3]-$sinaData[2],2));
+        $company_data['price_now'] = sprintf('%.2f',$sinaData[3]);
+        $company_data['price_diff'] = sprintf('%.2f',abs($sinaData[3]-$sinaData[2]));
         $rate = abs((($sinaData[3]-$sinaData[2])/$sinaData[2])*100);
         $rate = sprintf('%.2f',$rate).'%';
-        if($sinaData[3] == '0.00') {
+        if($sinaData[3] == '0.00' || $sinaData[9] == '0.00') {
             $rate = '停牌';
             $company_data['price_diff'] = '停牌';
         }

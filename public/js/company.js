@@ -75,7 +75,10 @@ companyObj.preLoad = function(iid,sid) {
 $(document).ready(function(){
     $("#menu_title_company").addClass('actived');
 
-    $(".industry_list_select[sid=125]").html();
+    $('div:not(".industry_list_select,.subindustry_list_select,#industry_dropdown,#subindustry_dropdown")').click(function(){
+        $("#industry_dropdown").removeClass('is-open');
+        $("#subindustry_dropdown").removeClass('is-open');
+    });
 
     $(".industry_list_select").click(function(){
         var industryName = $(this).html();

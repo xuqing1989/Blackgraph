@@ -53,7 +53,7 @@
             <div class="small-4 left columns">子行业:&nbsp;<span class="index-industry-list-title" type="button" id="subindustry_title" data-toggle="subindustry_dropdown">全部&nbsp;&#9660;</span></div>
             <div class="small-4 right columns" style="text-align:right"><input type='checkbox' id="flag_checkbox"/>&nbsp;仅包括沪深300指数成分股</div>
         </div>
-        <div class="dropdown-pane bottom index-industry-list" id="industry_dropdown" data-dropdown >
+        <div class="dropdown-pane bottom index-industry-list" id="industry_dropdown" data-dropdown data-close-on-click='true'>
             <ul>
                 <li id="industry_list_all" sid="all" sub='[]'>全部</li>
                 <?php foreach($industry_data as $key=>$value): ?>
@@ -61,7 +61,7 @@
                 <?php endforeach; ?>
             </ul>
         </div>
-        <div class="dropdown-pane index-industry-list" id="subindustry_dropdown" data-dropdown >
+        <div class="dropdown-pane index-industry-list" id="subindustry_dropdown" data-dropdown data-close-on-click='true'>
             <ul id="subindustry_list">
                 <li class="subindustry_list_select" sid="all">全部</li>
             </ul>

@@ -21,11 +21,11 @@
         <!-- Scripts -->
         <?php echo $this->headScript()
             ->prependFile($this->basePath('js/foundation.min.js'))
+            ->prependFile($this->basePath('js/global.js'))
             ->prependFile($this->basePath('js/jquery.min.js'))
             ->prependFile($this->basePath('js/echarts.min.js'))
             ->prependFile($this->basePath('js/respond.min.js'), 'text/javascript', array('conditional' => 'lt IE 9',))
-            ->prependFile($this->basePath('js/html5shiv.js'),   'text/javascript', array('conditional' => 'lt IE 9',))
-            ->prependFile($this->basePath('js/global.js'));
+            ->prependFile($this->basePath('js/html5shiv.js'),   'text/javascript', array('conditional' => 'lt IE 9',));
         ?>
         <script src="../js/vendor/modernizr.js"></script>
         <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
@@ -41,7 +41,13 @@
                 <a href="../"><div class="small-2 columns layout-topbar-menu left" id="menu_title_cal">财报日历</div></a>
                 <a href="../company"><div class="small-2 columns layout-topbar-menu left" id="menu_title_company">公司</div></a>
                 <div class="small-1 columns layout-topbar-wx right">微信群</div>
-                <div class="small-4 columns layout-topbar-search right"><input class="right" placeholder="搜索股票代码/公司名" /></div>
+                <div class="small-4 columns layout-topbar-search right">
+                    <input class="right" id="search_company" placeholder="搜索股票代码/公司名" data-toggle="search_dropdown" />
+                </div>
+            </div>
+            <div class="dropdown-pane bottom layout-topbar-search-result" id="search_dropdown" data-dropdown data-close-on-click='true'>
+                <ul>
+                </ul>
             </div>
         </div>
         <div class="container">
