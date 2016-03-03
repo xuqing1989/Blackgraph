@@ -63,10 +63,16 @@ body ul {
 }
 
 .layout-topbar-search-result{
+    border:0;
+    padding:0;
     width:220px;
+}
+
+.layout-topbar-search-result ul{
+    border:1px solid #fff;
     background-color:#262626;
     color:#999;
-    padding: 10px 0 5px 10px;
+    padding: 10 0 5px 5px;
     max-height:180px;
     overflow:auto;
 }

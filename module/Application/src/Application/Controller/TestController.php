@@ -17,6 +17,7 @@ class TestController extends AbstractActionController
     protected $reportTable;
     protected $industryTable;
     protected $subindustryTable;
+    protected $tableArray;
 
     public function indexAction()
     {
@@ -42,28 +43,7 @@ class TestController extends AbstractActionController
     }
 
     public function test3Action(){
-        $curl = curl_init();
-        
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => "http://a.apix.cn/apixmoney/stockdata/stock?stockid=sz002230",
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => "",
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 30,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => "GET",
-          CURLOPT_HTTPHEADER => array(
-            "accept: application/json",
-            "apix-key: a613753089814fed586fa777bf97b179",
-            "content-type: application/json"
-          ),
-        ));
-        
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        
-        curl_close($curl);
-        echo $response;
+        echo 'test console';
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
@@ -115,5 +95,14 @@ class TestController extends AbstractActionController
             $this->subindustryTable = $sm -> get('Application\Model\SubindustryTable');
         }
         return $this->subindustryTable;
+    }
+
+    public function getTable($tableModelName)
+    {
+        if(!$this->tableArray[$tableModelName]) {
+            $sm = $this->getServiceLocator();
+            $this->tableArray[$tableModelName] = $sm -> get('Application\Model\\'.$tableModelName);
+        }
+        return $this->tableArray[$tableModelName];
     }
 }

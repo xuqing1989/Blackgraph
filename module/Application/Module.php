@@ -12,6 +12,7 @@ namespace Application;
 use Application\Model\ReportTable;
 use Application\Model\IndustryTable;
 use Application\Model\SubindustryTable;
+use Application\Model\TlFdmtisTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\ModuleRouteListener;
@@ -62,6 +63,12 @@ class Module
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $tableGateway = new TableGateway('subindustry',$dbAdapter);
                     $table = new SubindustryTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\TlFdmtisTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtis',$dbAdapter);
+                    $table = new TlFdmtisTable($tableGateway);
                     return $table;
                 },
             ),
