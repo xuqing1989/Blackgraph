@@ -25,7 +25,6 @@ class DataController extends AbstractActionController
         $result = array();
         //fix the last day lost bug
         $endDate += 24*3600;
-        date_default_timezone_set('PRC');
         for($start=$startDate; $start <= $endDate; $start += 24*3600) {
             $reportCount = $this->getReportTable() -> fetchReport(date("Y-m-d",$start),$industry,$subindustry,$flag)->count();
             if($reportCount) {

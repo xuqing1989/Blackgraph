@@ -99,7 +99,7 @@ class TestController extends AbstractActionController
 
     public function getTable($tableModelName)
     {
-        if(!$this->tableArray[$tableModelName]) {
+        if(!isset($this->tableArray[$tableModelName])) {
             $sm = $this->getServiceLocator();
             $this->tableArray[$tableModelName] = $sm -> get('Application\Model\\'.$tableModelName);
         }

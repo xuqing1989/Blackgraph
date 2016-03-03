@@ -55,6 +55,15 @@ return array(
     'console' => array(
         'router' => array(
             'routes' => array(
+                'init' => array(
+                    'options' => array(
+                        'route' => 'init <tableModel>',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action'     => 'inittable',
+                        ),
+                    ),
+                ),
             ),
         ),
     ),
@@ -85,6 +94,7 @@ return array(
             'Application\Controller\Graph' => 'Application\Controller\GraphController',
             'Application\Controller\Data' => 'Application\Controller\DataController',
             'Application\Controller\Api' => 'Application\Controller\ApiController',
+            'Application\Controller\Console' => 'Application\Controller\ConsoleController',
         ),
     ),
     'view_manager' => array(

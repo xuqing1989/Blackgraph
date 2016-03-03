@@ -9,6 +9,8 @@ class TlFdmtisTable
 
     protected $tableGateway;
 
+    public $apiBase = '/api/fundamental/getFdmtIS.json?';
+
     public function __construct(TableGateway $tableGateway) {
         $this->tableGateway = $tableGateway;
     }
