@@ -13,6 +13,7 @@ use Application\Model\ReportTable;
 use Application\Model\IndustryTable;
 use Application\Model\SubindustryTable;
 use Application\Model\TlFdmtisTable;
+use Application\Model\TlFdmtbsTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\ModuleRouteListener;
@@ -69,6 +70,12 @@ class Module
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $tableGateway = new TableGateway('tl_fdmtis',$dbAdapter);
                     $table = new TlFdmtisTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\TlFdmtbsTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtbs',$dbAdapter);
+                    $table = new TlFdmtbsTable($tableGateway);
                     return $table;
                 },
             ),

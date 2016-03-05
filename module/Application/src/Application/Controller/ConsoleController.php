@@ -43,7 +43,6 @@ class ConsoleController extends AbstractActionController
     public function inittableAction()
     {
         $request = $this->getRequest();
-
         // Make sure that we are running in a console and the user has not tricked our
         // application into running this action from a public web server.
         if (!$request instanceof ConsoleRequest) {
@@ -57,25 +56,25 @@ class ConsoleController extends AbstractActionController
 
         $stockList = $this->getTable('ReportTable')->fetchAll()->toArray();
         foreach($stockList as $key => $stockValue) {
-            $apiData = $this->fetchFromApi($apiBase,array('ticker'=>$stockValue['ticker'],'beginDate'=>$beginDate,'endDate'=>$endDate));
-            $errorCounter = 0;
-            while(!isset($apiData->data) && $errorCounter < 5) {
-                $errorCounter ++;
-                echo "Fail ".$errorCounter." retry...\r\n";
                 $apiData = $this->fetchFromApi($apiBase,array('ticker'=>$stockValue['ticker'],'beginDate'=>$beginDate,'endDate'=>$endDate));
-            }
-            if($errorCounter == 5) {
-                echo "abort! Last tikcer: ".$stockValue['ticker'];
-                return;
-            }
-            $apiData = $apiData->data;
-            foreach($apiData as $value) {
-                $checkDupKey = array('ticker'=>$value->ticker,'endDate'=>$value->endDate,'reportType'=>$value->reportType);
-                if(!count($this->getTable($tableModel)->fetchByKey($checkDupKey)->toArray())) {
-                    $this->getTable($tableModel)->insertData((array)$value);
+                $errorCounter = 0;
+                while(!isset($apiData->data) && $errorCounter < 5) {
+                    $errorCounter ++;
+                    echo "Fail ".$errorCounter." retry...\r\n";
+                    $apiData = $this->fetchFromApi($apiBase,array('ticker'=>$stockValue['ticker'],'beginDate'=>$beginDate,'endDate'=>$endDate));
                 }
-            }
-            echo $stockValue['ticker']." completed!\r\n";
+                if($errorCounter == 5) {
+                    echo "abort! Last tikcer: ".$stockValue['ticker'];
+                    return;
+                }
+                $apiData = $apiData->data;
+                foreach($apiData as $value) {
+                    $checkDupKey = array('ticker'=>$value->ticker,'endDate'=>$value->endDate,'reportType'=>$value->reportType);
+                    if(!count($this->getTable($tableModel)->fetchByKey($checkDupKey)->toArray())) {
+                        $this->getTable($tableModel)->insertData((array)$value);
+                    }
+                }
+                echo $stockValue['ticker']." completed!\r\n";
         }
     }
 
