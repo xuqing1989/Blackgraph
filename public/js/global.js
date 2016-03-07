@@ -25,9 +25,9 @@ $(document).ready(function(){
                         for(var key in searchResult){
                             liHtml += '<li><a href="../company/detail?ticker='+searchResult[key].ticker+'">'+
                                        searchResult[key].ticker+'.'+
-                                       searchResult[key].house+'&nbsp;'+
+                                       searchResult[key].house+'<span>'+
                                        searchResult[key].name+
-                                      '</a></li>';
+                                      '</span></a></li>';
                         }
                         liHtml += "</ul>";
                         if(liHtml !="<ul></ul>") {

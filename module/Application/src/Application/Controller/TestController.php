@@ -51,10 +51,12 @@ class TestController extends AbstractActionController
 
     public function testAction()
     {
+        //For api Test. Do not EDIT
+
         $host = "https://api.wmcloud.com/data/v1";
         $request = $this -> getRequest();
         $api = $request->getQuery('api');
-        $api = '/api/fundamental/getFdmtIS.json?ticker=600887&secID=&beginDate=20131231&endDate=20141231';
+        //$api = '/api/fundamental/getFdmtIS.json?ticker=600887&secID=&beginDate=20131231&endDate=20141231';
         $ch = curl_init();
         $timeout = 15;
         //echo $host.$api."<br/><br/><br/>";
@@ -65,11 +67,11 @@ class TestController extends AbstractActionController
         $file_contents = curl_exec($ch);
         curl_close($ch);
         echo $file_contents;
-        $file_contents = json_decode($file_contents);
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
     }
+
     public function getReportTable()
     {
         if(!$this->reportTable) {

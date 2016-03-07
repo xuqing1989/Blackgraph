@@ -29,7 +29,7 @@ class ReportTable
         return $resultSet;
     }
 
-    public function fetchReport($date,$industry,$subindustry,$flag) {
+    public function fetchReport($date,$industry,$subindustry,$flag,$orderString='ticker ASC') {
         $queryWhere = array('release_date = ?' => $date,
                             'industry_id = ?' => $industry,
                             'subindustry_id = ?' => $subindustry,
@@ -39,7 +39,10 @@ class ReportTable
                 unset($queryWhere[$key]);
             }
         }
-        $resultSet = $this->tableGateway->select($queryWhere);
+        $resultSet = $this->tableGateway->select(function (Select $select) use($queryWhere,$orderString) {
+             $select->where($queryWhere)
+                    ->order(array($orderString));
+        });
         return $resultSet;
     }
 

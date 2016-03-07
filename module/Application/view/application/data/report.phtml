@@ -1,16 +1,33 @@
+<?php $orderArray = explode(" ",$orderString); ?>
 <div>符合条件的股票:&nbsp;<?php echo $total_num; ?>个</div>
     <table class="index-table-list">
         <tbody>
              <tr>
-                 <th class="text-left">代码</th>
+                 <th class="text-left">
+                    <a href="javascript:void(0)" order='ticker' <?php echo $orderArray[0]=='ticker'?('orderSelect=1 orderP='.($orderArray[1]=='ASC'?'1':'0')):'';?> class="company_table_order">
+                        代码<span><?php echo $orderArray[0]=='ticker'?($orderArray[1]=='ASC'?'&#9650':'&#9660'):'';?></span>
+                    </a>
+                 </th>
                  <th class="text-left">简称</th>
                  <th>最新价</th>
                  <th>涨跌幅</th>
                  <th>成交额(亿)</th>
-                 <th>总市值(亿)</th>
-                 <th>市盈率(TTM)</th>
+                 <th>
+                     <a href="javascript:void(0)" order='market_cup' <?php echo $orderArray[0]=='market_cup'?('orderSelect=1 orderP='.($orderArray[1]=='ASC'?'1':'0')):'';?> class="company_table_order">
+                        总市值(亿)<span><?php echo $orderArray[0]=='market_cup'?($orderArray[1]=='ASC'?'&#9650':'&#9660'):'';?></span>
+                     </a>
+                 </th>
+                 <th>
+                     <a href="javascript:void(0)" order='ttm' <?php echo $orderArray[0]=='ttm'?('orderSelect=1 orderP='.($orderArray[1]=='ASC'?'1':'0')):'';?> class="company_table_order">
+                        市盈率(TTM)<span><?php echo $orderArray[0]=='ttm'?($orderArray[1]=='ASC'?'&#9650':'&#9660'):'';?></span>
+                     </a>
+                 </th>
                  <th>近期披露</th>
-                 <th>日期</th>
+                 <th>
+                     <a href="javascript:void(0)" order='release_date' <?php echo $orderArray[0]=='release_date'?('orderSelect=1 orderP='.($orderArray[1]=='ASC'?'1':'0')):'';?> class="company_table_order">
+                        日期<span><?php echo $orderArray[0]=='release_date'?($orderArray[1]=='ASC'?'&#9650':'&#9660'):'';?></span>
+                     </a>
+                 </th>
              </tr>
              <?php foreach($report_list as $key=>$value): ?>
              

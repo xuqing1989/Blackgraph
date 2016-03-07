@@ -76,7 +76,12 @@ body ul {
     max-height:180px;
     overflow:auto;
 }
-
+.layout-topbar-search-result a{
+    padding-left:5px;
+}
+.layout-topbar-search-result  a > span{
+    margin-left:25px;
+}
 
 .layout-topbar-wx {
     padding-top:22px;
@@ -193,7 +198,7 @@ body ul {
     opacity: 0.7; 
 }
 
-.index-table-list td, .index-table-list td a, .index-table-list th {
+.index-table-list td, .index-table-list th {
     padding-right:10px;
     padding-left:5px;
     height: 30px;

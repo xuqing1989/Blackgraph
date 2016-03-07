@@ -43,14 +43,19 @@ class DataController extends AbstractActionController
         $date = $request->getQuery('date');
         $industry = $request->getQuery('industry');
         $subindustry = $request->getQuery('subindustry');
+        $orderKey = $request->getQuery('order1');
+        $orderValue = $request->getQuery('order2')?'ASC':'DESC';
+        $orderString = $orderKey.' '.$orderValue;
         $flag = $request->getQuery('flag');
         $page = $request->getQuery('page');
         //config
         $countPerPage = 50;
 
-        $report_list = $this->getReportTable()->fetchReport($date,$industry,$subindustry,$flag)->toArray();
+        $report_list = $this->getReportTable()->fetchReport($date,$industry,$subindustry,$flag,$orderString)->toArray();
         $total_num = count($report_list);
-        $report_list = array_splice($report_list,($page-1)*$countPerPage,50);
+        if($page != 'all') {
+            $report_list = array_splice($report_list,($page-1)*$countPerPage,50);
+        }
         foreach($report_list as $key=>$value) {
             $tickerPara .= strtolower($value['house']).$value['ticker'].',';
         }
@@ -79,15 +84,16 @@ class DataController extends AbstractActionController
             if($sinaData[3] == '0.00' || $sinaData[9] == '0.00') {
                 $report_list[$skey]['color'] = '';
                 $rate = '停牌';
+                $report_list[$skey]['price_now'] = $sinaData[2];
             }
             else {
                 if($sinaData[3] > $sinaData[2]){
                     $report_list[$skey]['color'] = 'red';
-                    $rate = '&uarr;&nbsp;'.$rate;
+                    $rate = '+'.$rate;
                 }
                 else {
                     $report_list[$skey]['color'] = 'green';
-                    $rate = '&darr;&nbsp;'.$rate;
+                    $rate = '-'.$rate;
                 }
             }
             $report_list[$skey]['price_rate'] = $rate;
@@ -98,6 +104,7 @@ class DataController extends AbstractActionController
                                                'page' => (int)$page,
                                                'total_num' => $total_num,
                                                'countPerPage' => $countPerPage,
+                                               'orderString' => $orderString,
                                               ));
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
@@ -146,12 +153,12 @@ class DataController extends AbstractActionController
         }
         else {
             if($sinaData[3] > $sinaData[2]){
-                $rate = '&uarr;&nbsp;'.$rate;
+                $rate = '+'.$rate;
                 $company_data['price_diff'] = '+' . $company_data['price_diff'];
                 $company_data['isP'] = true;
             }
             else {
-                $rate = '&darr;&nbsp;'.$rate;
+                $rate = '-'.$rate;
                 $company_data['price_diff'] = '-' . $company_data['price_diff'];
                 $company_data['isP'] = false;
             }

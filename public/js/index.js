@@ -7,6 +7,8 @@ indexObj.filter = {'industry':'all',
                    'flag':'all',
                    'page':'all'};
 
+indexObj.order = {'key':'market_cup','value':0};
+
 indexObj.loadDate = function() {
     var theDate = indexObj.activeDate;
     indexObj.report_list(theDate.format('YYYY-MM-DD'),indexObj.filter);
@@ -27,10 +29,28 @@ indexObj.report_list = function(report_date,filterObj){
             "subindustry":filterObj.subindustry,
             "flag":filterObj.flag,
             "page":filterObj.page,
+            "order1":indexObj.order.key,
+            "order2":indexObj.order.value,
         },
         success: function(result) {
             $('.ajax_loader').hide();
             $('#ajax_report_list').html(result);
+            $('.company_table_order').click(function(){
+                indexObj.order.key = $(this).attr('order');
+                if(!$(this).attr('orderSelect')) {
+                    indexObj.order.value = 1;
+                }
+                else {
+                    if($(this).attr('orderP') == '1') {
+                        indexObj.order.value = 0;
+                    }
+                    else {
+                        indexObj.order.value = 1;
+                    }
+                }
+                //indexObj.filter.page = 1;
+                indexObj.report_list(report_date,filterObj);
+            });
         }
     });
 }

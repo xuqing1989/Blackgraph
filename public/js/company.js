@@ -5,6 +5,8 @@ companyObj.filter = {'industry':'all',
                      'flag':'all',
                      'page':1};
 
+companyObj.order = {'key':'market_cup','value':0};
+
 companyObj.report_list = function(){
     $('#ajax_report_list').html('');
     $('#ajax_loader').show();
@@ -17,6 +19,8 @@ companyObj.report_list = function(){
             "subindustry":companyObj.filter.subindustry,
             "flag":companyObj.filter.flag,
             "page":companyObj.filter.page,
+            "order1":companyObj.order.key,
+            "order2":companyObj.order.value,
         },
         success: function(result) {
             $('#ajax_loader').hide();
@@ -34,6 +38,22 @@ companyObj.report_list = function(){
             });
             $('#list_page_next').click(function(){
                 companyObj.filter.page++;
+                companyObj.report_list();
+            });
+            $('.company_table_order').click(function(){
+                companyObj.order.key = $(this).attr('order');
+                if(!$(this).attr('orderSelect')) {
+                    companyObj.order.value = 1;
+                }
+                else {
+                    if($(this).attr('orderP') == '1') {
+                        companyObj.order.value = 0;
+                    }
+                    else {
+                        companyObj.order.value = 1;
+                    }
+                }
+                companyObj.filter.page = 1;
                 companyObj.report_list();
             });
         }
