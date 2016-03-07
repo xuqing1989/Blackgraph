@@ -5,7 +5,7 @@ indexObj.cal = new CalHeatMap();
 indexObj.filter = {'industry':'all',
                    'subindustry':'all',
                    'flag':'all',
-                   'page':'all'};
+                   'page':1};
 
 indexObj.order = {'key':'market_cup','value':0};
 
@@ -35,8 +35,16 @@ indexObj.report_list = function(report_date,filterObj){
         success: function(result) {
             $('.ajax_loader').hide();
             $('#ajax_report_list').html(result);
+            $('.list_page_num').click(function() {
+                var num = $(this).html();
+                if(num != '...') {
+                    indexObj.filter.page = num;
+                }
+                indexObj.report_list(report_date,filterObj);
+            });
             $('.company_table_order').click(function(){
                 indexObj.order.key = $(this).attr('order');
+                indexObj.filter.page = 1;
                 if(!$(this).attr('orderSelect')) {
                     indexObj.order.value = 1;
                 }
