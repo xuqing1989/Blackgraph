@@ -20,8 +20,8 @@ create table report_info (
     industry_id int references industry(id),
     subindustry_id int references subindustry(id),
     flag int,
-    market_cup decimal(8,4),
-    ttm decimal(8,4),
+    market_cup doule,
+    ttm double,
     report_year int,
     report_type char(2),
     release_date date
