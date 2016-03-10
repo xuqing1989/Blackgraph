@@ -11,11 +11,11 @@ CompanyDetail.updatePrice = function(){
         },
         success: function(result) {
             var priceObj = eval('('+result+')');
-            $('#price_now').html(priceObj.price_now);
-            $('#price_diff').html(priceObj.price_diff);
-            $('#price_rate').html(priceObj.price_rate);
-            $('#volumn_now').html(priceObj.volumn);
-            $('#count_now').html(priceObj.count);
+            $('#price_now').fadeOut(200).fadeIn(200).fadeOut(200).html(priceObj.price_now).fadeIn(200);
+            $('#price_diff').fadeOut(200).fadeIn(200).fadeOut(200).html(priceObj.price_diff).fadeIn(200);
+            $('#price_rate').fadeOut(200).fadeIn(200).fadeOut(200).html(priceObj.price_rate).fadeIn(200);
+            $('#volumn_now').fadeOut(200).fadeIn(200).fadeOut(200).html(priceObj.volumn).fadeIn(200);
+            $('#count_now').fadeOut(200).fadeIn(200).fadeOut(200).html(priceObj.count).fadeIn(200);
             if(priceObj.price_diff != '停牌') {
                 if(priceObj.isP) {
                     $('.company-overview-price').removeClass('green').addClass('red');
