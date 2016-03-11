@@ -29,6 +29,11 @@ class ReportTable
         return $resultSet;
     }
 
+    public function fetchBySubindustry($subindustry_id) {
+        $resultSet = $this->tableGateway->select(array('subindustry_id' => $subindustry_id));
+        return $resultSet;
+    }
+
     public function fetchReport($date,$industry,$subindustry,$flag,$orderString='ticker ASC') {
         $queryWhere = array('release_date = ?' => $date,
                             'industry_id = ?' => $industry,

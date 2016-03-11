@@ -12,8 +12,23 @@ namespace Application;
 use Application\Model\ReportTable;
 use Application\Model\IndustryTable;
 use Application\Model\SubindustryTable;
+
 use Application\Model\TlFdmtisTable;
 use Application\Model\TlFdmtbsTable;
+use Application\Model\TlFdmtcfTable;
+
+use Application\Model\TlFdmtisbankTable;
+use Application\Model\TlFdmtbsbankTable;
+use Application\Model\TlFdmtcfbankTable;
+
+use Application\Model\TlFdmtissecuTable;
+use Application\Model\TlFdmtbssecuTable;
+use Application\Model\TlFdmtcfsecuTable;
+
+use Application\Model\TlFdmtisinsuTable;
+use Application\Model\TlFdmtbsinsuTable;
+use Application\Model\TlFdmtcfinsuTable;
+
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\ModuleRouteListener;
@@ -76,6 +91,69 @@ class Module
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $tableGateway = new TableGateway('tl_fdmtbs',$dbAdapter);
                     $table = new TlFdmtbsTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\TlFdmtcfTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtcf',$dbAdapter);
+                    $table = new TlFdmtcfTable($tableGateway);
+                    return $table;
+                },
+
+                'Application\Model\TlFdmtisbankTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtisbank',$dbAdapter);
+                    $table = new TlFdmtisbankTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\TlFdmtbsbankTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtbsbank',$dbAdapter);
+                    $table = new TlFdmtbsbankTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\TlFdmtcfbankTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtcfbank',$dbAdapter);
+                    $table = new TlFdmtcfbankTable($tableGateway);
+                    return $table;
+                },
+
+				'Application\Model\TlFdmtissecuTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtissecu',$dbAdapter);
+                    $table = new TlFdmtissecuTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\TlFdmtbssecuTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtbssecu',$dbAdapter);
+                    $table = new TlFdmtbssecuTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\TlFdmtcfsecuTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtcfsecu',$dbAdapter);
+                    $table = new TlFdmtcfsecuTable($tableGateway);
+                    return $table;
+                },
+
+				'Application\Model\TlFdmtisinsuTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtisinsu',$dbAdapter);
+                    $table = new TlFdmtisinsuTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\TlFdmtbsinsuTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtbsinsu',$dbAdapter);
+                    $table = new TlFdmtbsinsuTable($tableGateway);
+                    return $table;
+                },
+                'Application\Model\TlFdmtcfinsuTable' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $tableGateway = new TableGateway('tl_fdmtcfinsu',$dbAdapter);
+                    $table = new TlFdmtcfinsuTable($tableGateway);
                     return $table;
                 },
             ),

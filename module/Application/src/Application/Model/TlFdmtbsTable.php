@@ -10,6 +10,7 @@ class TlFdmtbsTable
     protected $tableGateway;
 
     public $apiBase = '/api/fundamental/getFdmtBS.json?';
+    public $apiSubindustry = 'all';
 
     public function __construct(TableGateway $tableGateway) {
         $this->tableGateway = $tableGateway;

@@ -4,13 +4,13 @@ namespace Application\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 
-class TlFdmtisTable
+class TlFdmtcfsecuTable
 {
 
     protected $tableGateway;
 
-    public $apiBase = '/api/fundamental/getFdmtIS.json?';
-    public $apiSubindustry = 'all';
+    public $apiBase = '/api/fundamental/getFdmtCFSecu.json?';
+    public $apiSubindustry = '证券';
 
     public function __construct(TableGateway $tableGateway) {
         $this->tableGateway = $tableGateway;

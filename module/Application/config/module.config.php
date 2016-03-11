@@ -57,7 +57,7 @@ return array(
             'routes' => array(
                 'init' => array(
                     'options' => array(
-                        'route' => 'init <tableModel>',
+                        'route' => 'init <tableModel> <beginTicker>',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
                             'action'     => 'inittable',
