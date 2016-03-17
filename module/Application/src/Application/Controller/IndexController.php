@@ -92,6 +92,12 @@ class IndexController extends AbstractActionController
             $this -> getReportTable() -> addReport($sql_report);
         }
         $this -> getReportTable() -> updateReport(array('ticker'=>'000001'),'name = ?','平安银行');
+
+        //change 西水股份 锦龙股份 subindustry into 多元金融
+        $dyjr = $this -> getSubindustryTable() -> fetchByName('多元金融') -> toArray();
+        $dyjrId = $dyjr[0]['id'];
+        $this -> getReportTable() -> updateReport(array('subindustry_id'=>$dyjrId),'name = ?', '西水股份');
+        $this -> getReportTable() -> updateReport(array('subindustry_id'=>$dyjrId),'name = ?', '锦龙股份');
         fclose($handle);
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);

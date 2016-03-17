@@ -43,7 +43,10 @@ class TestController extends AbstractActionController
     }
 
     public function test3Action(){
-        echo 'test console';
+        $dyjr = $this -> getSubindustryTable() -> fetchByName('多元金融') -> toArray();
+        $dyjrId = $dyjr[0]['id'];
+        $this -> getReportTable() -> updateReport(array('subindustry_id'=>$dyjrId),'name = ?', '西水股份');
+        $this -> getReportTable() -> updateReport(array('subindustry_id'=>$dyjrId),'name = ?', '锦龙股份');
         $this->viewModel = new ViewModel();
         $this->viewModel->setTerminal(true);
         return $this->viewModel;
