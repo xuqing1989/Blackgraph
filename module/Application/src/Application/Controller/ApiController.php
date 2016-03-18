@@ -14,6 +14,7 @@ use Zend\View\Model\ViewModel;
 
 class ApiController extends AbstractActionController
 {
+    //Whole Api Contorller now is abondened because the whole api data is stored in MySQL now
     protected $token = 'Authorization: Bearer 0f2fb0eb5ab384166febe5e243e2be6ea53c279220fcb0746f2fd79cde38091a';
     protected $host = 'https://api.wmcloud.com/data/v1';
 

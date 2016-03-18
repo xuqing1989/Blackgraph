@@ -28,6 +28,24 @@ CompanyDetail.updatePrice = function(){
     });
 }
 
+CompanyDetail.loadGraph = function(graphList) {
+    $("#chart_body_section").html("");
+    for(var gIndex in graphList){
+        var chartDom = '<div class="company-chart-body" id="chart_body_'+gIndex+'"></div>';
+        $("#chart_body_section").append(chartDom);
+        $.ajax({
+            type:"POST",
+            url: "../graph/"+graphList[gIndex],
+            data: {
+                "divId":"chart_body_"+gIndex,
+            },
+            success: function(result) {
+                eval(result);
+            },
+        });
+    }
+}
+
 $(document).ready(function(){
     $("#menu_title_company").addClass('actived');
 
@@ -35,69 +53,14 @@ $(document).ready(function(){
         $(".company-nav-body > span").removeClass('actived');
         $(this).addClass('actived');
     });
-
-    $("#chart_nav_2").click(function(){
-        $("[id^=chart_body_]").html(CompanyDetail.ajaxLoader);
-        $.ajax({
-            type:'GET',
-            url: '../api/fdmtis',
-            data: {
-                "ticker":Global.ticker,
-                "endDate":moment().format('YYYYMMDD'),
-            },
-            success: function(apiData) {
-                Global.fdmtis = apiData;
-                $.ajax({
-                    type:'POST',
-                    url: '../graph/profitmargin',
-                    data: {
-                        "divId":'chart_body_1',
-                        "apiData":apiData,
-                    },
-                    success: function(result) {
-                        eval(result);
-                    }
-                });
-                if(Global.fdmtbs) {
-                }
-            }
-        });
-        $.ajax({
-            type:'GET',
-            url: '../api/fdmtbs',
-            data: {
-                "ticker":Global.ticker,
-                "endDate":moment().format('YYYYMMDD'),
-            },
-            success: function(apiData) {
-                Global.fdmtbs = apiData;
-                if(Global.fdmtis) {
-                }
-                $.ajax({
-                    type:'POST',
-                    url: '../graph/liquidity',
-                    data: {
-                        "divId":'chart_body_3',
-                        "apiData":apiData,
-                    },
-                    success: function(result) {
-                        eval(result);
-                    }
-                });
-                $.ajax({
-                    type:'POST',
-                    url: '../graph/assetsliabilityrate',
-                    data: {
-                        "divId":'chart_body_4',
-                        "apiData":apiData,
-                    },
-                    success: function(result) {
-                        eval(result);
-                    }
-                });
-            }
-        });
-    });
+    for(var sectionIndex in Global.graphLayout){
+        (function(sectionIndex){
+            $('#chart_nav_'+sectionIndex).click(function(){
+                CompanyDetail.loadGraph(Global.graphLayout[sectionIndex]);
+            });
+        })(sectionIndex);
+    }
     CompanyDetail.updatePrice();
+    CompanyDetail.loadGraph(Global.graphLayout[0]);
     setInterval("CompanyDetail.updatePrice()",10000);
 });

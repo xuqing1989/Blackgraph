@@ -1,6 +1,7 @@
 <script type='text/javascript'>
 Global.ticker = '<?php echo $company_data['ticker'];?>';
 Global.house = '<?php echo $company_data['house'];?>';
+Global.graphLayout = <?php echo json_encode($graph_layout);?>;
 </script>
 
 <div class="row company-overview-body">
@@ -57,18 +58,16 @@ Global.house = '<?php echo $company_data['house'];?>';
 </div>
 
 <div class="row company-nav-body">
-    <span class="actived" id="chart_nav_2">财务指标</span>
-    <span>收入利润</span>
-    <span>资产负债</span>
-    <span>现金流量</span>
-    <span>杜邦分析</span>
+    <span class="actived" id="chart_nav_0">财务指标</span>
+    <span id="chart_nav_1">收入利润</span>
+    <span id="chart_nav_2">资产负债</span>
+    <span id="chart_nav_3">现金流量</span>
+    <span id="chart_nav_4">杜邦分析</span>
     <a href="http://www.cninfo.com.cn/information/companyinfo_n.html?fulltext?<?php echo strtolower($company_data['house']).'mb'.$company_data['ticker'];?>" target='_blank'>
         <span>公司公告</span>
     </a>
 </div>
 
-<div class="row company-chart-body" id="chart_body_1"></div>
-<div class="row company-chart-body" id="chart_body_2"></div>
-<div class="row company-chart-body" id="chart_body_3"></div>
-<div class="row company-chart-body" id="chart_body_4"></div>
+<div class="row" id="chart_body_section">
+</div>
 <script src="../js/company_detail.js" type="text/javascript"></script>

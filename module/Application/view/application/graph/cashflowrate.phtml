@@ -4,18 +4,26 @@
         textStyle: {
             color:'#ccc',
         },
-        color:["#1F78B4","#FE7F0E","#555"],
+        color:["#349B2E","#FE7F0E","#1F78B4"],
         title: {
-            text: '应收周转',
+            text: '收入',
             textStyle: {
                 color:'#ccc',
             },
         },
-        tooltip: {},
+        tooltip: {
+            formatter:function(obj) {
+                var result = obj.seriesName+"<br/>"+obj.name+": " +obj.value;
+                if(obj.seriesIndex != 2){
+                    result += "%";
+                }
+                return result;
+            },
+        },
         grid: {
         },
         legend: {
-            data:['应收','应收周转天数'],
+            data:['收入','收入-同比增长','收入-环比增长'],
             textStyle: {
                 color:'#ccc',
             },
@@ -43,7 +51,7 @@
         yAxis:[
         {
             type:'value',
-            name:'应收(CNY百万)',
+            name:'存货(CNY百万)',
             splitNumber:'5',
             splitLine: {
                 lineStyle: {
@@ -65,7 +73,7 @@
         },
         {
             type:'value',
-            name:'应收周转天数',
+            name:'百分比',
             splitLine: {
                 lineStyle: {
                     color: ['#555']
@@ -79,7 +87,8 @@
             axisLabel: {
                 textStyle: {
                     color: '#ccc'
-                }
+                },
+                formatter: '{value}%',
             },
             splitLine:{
                 show:false,
@@ -90,12 +99,12 @@
         ],
         series: [
         {
-            name: '应收',
-            type: 'bar',
-            stack:'1',
-            data: [200, 300, 360, 500, 
-                   400,500, 280, 300,
-                   400,500, 280, 300],
+            name: '收入-同比增长',
+            type: 'line',
+            yAxisIndex:'1',
+            data: [59, 42, 73, 71, 
+                   19,15, 120, 94,
+                   96,50, 62, 92,],
             markLine : {
                 name :"平均值",
                 lineStyle: {
@@ -109,14 +118,14 @@
             },
         },
         {
-            name: '应收周转天数',
+            name: '收入-环比增长',
             type: 'line',
             yAxisIndex:'1',
-            data: [5, 4, 7, 7, 
-                   1,15, 12, 9,
-                   9,10, 12, 9,],
+            data: [69, 22, 53, 91, 
+                   39,75, 10, 34,
+                   46,70, 72, 62,],
             markLine : {
-                name : "平均值",
+                name :"平均值",
                 lineStyle: {
                     normal:{
                         color:'#777',
@@ -126,6 +135,14 @@
                     {type : 'average', name : '平均值'}
                 ]
             },
+        },
+        {
+            name: '收入',
+            type: 'bar',
+            stack:'1',
+            data: [200, 300, 360, 500, 
+                   400,500, 280, 300,
+                   400,500, 280, 300],
         },
         ],
     };

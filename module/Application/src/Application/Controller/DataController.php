@@ -14,6 +14,8 @@ use Zend\View\Model\ViewModel;
 
 class DataController extends AbstractActionController
 {
+    protected $tableArray = array();
+
     public function calendarAction()
     {
         $request = $this -> getRequest();
@@ -32,9 +34,7 @@ class DataController extends AbstractActionController
             }
         }
         echo json_encode($result);
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setTerminal(true);
-        return $this->viewModel;
+        return $this->response;
     }
 
     public function reportAction()
@@ -115,9 +115,7 @@ class DataController extends AbstractActionController
         $text = $request->getQuery('text');
         $searchResult = $this->getReportTable()->searchReport($text)->toArray();
         echo json_encode($searchResult);
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setTerminal(true);
-        return $this->viewModel;
+        return $this->response;
     }
 
     public function sinaAction(){
@@ -168,9 +166,7 @@ class DataController extends AbstractActionController
         $company_data['count'] = round($sinaData[8]/10000,2).'亿';
         
         echo json_encode($company_data);
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setTerminal(true);
-        return $this->viewModel;
+        return $this->response;
     }
 
     public function getReportTable()
@@ -180,5 +176,14 @@ class DataController extends AbstractActionController
             $this->reportTable = $sm -> get('Application\Model\ReportTable');
         }
         return $this->reportTable;
+    }
+
+    public function getTable($tableModelName)
+    {
+        if(!isset($this->tableArray[$tableModelName])) {
+            $sm = $this->getServiceLocator();
+            $this->tableArray[$tableModelName] = $sm -> get('Application\Model\\'.$tableModelName);
+        }
+        return $this->tableArray[$tableModelName];
     }
 }

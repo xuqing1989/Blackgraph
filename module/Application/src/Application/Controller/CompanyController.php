@@ -75,7 +75,34 @@ class CompanyController extends AbstractActionController
         $company_data['industry'] = $company_data['industry'][0];
         $company_data['subindustry'] = $this->getSubindustryTable()->fetchById($company_data['subindustry_id'])->toArray();
         $company_data['subindustry'] = $company_data['subindustry'][0];
-        return new ViewModel(array('company_data'=>$company_data));
+
+        //for graph order in company detail page
+        $subName = $company_data['subindustry']['name'];
+        $layout = array();
+        switch($subName) {
+        case '银行':
+            $layout = array(
+                ['profitmargin','loandepositrate','assetsliabilityrate','cashflowrate'],
+            );
+            break;
+        case '证券':
+            $layout = array(
+                ['profitmargin','assetsliabilityrate','cashflowrate'],
+            );
+            break;
+        case '保险':
+            $layout = array(
+                ['profitmargin','assetsliabilityrate','cashflowrate'],
+            );
+            break;
+        default:
+            $layout = array(
+                ['profitmargin','turnoverdays','liquidity','assetsliabilityrate','cashflowrate'],
+            );
+        }
+        return new ViewModel(array('company_data'=>$company_data,
+                                   'graph_layout'=>$layout,
+                            ));
     }
 
     public function getIndustryTable()

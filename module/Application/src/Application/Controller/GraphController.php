@@ -14,6 +14,8 @@ use Zend\View\Model\ViewModel;
 
 class GraphController extends AbstractActionController
 {
+    protected $tableArray = array();
+
     public function indexAction()
     {
         $this->viewModel = new ViewModel();
@@ -41,7 +43,7 @@ class GraphController extends AbstractActionController
         return $this->viewModel;
     }
 
-    public function inventoryturnoverAction()
+    public function turnoverdaysAction()
     {
         $request = $this -> getRequest();
         $divId = $request -> getPost('divId');
@@ -202,7 +204,7 @@ class GraphController extends AbstractActionController
         return $this->viewModel;
     }
 
-    public function receivableturnoverAction()
+    public function assetsrateAction()
     {
         $request = $this -> getRequest();
         $divId = $request -> getPost('divId');
@@ -212,7 +214,7 @@ class GraphController extends AbstractActionController
         return $this->viewModel;
     }
 
-    public function assetsrateAction()
+    public function loandepositrateAction()
     {
         $request = $this -> getRequest();
         $divId = $request -> getPost('divId');
@@ -220,5 +222,24 @@ class GraphController extends AbstractActionController
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
         return $this->viewModel;
+    }
+
+    public function cashflowrateAction()
+    {
+        $request = $this -> getRequest();
+        $divId = $request -> getPost('divId');
+        $this->viewModel = new ViewModel();
+        $this->viewModel->setVariables(array('divId' => $divId))
+                        ->setTerminal(true);
+        return $this->viewModel;
+    }
+
+    public function getTable($tableModelName)
+    {
+        if(!isset($this->tableArray[$tableModelName])) {
+            $sm = $this->getServiceLocator();
+            $this->tableArray[$tableModelName] = $sm -> get('Application\Model\\'.$tableModelName);
+        }
+        return $this->tableArray[$tableModelName];
     }
 }
