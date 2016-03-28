@@ -391,8 +391,28 @@ body ul {
 }
 
 .company-chart-body {
-    height:300px;
     margin-top:20px;
+}
+
+.company-chart-body > div:first-child {
+    text-align:right;
+}
+
+.company-chart-body > div {
+    width:100%;
+}
+.company-chart-body > .chart-graph{
+    height:300px;
+    margin-top:5px;
+}
+
+.company-chart-body .chart-type-select.actived{
+    color:#FFF;
+}
+
+.company-chart-body .chart-type-select:hover {
+    color:#FFF;
+    cursor:pointer;
 }
 
 /*all*/

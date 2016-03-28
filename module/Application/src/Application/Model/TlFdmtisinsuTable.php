@@ -3,6 +3,7 @@
 namespace Application\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class TlFdmtisinsuTable
 {
@@ -33,4 +34,11 @@ class TlFdmtisinsuTable
         return $this->tableGateway->select($keyData);
     }
 
+    public function fetchForChart($ticker){
+        $resultSet = $this->tableGateway->select(function (Select $select) use($ticker) {
+            $select -> where(array('ticker = ?' => $ticker))
+                    -> order(array('endDate ASC'));
+        });
+        return $resultSet;
+    }
 }

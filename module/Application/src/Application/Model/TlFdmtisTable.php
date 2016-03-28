@@ -3,9 +3,11 @@
 namespace Application\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class TlFdmtisTable
 {
+    //合并利润表
 
     protected $tableGateway;
 
@@ -31,6 +33,14 @@ class TlFdmtisTable
 
     public function fetchByKey($keyData) {
         return $this->tableGateway->select($keyData);
+    }
+    
+    public function fetchForChart($ticker){
+        $resultSet = $this->tableGateway->select(function (Select $select) use($ticker) {
+            $select -> where(array('ticker = ?' => $ticker))
+                    -> order(array('endDate DESC'));
+        });
+        return $resultSet;
     }
 
 }

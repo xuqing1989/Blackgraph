@@ -33,16 +33,21 @@ CompanyDetail.loadGraph = function(graphList) {
     for(var gIndex in graphList){
         var chartDom = '<div class="company-chart-body" id="chart_body_'+gIndex+'"></div>';
         $("#chart_body_section").append(chartDom);
-        $.ajax({
-            type:"POST",
-            url: "../graph/"+graphList[gIndex],
-            data: {
-                "divId":"chart_body_"+gIndex,
-            },
-            success: function(result) {
-                eval(result);
-            },
-        });
+        $(".company-chart-body").html(CompanyDetail.ajaxLoader);
+        (function(gIndex){
+            $.ajax({
+                type:"POST",
+                url: "../graph/"+graphList[gIndex],
+                data: {
+                    "ticker":Global.ticker,
+                    "graphType":"season",
+                    "divId":"chart_body_"+gIndex,
+                },
+                success: function(result) {
+                    $('#chart_body_'+gIndex).html(result);
+                },
+            });
+        })(gIndex);
     }
 }
 

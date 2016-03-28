@@ -123,26 +123,85 @@ class GraphController extends AbstractActionController
     {
         $request = $this -> getRequest();
         $divId = $request -> getPost('divId');
-        $apiData = json_decode($request -> getPost('apiData'));
+        $graphType = $request -> getPost('graphType');
+        $ticker = $request -> getPost('ticker');
+        $subName = $this -> getSubindustryName($ticker);
+        switch($subName) {
+        case '银行':
+            $rawData = $this->getTable('TlfdmtisbankTable')->fetchForChart($ticker)->toArray();
+            break;
+        case '证券':
+            $rawData = $this->getTable('TlfdmtissecuTable')->fetchForChart($ticker)->toArray();
+            break;
+        case '保险':
+            $rawData = $this->getTable('TlfdmtisinsuTable')->fetchForChart($ticker)->toArray();
+            break;
+        default:
+            $rawData = $this->getTable('TlfdmtisTable')->fetchForChart($ticker)->toArray();
+        }
         $xAris = array();
-        $data1 = array();
-        $data2 = array();
-        $data3 = array();
-        foreach($apiData as $year => $season) {
-            foreach($season as $key => $value) {
-                $value = $value->data;
-                array_push($xAris,substr($year,2,2).'Q'.$key);
-                array_push($data1,round(($value->NIncomeAttrP / $value->tRevenue)*100,2));
-                array_push($data2,round(($value->operateProfit / $value->tRevenue)*100,2));
-                array_push($data3,round((($value->tRevenue - $value->COGS) / $value->tRevenue)*100,2));
+        $data1 = array();//净利润
+        $data2 = array();//经营利润率
+        $data3 = array();//毛利率
+        if($graphType == 'season') {
+            $typeToSeason = array(
+                '03-31' => 'Q1',
+                '06-30' => 'Q2',
+                '09-30' => 'Q3',
+                '12-31' => 'Q4',
+            );
+            $counter = 0;
+            $cq3Value = array();
+	        foreach($rawData as $key => $value) {
+                if($value['reportType'] == 'CQ3'){
+                    $cq3Value = $value;
+                    continue;
+                }
+                else if($value['reportType'] == 'S1'){
+                    $calValue['revenue'] = $value['revenue'] - $rawData[$key-1]['revenue'];
+                    $calValue['COGS'] = $value['COGS'] - $rawData[$key-1]['COGS'];
+                    $calValue['NIncomeAttrP'] = $value['NIncomeAttrP'] - $rawData[$key-1]['NIncomeAttrP'];
+                    $calValue['operateProfit'] = $value['operateProfit'] - $rawData[$key-1]['operateProfit'];
+                    if(isset($value['tRevenue'])){
+                        $calValue['tRevenue'] = $value['tRevenue'] - $rawData[$key-1]['tRevenue'];
+                    }
+                }
+                else if($value['reportType'] == 'A'){
+                    $calValue['revenue'] = $value['revenue'] - $cq3Value['revenue'];
+                    $calValue['COGS'] = $value['COGS'] - $cq3Value['COGS'];
+                    $calValue['NIncomeAttrP'] = $value['NIncomeAttrP'] - $cq3Value['NIncomeAttrP'];
+                    $calValue['operateProfit'] = $value['operateProfit'] - $cq3Value['operateProfit'];
+                    if(isset($value['tRevenue'])){
+                        $calValue['tRevenue'] = $value['tRevenue'] - $cq3Value['tRevenue'];
+                    }
+                }
+                else {
+                    $calValue = $value;
+                }
+                array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[substr($calValue['endDate'],5)]);
+                array_push($data3,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/$calValue['revenue']));
+                switch($subName) {
+                case '银行':
+                case '证券':
+                case '保险':
+                    //经营利润率 is the same as 毛利率 in these three subindustry
+                    array_push($data1,sprintf('%.2f',$calValue['NIncomeAttrP']/$calValue['revenue']));
+                    break;
+                default:
+                    array_push($data2,sprintf('%.2f',$calValue['operateProfit']/$calValue['tRevenue']));
+                    array_push($data1,sprintf('%.2f',$calValue['NIncomeAttrP']/$calValue['tRevenue']));
+                }
+                $counter++;
+                if($counter==20) break;
             }
         }
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId,
-                                             'xAris' => $xAris,
-                                             'data1' => $data1,
-                                             'data2' => $data2,
-                                             'data3' => $data3,
+                                             'graphType' => $graphType,
+                                             'xAris' => array_reverse($xAris),
+                                             'data1' => array_reverse($data1),
+                                             'data2' => array_reverse($data2),
+                                             'data3' => array_reverse($data3),
                                       ))
                         ->setTerminal(true);
         return $this->viewModel;
@@ -241,5 +300,13 @@ class GraphController extends AbstractActionController
             $this->tableArray[$tableModelName] = $sm -> get('Application\Model\\'.$tableModelName);
         }
         return $this->tableArray[$tableModelName];
+    }
+
+    public function getSubindustryName($ticker) {
+        $company_data = $this->getTable('ReportTable')->fetchByTicker($ticker)->toArray();
+        $company_data = $company_data[0];
+        $company_data['subindustry'] = $this->getTable('SubindustryTable')->fetchById($company_data['subindustry_id'])->toArray();
+        $subName = $company_data['subindustry'][0]['name'];
+        return $subName;
     }
 }

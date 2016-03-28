@@ -1,4 +1,33 @@
-    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+<div>
+    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_profitmargin_year">年度报告</span>
+    <span>&nbsp;|&nbsp;</span>
+    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_profitmargin_season">季度报告</span>
+</div>
+<div class="chart-graph" id="chart_profitmargin"></div>
+<script type="text/javascript">
+$(function(){
+    var loadGraph = function(graphType){
+        $("#chart_profitmargin").html(CompanyDetail.ajaxLoader);
+        $.ajax({
+            type:"POST",
+            url: "../graph/profitmargin",
+            data: {
+                "ticker":Global.ticker,
+                "graphType":graphType,
+                "divId":'<?php echo $divId;?>',
+            },
+            success: function(result) {
+                $('#<?php echo $divId;?>').html(result);
+            },
+        });
+    };
+    $('#chart_select_profitmargin_year').click(function(){
+        loadGraph('year');
+    });
+    $('#chart_select_profitmargin_season').click(function(){
+        loadGraph('season');
+    });
+    var myChart = echarts.init(document.getElementById('chart_profitmargin'));
     var option = {
         backgroundColor:'#262626',
         textStyle: {
@@ -17,7 +46,11 @@
         grid: {
         },
         legend: {
+            <?php if($data2): ?>
             data:['净利率','毛利率','经营利润率'],
+            <?php else: ?>
+            data:['净利率','毛利率'],
+            <?php endif; ?>
             textStyle: {
                 color:'#ccc',
             },
@@ -91,3 +124,5 @@
         ],
     };
     myChart.setOption(option);
+});
+</script>
