@@ -415,6 +415,35 @@ body ul {
     cursor:pointer;
 }
 
+.company-chart-body .chart-table {
+    width:100%;
+    margin-top:10px;
+    font-size:12px;
+}
+
+.company-chart-body tr.odd, .company-chart-body tr:nth-of-type(2n+1) {
+    background-color: #262626 !important;
+}
+
+.company-chart-body tr.even, .company-chart-body tr:nth-of-type(2n) {
+    background-color: #2c2c2c !important;
+}
+
+.company-chart-body .chart-table th, .company-chart-body .chart-table td {
+    text-align:left;
+    padding-left:4px;
+}
+
+.company-chart-body .chart-table tr:first-child {
+    border:1px solid #555;
+    border-width:0 0 1px 0;
+}
+
+.company-chart-body .chart-table tr>th:first-child {
+    border:1px solid #555;
+    border-width:0 1px 0 0;
+}
+
 /*all*/
 
 .left{

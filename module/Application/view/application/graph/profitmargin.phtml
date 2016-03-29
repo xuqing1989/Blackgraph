@@ -4,6 +4,42 @@
     <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_profitmargin_season">季度报告</span>
 </div>
 <div class="chart-graph" id="chart_profitmargin"></div>
+<div>
+    <table class="chart-table">
+        <tr>
+            <th></th>
+            <?php foreach($xAris as $value): ?>
+            <th>
+                <?php echo $value; ?>
+            </th>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th>毛利率</th>
+            <?php foreach($data3 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <?php if($data2): ?>
+        <tr>
+            <th>营业利润率</th>
+            <?php foreach($data2 as $value): ?>
+            <td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <?php endif; ?>
+        <tr>
+            <th>净利润率</th>
+            <?php foreach($data1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide">
+        </tr>
+        <tr class="chart-table-hide">
+        </tr>
+    </table>
+</div>
 <script type="text/javascript">
 $(function(){
     var loadGraph = function(graphType){
