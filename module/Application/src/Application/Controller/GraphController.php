@@ -143,6 +143,8 @@ class GraphController extends AbstractActionController
         $data1 = array();//净利润
         $data2 = array();//经营利润率
         $data3 = array();//毛利率
+        $hideData1 = array();//毛利
+        $hideData2 = array();//营业利润
         $typeToSeason = array(
             '03-31' => 'Q1',
             '06-30' => 'Q2',
@@ -180,6 +182,8 @@ class GraphController extends AbstractActionController
                 }
                 array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[substr($calValue['endDate'],5)]);
                 array_push($data3,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/$calValue['revenue']));
+                array_push($hideData1,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/10000000));
+                array_push($hideData2,sprintf('%.2f',$calValue['revenue']/10000000));
                 switch($subName) {
                 case '银行':
                 case '证券':
@@ -210,12 +214,14 @@ class GraphController extends AbstractActionController
                 }
                 $calValue = $value;
                 if(substr($calValue['endDate'],5) == '12-31') {
-                    array_push($xAris,substr($calValue['endDate'],2,2));
+                    array_push($xAris,substr($calValue['endDate'],0,4));
                 }
                 else {
-                    array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[substr($calValue['endDate'],5)]);
+                    array_push($xAris,substr($calValue['endDate'],0,4).$typeToSeason[substr($calValue['endDate'],5)]);
                 }
                 array_push($data3,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/$calValue['revenue']));
+                array_push($hideData1,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/10000000));
+                array_push($hideData2,sprintf('%.2f',$calValue['revenue']/10000000));
                 switch($subName) {
                 case '银行':
                 case '证券':
@@ -238,6 +244,8 @@ class GraphController extends AbstractActionController
                                              'data1' => array_reverse($data1),
                                              'data2' => array_reverse($data2),
                                              'data3' => array_reverse($data3),
+                                             'hideData1' => array_reverse($hideData1),
+                                             'hideData2' => array_reverse($hideData2),
                                       ))
                         ->setTerminal(true);
         return $this->viewModel;

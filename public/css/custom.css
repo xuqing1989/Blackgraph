@@ -442,8 +442,19 @@ body ul {
 .company-chart-body .chart-table tr>th:first-child {
     border:1px solid #555;
     border-width:0 1px 0 0;
+    width:8%;
 }
 
+.company-chart-body .chart-table-toggle {
+    background-color:#222;
+    text-align:center;
+    font-size:12px;
+}
+
+.company-chart-body .chart-table-toggle:hover {
+    color:#FFF;
+    cursor:pointer;
+}
 /*all*/
 
 .left{

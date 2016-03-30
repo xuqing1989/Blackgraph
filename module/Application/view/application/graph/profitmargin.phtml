@@ -35,10 +35,19 @@
             <?php endforeach; ?>
         </tr>
         <tr class="chart-table-hide">
+            <th>毛利</th>
+            <?php foreach($hideData1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
         </tr>
         <tr class="chart-table-hide">
+            <th>营业收入</th>
+            <?php foreach($hideData2 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
         </tr>
     </table>
+    <div class="chart-table-toggle" id="chart_table_toggle" toggle-status="false">展开&nbsp;&or;</div>
 </div>
 <script type="text/javascript">
 $(function(){
@@ -63,6 +72,20 @@ $(function(){
     $('#chart_select_profitmargin_season').click(function(){
         loadGraph('season');
     });
+
+    $('.chart-table-hide').hide();
+    $('#chart_table_toggle').click(function(){
+        $('.chart-table-hide').toggle();
+        if($(this).attr('toggle-status')=="false") {
+            $(this).attr('toggle-status',"true");
+            $(this).html("收起&nbsp;&and;");
+        }
+        else {
+            $(this).attr('toggle-status',"false");
+            $(this).html("展开&nbsp;&or;");
+        }
+    });
+
     var myChart = echarts.init(document.getElementById('chart_profitmargin'));
     var option = {
         backgroundColor:'#262626',
