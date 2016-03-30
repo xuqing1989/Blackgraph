@@ -37,7 +37,7 @@ class TlFdmtissecuTable
     public function fetchForChart($ticker){
         $resultSet = $this->tableGateway->select(function (Select $select) use($ticker) {
             $select -> where(array('ticker = ?' => $ticker))
-                    -> order(array('endDate ASC'));
+                    -> order(array('endDate DESC'));
         });
         return $resultSet;
     }
