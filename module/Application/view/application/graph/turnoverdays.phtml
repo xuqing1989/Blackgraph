@@ -1,6 +1,14 @@
-    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+<div>
+    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_turnoverdays_year">年度报告</span>
+    <span>&nbsp;|&nbsp;</span>
+    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_turnoverdays_season">季度报告</span>
+</div>
+<div class="chart-graph" id="chart_turnoverdays"></div>
+<script type="text/javascript">
+$(function(){
+    var myChart = echarts.init(document.getElementById('chart_turnoverdays'));
     var option = {
-        backgroundColor:'#353535',
+        backgroundColor:'#262626',
         textStyle: {
             color:'#ccc',
         },
@@ -130,3 +138,5 @@
         ],
     };
     myChart.setOption(option);
+});
+</script>

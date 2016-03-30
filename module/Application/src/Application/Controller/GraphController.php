@@ -156,19 +156,24 @@ class GraphController extends AbstractActionController
             $cq3Value = array();
 	        foreach($rawData as $key => $value) {
                 if($value['reportType'] == 'CQ3'){
-                    $cq3Value = $value;
                     continue;
                 }
                 else if($value['reportType'] == 'S1'){
-                    $calValue['revenue'] = $value['revenue'] - $rawData[$key-1]['revenue'];
-                    $calValue['COGS'] = $value['COGS'] - $rawData[$key-1]['COGS'];
-                    $calValue['NIncomeAttrP'] = $value['NIncomeAttrP'] - $rawData[$key-1]['NIncomeAttrP'];
-                    $calValue['operateProfit'] = $value['operateProfit'] - $rawData[$key-1]['operateProfit'];
+                    $calValue['revenue'] = $value['revenue'] - $rawData[$key+1]['revenue'];
+                    $calValue['COGS'] = $value['COGS'] - $rawData[$key+1]['COGS'];
+                    $calValue['NIncomeAttrP'] = $value['NIncomeAttrP'] - $rawData[$key+1]['NIncomeAttrP'];
+                    $calValue['operateProfit'] = $value['operateProfit'] - $rawData[$key+1]['operateProfit'];
                     if(isset($value['tRevenue'])){
-                        $calValue['tRevenue'] = $value['tRevenue'] - $rawData[$key-1]['tRevenue'];
+                        $calValue['tRevenue'] = $value['tRevenue'] - $rawData[$key+1]['tRevenue'];
                     }
                 }
                 else if($value['reportType'] == 'A'){
+                    //find next CQ3 Data
+                    $skey = $key;
+                    while($rawData[$skey]['reportType'] != 'CQ3'){
+                        $skey++;
+                    }
+                    $cq3Value = $rawData[$skey];
                     $calValue['revenue'] = $value['revenue'] - $cq3Value['revenue'];
                     $calValue['COGS'] = $value['COGS'] - $cq3Value['COGS'];
                     $calValue['NIncomeAttrP'] = $value['NIncomeAttrP'] - $cq3Value['NIncomeAttrP'];
@@ -180,8 +185,9 @@ class GraphController extends AbstractActionController
                 else {
                     $calValue = $value;
                 }
+                $calValue['endDate'] = $value['endDate'];
                 array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[substr($calValue['endDate'],5)]);
-                array_push($data3,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/$calValue['revenue']));
+                array_push($data3,sprintf('%.2f',(($calValue['revenue']-$calValue['COGS'])/$calValue['revenue'])*100));
                 array_push($hideData1,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/10000000));
                 array_push($hideData2,sprintf('%.2f',$calValue['revenue']/10000000));
                 switch($subName) {
@@ -189,11 +195,11 @@ class GraphController extends AbstractActionController
                 case '证券':
                 case '保险':
                     //经营利润率 is the same as 毛利率 in these three subindustry
-                    array_push($data1,sprintf('%.2f',$calValue['NIncomeAttrP']/$calValue['revenue']));
+                    array_push($data1,sprintf('%.2f',($calValue['NIncomeAttrP']/$calValue['revenue'])*100));
                     break;
                 default:
-                    array_push($data2,sprintf('%.2f',$calValue['operateProfit']/$calValue['tRevenue']));
-                    array_push($data1,sprintf('%.2f',$calValue['NIncomeAttrP']/$calValue['tRevenue']));
+                    array_push($data2,sprintf('%.2f',($calValue['operateProfit']/$calValue['tRevenue'])*100));
+                    array_push($data1,sprintf('%.2f',($calValue['NIncomeAttrP']/$calValue['tRevenue'])*100));
                 }
                 $counter++;
                 if($counter==20) break;
@@ -219,7 +225,7 @@ class GraphController extends AbstractActionController
                 else {
                     array_push($xAris,substr($calValue['endDate'],0,4).$typeToSeason[substr($calValue['endDate'],5)]);
                 }
-                array_push($data3,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/$calValue['revenue']));
+                array_push($data3,sprintf('%.2f',(($calValue['revenue']-$calValue['COGS'])/$calValue['revenue'])*100));
                 array_push($hideData1,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/10000000));
                 array_push($hideData2,sprintf('%.2f',$calValue['revenue']/10000000));
                 switch($subName) {
@@ -227,11 +233,11 @@ class GraphController extends AbstractActionController
                 case '证券':
                 case '保险':
                     //经营利润率 is the same as 毛利率 in these three subindustry
-                    array_push($data1,sprintf('%.2f',$calValue['NIncomeAttrP']/$calValue['revenue']));
+                    array_push($data1,sprintf('%.2f',($calValue['NIncomeAttrP']/$calValue['revenue'])*100));
                     break;
                 default:
-                    array_push($data2,sprintf('%.2f',$calValue['operateProfit']/$calValue['tRevenue']));
-                    array_push($data1,sprintf('%.2f',$calValue['NIncomeAttrP']/$calValue['tRevenue']));
+                    array_push($data2,sprintf('%.2f',($calValue['operateProfit']/$calValue['tRevenue'])*100));
+                    array_push($data1,sprintf('%.2f',($calValue['NIncomeAttrP']/$calValue['tRevenue'])*100));
                 }
                 $counter++;
                 if($counter==5) break;
