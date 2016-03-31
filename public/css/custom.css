@@ -415,10 +415,19 @@ body ul {
     cursor:pointer;
 }
 
-.company-chart-body .chart-table {
+.company-chart-body .chart-div {
     width:100%;
+    overflow-x:auto;
+}
+
+.company-chart-body .chart-table {
+    min-width:100%;
+    white-space:nowrap;
     margin-top:10px;
-    font-size:12px;
+    font-size:14px;
+}
+.company-chart-body .chart-table .chart-table-hide{
+    font-size:11px;
 }
 
 .company-chart-body tr.odd, .company-chart-body tr:nth-of-type(2n+1) {
@@ -431,7 +440,7 @@ body ul {
 
 .company-chart-body .chart-table th, .company-chart-body .chart-table td {
     text-align:left;
-    padding-left:4px;
+    padding:2px 10px 2px 4px;
 }
 
 .company-chart-body .chart-table tr:first-child {
@@ -445,15 +454,13 @@ body ul {
     width:8%;
 }
 
-.company-chart-body .chart-table-toggle {
-    background-color:#222;
-    text-align:center;
-    font-size:12px;
+.company-chart-body .chart-table tr.chart-table-hide>th:first-child {
+    padding-left:15px;
 }
 
-.company-chart-body .chart-table-toggle:hover {
-    color:#FFF;
+.company-chart-body .chart-table tr>th:first-child:hover {
     cursor:pointer;
+    color:#FFF;
 }
 /*all*/
 

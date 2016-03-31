@@ -1,11 +1,11 @@
 <div>
-    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_profitmargin_year">年度报告</span>
+    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_profitmargin_year">年度</span>
     <span>&nbsp;|&nbsp;</span>
-    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_profitmargin_season">季度报告</span>
+    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_profitmargin_season">季度</span>
 </div>
 <div class="chart-graph" id="chart_profitmargin"></div>
-<div>
-    <table class="chart-table">
+<div class="chart-div">
+    <table class="chart-table" id="chart_table_profitmargin">
         <tr>
             <th></th>
             <?php foreach($xAris as $value): ?>
@@ -15,39 +15,62 @@
             <?php endforeach; ?>
         </tr>
         <tr>
-            <th>毛利率</th>
+            <th toggle-tr="true" toggle-to="line1">毛利率</th>
             <?php foreach($data3 as $value): ?>
-            <td><?php echo $value;?></td>
+            <td><?php echo $value.'%';?></td>
             <?php endforeach; ?>
         </tr>
-        <?php if($data2): ?>
-        <tr>
-            <th>营业利润率</th>
-            <?php foreach($data2 as $value): ?>
-            <td><?php echo $value; ?></td>
-            <?php endforeach; ?>
-        </tr>
-        <?php endif; ?>
-        <tr>
-            <th>净利润率</th>
-            <?php foreach($data1 as $value): ?>
-            <td><?php echo $value;?></td>
-            <?php endforeach; ?>
-        </tr>
-        <tr class="chart-table-hide">
+        <tr class="chart-table-hide" toggle-by="line1">
             <th>毛利</th>
             <?php foreach($hideData1 as $value): ?>
             <td><?php echo $value;?></td>
             <?php endforeach; ?>
         </tr>
-        <tr class="chart-table-hide">
+        <tr class="chart-table-hide" toggle-by="line1">
             <th>营业收入</th>
             <?php foreach($hideData2 as $value): ?>
             <td><?php echo $value;?></td>
             <?php endforeach; ?>
         </tr>
+        <?php if($data2): ?>
+        <tr>
+            <th toggle-tr="true" toggle-to="line2">营业利润率</th>
+            <?php foreach($data2 as $value): ?>
+            <td><?php echo $value.'%'; ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>营业利润</th>
+            <?php foreach($hideData3 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>营业总收入</th>
+            <?php foreach($hideData4 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <?php endif; ?>
+        <tr>
+            <th toggle-tr="true" toggle-to="line3">净利润率</th>
+            <?php foreach($data1 as $value): ?>
+            <td><?php echo $value.'%';?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line3">
+            <th>净利润(归属于母公司)</th>
+            <?php foreach($hideData5 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line3">
+            <th>营业总收入</th>
+            <?php foreach($hideData4 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
     </table>
-    <div class="chart-table-toggle" id="chart_table_toggle" toggle-status="false">展开&nbsp;&or;</div>
 </div>
 <script type="text/javascript">
 $(function(){
@@ -73,17 +96,10 @@ $(function(){
         loadGraph('season');
     });
 
-    $('.chart-table-hide').hide();
-    $('#chart_table_toggle').click(function(){
-        $('.chart-table-hide').toggle();
-        if($(this).attr('toggle-status')=="false") {
-            $(this).attr('toggle-status',"true");
-            $(this).html("收起&nbsp;&and;");
-        }
-        else {
-            $(this).attr('toggle-status',"false");
-            $(this).html("展开&nbsp;&or;");
-        }
+    $('#chart_table_profitmargin .chart-table-hide').hide();
+    $('#chart_table_profitmargin th[toggle-tr="true"]').click(function(){
+        var toggleKey = $(this).attr('toggle-to');
+        $('#chart_table_profitmargin .chart-table-hide[toggle-by="'+toggleKey+'"]').toggle();
     });
 
     var myChart = echarts.init(document.getElementById('chart_profitmargin'));

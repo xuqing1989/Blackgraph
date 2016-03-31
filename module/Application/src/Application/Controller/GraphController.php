@@ -144,7 +144,10 @@ class GraphController extends AbstractActionController
         $data2 = array();//经营利润率
         $data3 = array();//毛利率
         $hideData1 = array();//毛利
-        $hideData2 = array();//营业利润
+        $hideData2 = array();//营业收入
+        $hideData3 = array();//营业利润
+        $hideData4 = array();//营业总收入
+        $hideData5 = array();//净利润(母公司)
         $typeToSeason = array(
             '03-31' => 'Q1',
             '06-30' => 'Q2',
@@ -187,19 +190,23 @@ class GraphController extends AbstractActionController
                 }
                 $calValue['endDate'] = $value['endDate'];
                 array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[substr($calValue['endDate'],5)]);
-                array_push($data3,sprintf('%.2f',(($calValue['revenue']-$calValue['COGS'])/$calValue['revenue'])*100));
-                array_push($hideData1,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/10000000));
-                array_push($hideData2,sprintf('%.2f',$calValue['revenue']/10000000));
+                array_push($data3,sprintf('%.1f',(($calValue['revenue']-$calValue['COGS'])/$calValue['revenue'])*100));
+                array_push($hideData1,sprintf('%d',($calValue['revenue']-$calValue['COGS'])/1000000));
+                array_push($hideData2,sprintf('%d',$calValue['revenue']/1000000));
+                array_push($hideData3,sprintf('%d',$calValue['operateProfit']/1000000));
+                array_push($hideData5,sprintf('%d',$calValue['NIncomeAttrP']/1000000));
                 switch($subName) {
                 case '银行':
                 case '证券':
                 case '保险':
                     //经营利润率 is the same as 毛利率 in these three subindustry
-                    array_push($data1,sprintf('%.2f',($calValue['NIncomeAttrP']/$calValue['revenue'])*100));
+                    array_push($data1,sprintf('%.1f',($calValue['NIncomeAttrP']/$calValue['revenue'])*100));
+                    array_push($hideData4,sprintf('%d',$calValue['revenue']/1000000));
                     break;
                 default:
-                    array_push($data2,sprintf('%.2f',($calValue['operateProfit']/$calValue['tRevenue'])*100));
-                    array_push($data1,sprintf('%.2f',($calValue['NIncomeAttrP']/$calValue['tRevenue'])*100));
+                    array_push($data2,sprintf('%.1f',($calValue['operateProfit']/$calValue['tRevenue'])*100));
+                    array_push($data1,sprintf('%.1f',($calValue['NIncomeAttrP']/$calValue['tRevenue'])*100));
+                    array_push($hideData4,sprintf('%d',$calValue['tRevenue']/1000000));
                 }
                 $counter++;
                 if($counter==20) break;
@@ -225,19 +232,23 @@ class GraphController extends AbstractActionController
                 else {
                     array_push($xAris,substr($calValue['endDate'],0,4).$typeToSeason[substr($calValue['endDate'],5)]);
                 }
-                array_push($data3,sprintf('%.2f',(($calValue['revenue']-$calValue['COGS'])/$calValue['revenue'])*100));
-                array_push($hideData1,sprintf('%.2f',($calValue['revenue']-$calValue['COGS'])/10000000));
-                array_push($hideData2,sprintf('%.2f',$calValue['revenue']/10000000));
+                array_push($data3,sprintf('%.1f',(($calValue['revenue']-$calValue['COGS'])/$calValue['revenue'])*100));
+                array_push($hideData1,sprintf('%d',($calValue['revenue']-$calValue['COGS'])/1000000));
+                array_push($hideData2,sprintf('%d',$calValue['revenue']/1000000));
+                array_push($hideData3,sprintf('%d',$calValue['operateProfit']/1000000));
+                array_push($hideData5,sprintf('%d',$calValue['NIncomeAttrP']/1000000));
                 switch($subName) {
                 case '银行':
                 case '证券':
                 case '保险':
                     //经营利润率 is the same as 毛利率 in these three subindustry
-                    array_push($data1,sprintf('%.2f',($calValue['NIncomeAttrP']/$calValue['revenue'])*100));
+                    array_push($data1,sprintf('%.1f',($calValue['NIncomeAttrP']/$calValue['revenue'])*100));
+                    array_push($hideData5,sprintf('%d',$calValue['revenue']/1000000));
                     break;
                 default:
-                    array_push($data2,sprintf('%.2f',($calValue['operateProfit']/$calValue['tRevenue'])*100));
-                    array_push($data1,sprintf('%.2f',($calValue['NIncomeAttrP']/$calValue['tRevenue'])*100));
+                    array_push($data2,sprintf('%.1f',($calValue['operateProfit']/$calValue['tRevenue'])*100));
+                    array_push($data1,sprintf('%.1f',($calValue['NIncomeAttrP']/$calValue['tRevenue'])*100));
+                    array_push($hideData5,sprintf('%d',$calValue['tRevenue']/1000000));
                 }
                 $counter++;
                 if($counter==5) break;
@@ -252,6 +263,9 @@ class GraphController extends AbstractActionController
                                              'data3' => array_reverse($data3),
                                              'hideData1' => array_reverse($hideData1),
                                              'hideData2' => array_reverse($hideData2),
+                                             'hideData3' => array_reverse($hideData3),
+                                             'hideData4' => array_reverse($hideData4),
+                                             'hideData5' => array_reverse($hideData5),
                                       ))
                         ->setTerminal(true);
         return $this->viewModel;
