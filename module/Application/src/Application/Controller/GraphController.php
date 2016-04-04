@@ -50,15 +50,72 @@ class GraphController extends AbstractActionController
         $graphType = $request -> getPost('graphType');
         $ticker = $request -> getPost('ticker');
 
-        $rawData = $this->getTable('TlfdmtisTable')->fetchForChart($ticker)->toArray();
+        $rawData = $this->getTable('TlfdmtisTable')->fetchForChartJoinBs($ticker)->toArray();
 
         $xAris = array();
-
+        $typeToSeason = array(
+            '03-31' => 'Q1',
+            '06-30' => 'Q2',
+            '09-30' => 'Q3',
+            '12-31' => 'Q4',
+        );
         if($graphType == 'season') {
-
+            $counter = 0;
+            $cq3Value = array();
+            foreach($rawData as $key => $value) {
+                $calValue = array();
+                if($value['reportType'] == 'CQ3'){
+                    continue;
+                }
+                else {
+                    if($value['reportType'] == 'S1'){
+                        $calValue['COGS'] = $value['COGS'] - $rawData[$key+1]['COGS'];
+                        $calValue['tRevenue'] = $value['tRevenue'] - $rawData[$key+1]['tRevenue'];
+                    }
+                    else if($value['reportType'] == 'A'){
+                        //find next CQ3 Data
+                        $skey = $key;
+                        while($rawData[$skey]['reportType'] != 'CQ3'){
+                            $skey++;
+                        }
+                        $cq3Value = $rawData[$skey];
+                        $calValue['COGS'] = $value['COGS'] - $cq3Value['COGS'];
+                        $calValue['tRevenue'] = $value['tRevenue'] - $cq3Value['tRevenue'];
+                    }
+                    else {
+                        $calValue = $value;
+                    }
+                }
+                $calValue['endDate'] = $value['endDate'];
+                array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[substr($calValue['endDate'],5)]);
+                $counter++;
+                if($counter==20) break;
+            }
         }
         else if($graphType == 'year') {
-
+            $counter = 0;
+            foreach($rawData as $key => $value) {
+                $calValue = array();
+                //deal with Q3 and CQ3
+                if($key == 0 && $value['reportType']=='Q3'){
+                    continue;
+                }
+                if($key == 1 && $value['reportType']=='CQ3') {
+                    //do nothing
+                }
+                else if($key != 0 && $value['reportType'] != 'A'){
+                    continue;
+                }
+                $calValue = $value;
+                if(substr($calValue['endDate'],5) == '12-31') {
+                    array_push($xAris,substr($calValue['endDate'],0,4));
+                }
+                else {
+                    array_push($xAris,substr($calValue['endDate'],0,4).$typeToSeason[substr($calValue['endDate'],5)]);
+                }
+                $counter++;
+                if($counter==5) break;
+            }
         }
 
         $this->viewModel = new ViewModel();
