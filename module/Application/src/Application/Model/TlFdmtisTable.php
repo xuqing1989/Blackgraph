@@ -43,4 +43,21 @@ class TlFdmtisTable
         return $resultSet;
     }
 
+    public function fetchForChartJoinBs($ticker){
+        $resultSet = $this->tableGateway->select(function (Select $select) use($ticker) {
+            $select -> join(
+                'tl_fdmtbs',
+                new \Zend\Db\Sql\Expression(
+                    'tl_fdmtbs.ticker = tl_fdmtis.ticker and 
+                    tl_fdmtbs.endDate = tl_fdmtis.endDate and 
+                    tl_fdmtbs.reportType = tl_fdmtis.reportType'
+                ), 
+                 array('AR','inventories'),
+                'left'
+            )
+            -> where(array('tl_fdmtis.ticker = ?' => $ticker))
+            -> order(array('endDate DESC'));
+        });
+        return $resultSet;
+    }
 }

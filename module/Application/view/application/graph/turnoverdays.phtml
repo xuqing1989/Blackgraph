@@ -99,41 +99,15 @@ $(function(){
         series: [
         {
             name: '存货',
-            type: 'bar',
+            type: 'line',
             stack:'1',
-            data: [200, 300, 360, 500, 
-                   400,500, 280, 300,
-                   400,500, 280, 300],
-            markLine : {
-                name :"平均值",
-                lineStyle: {
-                    normal:{
-                        color:'#777',
-                    },
-                },
-                data : [
-                    {type : 'average', name : '平均值'}
-                ]
-            },
+            data: [],
         },
         {
             name: '存货周转天数',
             type: 'line',
             yAxisIndex:'1',
-            data: [5, 4, 7, 7, 
-                   1,15, 12, 9,
-                   9,10, 12, 9,],
-            markLine : {
-                name : "平均值",
-                lineStyle: {
-                    normal:{
-                        color:'#777',
-                    },
-                },
-                data : [
-                    {type : 'average', name : '平均值'}
-                ]
-            },
+            data: [],
         },
         ],
     };

@@ -47,6 +47,20 @@ class GraphController extends AbstractActionController
     {
         $request = $this -> getRequest();
         $divId = $request -> getPost('divId');
+        $graphType = $request -> getPost('graphType');
+        $ticker = $request -> getPost('ticker');
+
+        $rawData = $this->getTable('TlfdmtisTable')->fetchForChart($ticker)->toArray();
+
+        $xAris = array();
+
+        if($graphType == 'season') {
+
+        }
+        else if($graphType == 'year') {
+
+        }
+
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);

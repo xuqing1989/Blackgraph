@@ -8,6 +8,7 @@ use Zend\Db\Sql\Select;
 class TlFdmtisinsuTable
 {
 
+    //保险业利润表
     protected $tableGateway;
 
     public $apiBase = '/api/fundamental/getFdmtISInsu.json?';
