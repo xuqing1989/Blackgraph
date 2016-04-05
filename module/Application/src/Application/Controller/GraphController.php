@@ -53,11 +53,23 @@ class GraphController extends AbstractActionController
         $rawData = $this->getTable('TlfdmtisTable')->fetchForChartJoinBs($ticker)->toArray();
 
         $xAris = array();
+        $data1 = array();//存货周转天数
+        $data2 = array();//应收周转天数
+        $hideData1 = array();//平均存货
+        $hideData2 = array();//日均营业成本
+        $hideData3 = array();//平均应收账款
+        $hideData4 = array();//日均营业收入
         $typeToSeason = array(
             '03-31' => 'Q1',
             '06-30' => 'Q2',
             '09-30' => 'Q3',
             '12-31' => 'Q4',
+        );
+        $preSeason = array(
+            'Q1' => 'A',
+            'S1' => 'Q1',
+            'Q3' => 'S1',
+            'A' => 'Q3',
         );
         if($graphType == 'season') {
             $counter = 0;
@@ -68,6 +80,13 @@ class GraphController extends AbstractActionController
                     continue;
                 }
                 else {
+                    //caculate data in bs table
+                    $preKey = $key;
+                    while($rawData[$preKey]['reportType'] != $preSeason[$value['reportType']] && $preKey <= 20) {
+                        $preKey++;
+                    }
+                    $calValue['inventories'] = ($value['inventories'] + $rawData[$preKey]['inventories'])/2;
+                    $calValue['AR'] = ($value['AR'] + $rawData[$preKey]['AR'])/2;
                     if($value['reportType'] == 'S1'){
                         $calValue['COGS'] = $value['COGS'] - $rawData[$key+1]['COGS'];
                         $calValue['tRevenue'] = $value['tRevenue'] - $rawData[$key+1]['tRevenue'];
@@ -88,6 +107,8 @@ class GraphController extends AbstractActionController
                 }
                 $calValue['endDate'] = $value['endDate'];
                 array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[substr($calValue['endDate'],5)]);
+                array_push($data1,sprintf('%.1f',$calValue['inventories']/($calValue['COGS']/90)));
+                array_push($data2,sprintf('%.1f',$calValue['AR']/($calValue['tRevenue']/90)));
                 $counter++;
                 if($counter==20) break;
             }
@@ -119,8 +140,13 @@ class GraphController extends AbstractActionController
         }
 
         $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
+        $this->viewModel->setVariables(array(
+            'divId' => $divId,
+            'xAris' => array_reverse($xAris),
+            'data1' => array_reverse($data1),
+            'data2' => array_reverse($data2),
+        ))
+        ->setTerminal(true);
         return $this->viewModel;
     }
 

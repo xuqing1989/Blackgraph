@@ -1,7 +1,7 @@
 <div>
-    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_turnoverdays_year">年度报告</span>
+    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_turnoverdays_year">年度</span>
     <span>&nbsp;|&nbsp;</span>
-    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_turnoverdays_season">季度报告</span>
+    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_turnoverdays_season">季度</span>
 </div>
 <div class="chart-graph" id="chart_turnoverdays"></div>
 <script type="text/javascript">
@@ -19,19 +19,15 @@ $(function(){
                 color:'#ccc',
             },
         },
-        tooltip: {},
-        grid: {
-        },
+        tooltip:{},
         legend: {
-            data:['存货','存货周转天数'],
+            data:['存货周转天数','应收周转天数'],
             textStyle: {
                 color:'#ccc',
             },
         },
         xAxis: {
-            data: ["13Q1","13Q2","13Q3","13Q4",
-                   "14Q1","14Q2","14Q3","14Q4",
-                   "14Q1","14Q2","14Q3","14Q4",],
+            data: <?php echo json_encode($xAris);?>,
             axisTick: {
                 lineStyle: {
                     color: '#555'
@@ -43,72 +39,50 @@ $(function(){
                 }
             },
             splitLine: {
+                show:false,
                 lineStyle: {
                     color: ['#555']
                 }
             },
+            boundaryGap:false,
         },
         yAxis:[
         {
             type:'value',
-            name:'存货(CNY百万)',
-            splitNumber:'5',
+            name:'天数',
             splitLine: {
-                lineStyle: {
-                    color: ['#555']
-                }
-            },
-            axisTick: {
-                lineStyle: {
-                    color: '#555'
-                }
-            },
-            axisLabel: {
-                textStyle: {
-                    color: '#ccc'
-                }
-            },
-            scale:true,
-            boundaryGap: ['5%', '5%'],
-        },
-        {
-            type:'value',
-            name:'存货周转天数',
-            splitLine: {
-                lineStyle: {
-                    color: ['#555']
-                }
-            },
-            axisTick: {
-                lineStyle: {
-                    color: '#555'
-                }
-            },
-            axisLabel: {
-                textStyle: {
-                    color: '#ccc'
-                }
-            },
-            splitLine:{
                 show:false,
+                lineStyle: {
+                    color: ['#555']
+                }
             },
-            scale:true,
-            boundaryGap: ['5%', '5%'],
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                },
+                formatter: '{value}天',
+            },
+            scale:false,
         },
         ],
         series: [
-        {
-            name: '存货',
-            type: 'line',
-            stack:'1',
-            data: [],
-        },
-        {
-            name: '存货周转天数',
-            type: 'line',
-            yAxisIndex:'1',
-            data: [],
-        },
+            {
+                name: '存货周转天数',
+                type: 'line',
+                showAllSymbol : true,
+                data: <?php echo json_encode($data1);?>,
+            },
+            {
+                name: '应收周转天数',
+                type: 'line',
+                showAllSymbol : true,
+                data: <?php echo json_encode($data2);?>,
+            },
         ],
     };
     myChart.setOption(option);
