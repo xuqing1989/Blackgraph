@@ -4,8 +4,84 @@
     <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_turnoverdays_season">季度</span>
 </div>
 <div class="chart-graph" id="chart_turnoverdays"></div>
+<div class="chart-div">
+    <table class="chart-table" id="chart_table_turnoverdays">
+        <tr>
+            <th></th>
+            <?php foreach($xAris as $value): ?>
+            <th>
+                <?php echo $value; ?>
+            </th>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line1">存货周转天数</th>
+            <?php foreach($data1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line1">
+            <th>平均存货</th>
+            <?php foreach($hideData1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line1">
+            <th>日均营业成本</th>
+            <?php foreach($hideData2 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line2">应收周转天数</th>
+            <?php foreach($data2 as $value): ?>
+            <td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>平均应收账款</th>
+            <?php foreach($hideData3 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>日均营业收入</th>
+            <?php foreach($hideData4 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+    </table>
+</div>
 <script type="text/javascript">
 $(function(){
+    var loadGraph = function(graphType){
+        $("#chart_turnoverdays").html(CompanyDetail.ajaxLoader);
+        $.ajax({
+            type:"POST",
+            url: "../graph/turnoverdays",
+            data: {
+                "ticker":Global.ticker,
+                "graphType":graphType,
+                "divId":'<?php echo $divId;?>',
+            },
+            success: function(result) {
+                $('#<?php echo $divId;?>').html(result);
+            },
+        });
+    };
+    $('#chart_select_turnoverdays_year').click(function(){
+        loadGraph('year');
+    });
+    $('#chart_select_turnoverdays_season').click(function(){
+        loadGraph('season');
+    });
+
+    $('#chart_table_turnoverdays .chart-table-hide').hide();
+    $('#chart_table_turnoverdays th[toggle-tr="true"]').click(function(){
+        var toggleKey = $(this).attr('toggle-to');
+        $('#chart_table_turnoverdays .chart-table-hide[toggle-by="'+toggleKey+'"]').toggle();
+    });
+
     var myChart = echarts.init(document.getElementById('chart_turnoverdays'));
     var option = {
         backgroundColor:'#262626',

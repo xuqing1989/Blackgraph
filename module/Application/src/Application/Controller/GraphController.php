@@ -71,10 +71,10 @@ class GraphController extends AbstractActionController
             'Q3' => 'S1',
             'A' => 'Q3',
         );
+        $seasonOrder = ['A','Q3','S1','Q1'];
         if($graphType == 'season') {
             $counter = 0;
             $cq3Value = array();
-            $seasonOrder = ['A','Q3','S1','Q1'];
             foreach($sortData as $year => $seasons) {
                 $stopSign = false;
                 foreach($seasonOrder as $season) {
@@ -102,12 +102,17 @@ class GraphController extends AbstractActionController
                             $calValue['AR'] = ($value['AR']+$seasons[$preSeason[$value['reportType']]]['AR'])/2;
                         }
                         else {
-                            $calValue['inventories'] = ($value['inventories']+$sortData[--$year]['A']['inventories'])/2;
-                            $calValue['AR'] = ($value['AR']+$sortData[--$year]['A']['AR'])/2;
+                            $preYear = $year - 1;
+                            $calValue['inventories'] = ($value['inventories']+$sortData[$preYear]['A']['inventories'])/2;
+                            $calValue['AR'] = ($value['AR']+$sortData[$preYear]['A']['AR'])/2;
                         }
                         array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
                         array_push($data1,sprintf('%.1f',$calValue['inventories']/($calValue['COGS']/90)));
+                        array_push($hideData1,sprintf('%.1f',$calValue['inventories']/1000000));
+                        array_push($hideData2,sprintf('%.1f',($calValue['COGS']/90)/1000000));
                         array_push($data2,sprintf('%.1f',$calValue['AR']/($calValue['tRevenue']/90)));
+                        array_push($hideData3,sprintf('%.1f',$calValue['AR']/1000000));
+                        array_push($hideData4,sprintf('%.1f',($calValue['tRevenue']/90)/1000000));
                         $counter++;
                         if($counter==20) {
                             $stopSign = true;
@@ -120,36 +125,82 @@ class GraphController extends AbstractActionController
         }
         else if($graphType == 'year') {
             $counter = 0;
-            foreach($rawData as $key => $value) {
-                $calValue = array();
-                //deal with Q3 and CQ3
-                if($key == 0 && $value['reportType']=='Q3'){
-                    continue;
-                }
-                if($key == 1 && $value['reportType']=='CQ3') {
-                    //do nothing
-                }
-                else if($key != 0 && $value['reportType'] != 'A'){
-                    continue;
-                }
-                $calValue = $value;
-                if(substr($calValue['endDate'],5) == '12-31') {
-                    array_push($xAris,substr($calValue['endDate'],0,4));
+            //deal with first data
+            $firstCol = true;
+            //count season num for the first data
+            $firstSeaNum = 4;
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                if($firstCol) {
+                    foreach($seasonOrder as $season){
+                        if(isset($sortData[$year][$season])){
+                            $calValue = array();
+                            $calValue['endDate'] = $seasons[$season]['endDate'];
+                            $calValue['reportType'] = $seasons[$season]['reportType'];
+                            $calValue['inventories'] = ($sortData[$year][$season]['inventories'] +
+                                $sortData[$year-1]['A']['inventories'])/2;
+                            $calValue['AR'] = ($sortData[$year][$season]['AR'] +
+                                $sortData[$year-1]['A']['AR'])/2;
+                            if($firstSeaNum == 3){
+                                $calValue['COGS'] = $sortData[$year]['CQ3']['COGS'];
+                                $calValue['tRevenue'] = $sortData[$year]['CQ3']['tRevenue'];
+                            }
+                            else {
+                                $calValue['COGS'] = $sortData[$year][$season]['COGS'];
+                                $calValue['tRevenue'] = $sortData[$year][$season]['tRevenue'];
+                            }
+                            if($season != 'A') {
+                                array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
+                            }
+                            else {
+                                array_push($xAris,substr($calValue['endDate'],2,2));
+                            }
+                            array_push($data1,sprintf('%.1f',$calValue['inventories']/($calValue['COGS']/(90*$firstSeaNum))));
+                            array_push($hideData1,sprintf('%.1f',$calValue['inventories']/1000000));
+                            array_push($hideData2,sprintf('%.1f',($calValue['COGS']/(90*$firstSeaNum))/1000000));
+                            array_push($data2,sprintf('%.1f',$calValue['AR']/($calValue['tRevenue']/(90*$firstSeaNum))));
+                            array_push($hideData3,sprintf('%.1f',$calValue['AR']/1000000));
+                            array_push($hideData4,sprintf('%.1f',($calValue['tRevenue']/(90*$firstSeaNum))/1000000));
+                            $firstCol = false;
+                            $counter++;
+                            break;
+                        }
+                        $firstSeaNum --;
+                    }
                 }
                 else {
-                    array_push($xAris,substr($calValue['endDate'],0,4).$typeToSeason[substr($calValue['endDate'],5)]);
+                    $calValue = array();
+                    $calValue['inventories'] = ($sortData[$year]['A']['inventories'] + $sortData[$year-1]['A']['inventories'])/2;
+                    $calValue['AR'] = ($sortData[$year]['A']['AR'] + $sortData[$year-1]['A']['AR'])/2;
+                    $calValue['COGS'] = $sortData[$year]['A']['COGS'];
+                    $calValue['tRevenue'] = $sortData[$year]['A']['tRevenue'];
+                    array_push($xAris,substr($year,2,2));
+                    array_push($data1,sprintf('%.1f',$calValue['inventories']/($calValue['COGS']/360)));
+                    array_push($hideData1,sprintf('%.1f',$calValue['inventories']/1000000));
+                    array_push($hideData2,sprintf('%.1f',($calValue['COGS']/360)/1000000));
+                    array_push($data2,sprintf('%.1f',$calValue['AR']/($calValue['tRevenue']/360)));
+                    array_push($hideData3,sprintf('%.1f',$calValue['AR']/1000000));
+                    array_push($hideData4,sprintf('%.1f',($calValue['tRevenue']/360)/1000000));
+                    $counter++;
+                    if($counter == 5){
+                        $stopSign = true;
+                        break;
+                    }
                 }
-                $counter++;
-                if($counter==5) break;
+                if($stopSign) break;
             }
         }
-
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array(
             'divId' => $divId,
+            'graphType' => $graphType,
             'xAris' => array_reverse($xAris),
             'data1' => array_reverse($data1),
             'data2' => array_reverse($data2),
+            'hideData1' => array_reverse($hideData1),
+            'hideData2' => array_reverse($hideData2),
+            'hideData3' => array_reverse($hideData3),
+            'hideData4' => array_reverse($hideData4),
         ))
         ->setTerminal(true);
         return $this->viewModel;
