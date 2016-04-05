@@ -51,7 +51,7 @@ class GraphController extends AbstractActionController
         $ticker = $request -> getPost('ticker');
 
         $rawData = $this->getTable('TlfdmtisTable')->fetchForChartJoinBs($ticker)->toArray();
-
+        $sortData = $this->sortData($rawData);
         $xAris = array();
         $data1 = array();//存货周转天数
         $data2 = array();//应收周转天数
@@ -60,10 +60,10 @@ class GraphController extends AbstractActionController
         $hideData3 = array();//平均应收账款
         $hideData4 = array();//日均营业收入
         $typeToSeason = array(
-            '03-31' => 'Q1',
-            '06-30' => 'Q2',
-            '09-30' => 'Q3',
-            '12-31' => 'Q4',
+            'Q1' => 'Q1',
+            'S1' => 'Q2',
+            'Q3' => 'Q3',
+            'A' => 'Q4',
         );
         $preSeason = array(
             'Q1' => 'A',
@@ -74,43 +74,48 @@ class GraphController extends AbstractActionController
         if($graphType == 'season') {
             $counter = 0;
             $cq3Value = array();
-            foreach($rawData as $key => $value) {
-                $calValue = array();
-                if($value['reportType'] == 'CQ3'){
-                    continue;
-                }
-                else {
-                    //caculate data in bs table
-                    $preKey = $key;
-                    while($rawData[$preKey]['reportType'] != $preSeason[$value['reportType']] && $preKey <= 20) {
-                        $preKey++;
-                    }
-                    $calValue['inventories'] = ($value['inventories'] + $rawData[$preKey]['inventories'])/2;
-                    $calValue['AR'] = ($value['AR'] + $rawData[$preKey]['AR'])/2;
-                    if($value['reportType'] == 'S1'){
-                        $calValue['COGS'] = $value['COGS'] - $rawData[$key+1]['COGS'];
-                        $calValue['tRevenue'] = $value['tRevenue'] - $rawData[$key+1]['tRevenue'];
-                    }
-                    else if($value['reportType'] == 'A'){
-                        //find next CQ3 Data
-                        $skey = $key;
-                        while($rawData[$skey]['reportType'] != 'CQ3'){
-                            $skey++;
+            $seasonOrder = ['A','Q3','S1','Q1'];
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                foreach($seasonOrder as $season) {
+                    if(isset($seasons[$season])) {
+                        $value = $seasons[$season];
+                        $calValue = array();
+                        $calValue['endDate'] = $value['endDate'];
+                        $calValue['reportType'] = $value['reportType'];
+                        if($season == 'S1'){
+                            //S1: S1-Q1
+                            $calValue['COGS'] = $value['COGS'] - $seasons['Q1']['COGS'];
+                            $calValue['tRevenue'] = $value['tRevenue'] - $seasons['Q1']['tRevenue'];
                         }
-                        $cq3Value = $rawData[$skey];
-                        $calValue['COGS'] = $value['COGS'] - $cq3Value['COGS'];
-                        $calValue['tRevenue'] = $value['tRevenue'] - $cq3Value['tRevenue'];
-                    }
-                    else {
-                        $calValue = $value;
+                        else if($season == 'A'){
+                            //A: A-CQ3
+                            $calValue['COGS'] = $value['COGS'] - $seasons['CQ3']['COGS'];
+                            $calValue['tRevenue'] = $value['tRevenue'] - $seasons['CQ3']['tRevenue'];
+                        }
+                        else {
+                            $calValue['COGS'] = $value['COGS'];
+                            $calValue['tRevenue'] = $value['tRevenue'];
+                        }
+                        if($season != 'Q1') {
+                            $calValue['inventories'] = ($value['inventories']+$seasons[$preSeason[$value['reportType']]]['inventories'])/2;
+                            $calValue['AR'] = ($value['AR']+$seasons[$preSeason[$value['reportType']]]['AR'])/2;
+                        }
+                        else {
+                            $calValue['inventories'] = ($value['inventories']+$sortData[--$year]['A']['inventories'])/2;
+                            $calValue['AR'] = ($value['AR']+$sortData[--$year]['A']['AR'])/2;
+                        }
+                        array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
+                        array_push($data1,sprintf('%.1f',$calValue['inventories']/($calValue['COGS']/90)));
+                        array_push($data2,sprintf('%.1f',$calValue['AR']/($calValue['tRevenue']/90)));
+                        $counter++;
+                        if($counter==20) {
+                            $stopSign = true;
+                            break;
+                        }
                     }
                 }
-                $calValue['endDate'] = $value['endDate'];
-                array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[substr($calValue['endDate'],5)]);
-                array_push($data1,sprintf('%.1f',$calValue['inventories']/($calValue['COGS']/90)));
-                array_push($data2,sprintf('%.1f',$calValue['AR']/($calValue['tRevenue']/90)));
-                $counter++;
-                if($counter==20) break;
+                if($stopSign) break;
             }
         }
         else if($graphType == 'year') {
@@ -469,5 +474,21 @@ class GraphController extends AbstractActionController
         $company_data['subindustry'] = $this->getTable('SubindustryTable')->fetchById($company_data['subindustry_id'])->toArray();
         $subName = $company_data['subindustry'][0]['name'];
         return $subName;
+    }
+
+    public function sortData($dataArray){
+        $result = array();
+        foreach($dataArray as $key => $value){
+            $year = substr($value['endDate'],0,4);
+            $type = $value['reportType'];
+            if(!isset($result[$year])){
+                $result[$year] = array();
+            }
+            if(!isset($result[$year][$type])){
+                $result[$year][$type] = array();
+            }
+            $result[$year][$type] = $value;
+        }
+        return $result;
     }
 }
