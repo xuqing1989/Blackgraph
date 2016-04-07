@@ -1,4 +1,86 @@
-    var myCharts = echarts.init(document.getElementById('<?php echo $divId;?>'));
+<div>
+    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_liquidity_year">年度</span>
+    <span>&nbsp;|&nbsp;</span>
+    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_liquidity_season">季度</span>
+</div>
+<div class="chart-graph" id="chart_liquidity"></div>
+<div class="chart-div">
+    <table class="chart-table" id="chart_table_liquidity">
+        <tr>
+            <th></th>
+            <?php foreach($xAris as $value): ?>
+            <th>
+                <?php echo $value; ?>
+            </th>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line1">流动比率</th>
+            <?php foreach($data1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line1">
+            <th>流动资产</th>
+            <?php foreach($hideData1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line1">
+            <th>流动负债</th>
+            <?php foreach($hideData2 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line2">速动比率</th>
+            <?php foreach($data2 as $value): ?>
+            <td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>流动资产-存货</th>
+            <?php foreach($hideData3 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>流动负债</th>
+            <?php foreach($hideData2 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+    </table>
+</div>
+<script type='text/javascript'>
+    var loadGraph = function(graphType){
+        $("#chart_liquidity").html(CompanyDetail.ajaxLoader);
+        $.ajax({
+            type:"POST",
+            url: "../graph/liquidity",
+            data: {
+                "ticker":Global.ticker,
+                "graphType":graphType,
+                "divId":'<?php echo $divId;?>',
+            },
+            success: function(result) {
+                $('#<?php echo $divId;?>').html(result);
+            },
+        });
+    };
+    $('#chart_select_liquidity_year').click(function(){
+        loadGraph('year');
+    });
+    $('#chart_select_liquidity_season').click(function(){
+        loadGraph('season');
+    });
+
+    $('#chart_table_liquidity .chart-table-hide').hide();
+    $('#chart_table_liquidity th[toggle-tr="true"]').click(function(){
+        var toggleKey = $(this).attr('toggle-to');
+        $('#chart_table_liquidity .chart-table-hide[toggle-by="'+toggleKey+'"]').toggle();
+    });
+    var myCharts = echarts.init(document.getElementById('chart_liquidity'));
     var option = {
         backgroundColor:'#262626',
         textStyle: {
@@ -48,7 +130,7 @@
         yAxis:[
         {
             type:'value',
-            name:'CNY百万',
+            name:'%',
             splitNumber:'5',
             splitLine: {
                 show:false,
@@ -85,3 +167,4 @@
         ],
     };
     myCharts.setOption(option);
+</script>

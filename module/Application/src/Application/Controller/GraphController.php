@@ -15,7 +15,7 @@ use Zend\View\Model\ViewModel;
 class GraphController extends AbstractActionController
 {
     protected $tableArray = array();
-
+    const ONEMILLION = 1000000;
     public function indexAction()
     {
         $this->viewModel = new ViewModel();
@@ -108,11 +108,11 @@ class GraphController extends AbstractActionController
                         }
                         array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
                         array_push($data1,sprintf('%.1f',$calValue['inventories']/($calValue['COGS']/90)));
-                        array_push($hideData1,sprintf('%.1f',$calValue['inventories']/1000000));
-                        array_push($hideData2,sprintf('%.1f',($calValue['COGS']/90)/1000000));
+                        array_push($hideData1,sprintf('%.1f',$calValue['inventories']/self::ONEMILLION));
+                        array_push($hideData2,sprintf('%.1f',($calValue['COGS']/90)/self::ONEMILLION));
                         array_push($data2,sprintf('%.1f',$calValue['AR']/($calValue['tRevenue']/90)));
-                        array_push($hideData3,sprintf('%.1f',$calValue['AR']/1000000));
-                        array_push($hideData4,sprintf('%.1f',($calValue['tRevenue']/90)/1000000));
+                        array_push($hideData3,sprintf('%.1f',$calValue['AR']/self::ONEMILLION));
+                        array_push($hideData4,sprintf('%.1f',($calValue['tRevenue']/90)/self::ONEMILLION));
                         $counter++;
                         if($counter==20) {
                             $stopSign = true;
@@ -153,14 +153,14 @@ class GraphController extends AbstractActionController
                                 array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
                             }
                             else {
-                                array_push($xAris,substr($calValue['endDate'],2,2));
+                                array_push($xAris,substr($calValue['endDate'],0,4));
                             }
                             array_push($data1,sprintf('%.1f',$calValue['inventories']/($calValue['COGS']/(90*$firstSeaNum))));
-                            array_push($hideData1,sprintf('%.1f',$calValue['inventories']/1000000));
-                            array_push($hideData2,sprintf('%.1f',($calValue['COGS']/(90*$firstSeaNum))/1000000));
+                            array_push($hideData1,sprintf('%.1f',$calValue['inventories']/self::ONEMILLION));
+                            array_push($hideData2,sprintf('%.1f',($calValue['COGS']/(90*$firstSeaNum))/self::ONEMILLION));
                             array_push($data2,sprintf('%.1f',$calValue['AR']/($calValue['tRevenue']/(90*$firstSeaNum))));
-                            array_push($hideData3,sprintf('%.1f',$calValue['AR']/1000000));
-                            array_push($hideData4,sprintf('%.1f',($calValue['tRevenue']/(90*$firstSeaNum))/1000000));
+                            array_push($hideData3,sprintf('%.1f',$calValue['AR']/self::ONEMILLION));
+                            array_push($hideData4,sprintf('%.1f',($calValue['tRevenue']/(90*$firstSeaNum))/self::ONEMILLION));
                             $firstCol = false;
                             $counter++;
                             break;
@@ -174,13 +174,13 @@ class GraphController extends AbstractActionController
                     $calValue['AR'] = ($sortData[$year]['A']['AR'] + $sortData[$year-1]['A']['AR'])/2;
                     $calValue['COGS'] = $sortData[$year]['A']['COGS'];
                     $calValue['tRevenue'] = $sortData[$year]['A']['tRevenue'];
-                    array_push($xAris,substr($year,2,2));
+                    array_push($xAris,substr($year,0,4));
                     array_push($data1,sprintf('%.1f',$calValue['inventories']/($calValue['COGS']/360)));
-                    array_push($hideData1,sprintf('%.1f',$calValue['inventories']/1000000));
-                    array_push($hideData2,sprintf('%.1f',($calValue['COGS']/360)/1000000));
+                    array_push($hideData1,sprintf('%.1f',$calValue['inventories']/self::ONEMILLION));
+                    array_push($hideData2,sprintf('%.1f',($calValue['COGS']/360)/self::ONEMILLION));
                     array_push($data2,sprintf('%.1f',$calValue['AR']/($calValue['tRevenue']/360)));
-                    array_push($hideData3,sprintf('%.1f',$calValue['AR']/1000000));
-                    array_push($hideData4,sprintf('%.1f',($calValue['tRevenue']/360)/1000000));
+                    array_push($hideData3,sprintf('%.1f',$calValue['AR']/self::ONEMILLION));
+                    array_push($hideData4,sprintf('%.1f',($calValue['tRevenue']/360)/self::ONEMILLION));
                     $counter++;
                     if($counter == 5){
                         $stopSign = true;
@@ -344,22 +344,22 @@ class GraphController extends AbstractActionController
                 $calValue['endDate'] = $value['endDate'];
                 array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[substr($calValue['endDate'],5)]);
                 array_push($data3,sprintf('%.1f',(($calValue['revenue']-$calValue['COGS'])/$calValue['revenue'])*100));
-                array_push($hideData1,sprintf('%d',($calValue['revenue']-$calValue['COGS'])/1000000));
-                array_push($hideData2,sprintf('%d',$calValue['revenue']/1000000));
-                array_push($hideData3,sprintf('%d',$calValue['operateProfit']/1000000));
-                array_push($hideData5,sprintf('%d',$calValue['NIncomeAttrP']/1000000));
+                array_push($hideData1,sprintf('%d',($calValue['revenue']-$calValue['COGS'])/self::ONEMILLION));
+                array_push($hideData2,sprintf('%d',$calValue['revenue']/self::ONEMILLION));
+                array_push($hideData3,sprintf('%d',$calValue['operateProfit']/self::ONEMILLION));
+                array_push($hideData5,sprintf('%d',$calValue['NIncomeAttrP']/self::ONEMILLION));
                 switch($subName) {
                 case '银行':
                 case '证券':
                 case '保险':
                     //经营利润率 is the same as 毛利率 in these three subindustry
                     array_push($data1,sprintf('%.1f',($calValue['NIncomeAttrP']/$calValue['revenue'])*100));
-                    array_push($hideData4,sprintf('%d',$calValue['revenue']/1000000));
+                    array_push($hideData4,sprintf('%d',$calValue['revenue']/self::ONEMILLION));
                     break;
                 default:
                     array_push($data2,sprintf('%.1f',($calValue['operateProfit']/$calValue['tRevenue'])*100));
                     array_push($data1,sprintf('%.1f',($calValue['NIncomeAttrP']/$calValue['tRevenue'])*100));
-                    array_push($hideData4,sprintf('%d',$calValue['tRevenue']/1000000));
+                    array_push($hideData4,sprintf('%d',$calValue['tRevenue']/self::ONEMILLION));
                 }
                 $counter++;
                 if($counter==20) break;
@@ -386,22 +386,22 @@ class GraphController extends AbstractActionController
                     array_push($xAris,substr($calValue['endDate'],0,4).$typeToSeason[substr($calValue['endDate'],5)]);
                 }
                 array_push($data3,sprintf('%.1f',(($calValue['revenue']-$calValue['COGS'])/$calValue['revenue'])*100));
-                array_push($hideData1,sprintf('%d',($calValue['revenue']-$calValue['COGS'])/1000000));
-                array_push($hideData2,sprintf('%d',$calValue['revenue']/1000000));
-                array_push($hideData3,sprintf('%d',$calValue['operateProfit']/1000000));
-                array_push($hideData5,sprintf('%d',$calValue['NIncomeAttrP']/1000000));
+                array_push($hideData1,sprintf('%d',($calValue['revenue']-$calValue['COGS'])/self::ONEMILLION));
+                array_push($hideData2,sprintf('%d',$calValue['revenue']/self::ONEMILLION));
+                array_push($hideData3,sprintf('%d',$calValue['operateProfit']/self::ONEMILLION));
+                array_push($hideData5,sprintf('%d',$calValue['NIncomeAttrP']/self::ONEMILLION));
                 switch($subName) {
                 case '银行':
                 case '证券':
                 case '保险':
                     //经营利润率 is the same as 毛利率 in these three subindustry
                     array_push($data1,sprintf('%.1f',($calValue['NIncomeAttrP']/$calValue['revenue'])*100));
-                    array_push($hideData5,sprintf('%d',$calValue['revenue']/1000000));
+                    array_push($hideData5,sprintf('%d',$calValue['revenue']/self::ONEMILLION));
                     break;
                 default:
                     array_push($data2,sprintf('%.1f',($calValue['operateProfit']/$calValue['tRevenue'])*100));
                     array_push($data1,sprintf('%.1f',($calValue['NIncomeAttrP']/$calValue['tRevenue'])*100));
-                    array_push($hideData5,sprintf('%d',$calValue['tRevenue']/1000000));
+                    array_push($hideData5,sprintf('%d',$calValue['tRevenue']/self::ONEMILLION));
                 }
                 $counter++;
                 if($counter==5) break;
@@ -438,23 +438,96 @@ class GraphController extends AbstractActionController
     {
         $request = $this -> getRequest();
         $divId = $request -> getPost('divId');
-        $apiData = json_decode($request -> getPost('apiData'));
+        $graphType = $request -> getPost('graphType');
+        $ticker = $request -> getPost('ticker');
+        $rawData = $this->getTable('TlfdmtbsTable')->fetchForChart($ticker)->toArray();
+        $sortData = $this->sortData($rawData);
+        $typeToSeason = array(
+            'Q1' => 'Q1',
+            'S1' => 'Q2',
+            'Q3' => 'Q3',
+            'A' => 'Q4',
+        );
+        $seasonOrder = ['A','Q3','S1','Q1'];
         $xAris = array();
-        $data1 = array();
-        $data2 = array();
-        foreach($apiData as $year => $season) {
-            foreach($season as $key => $value) {
-                $value = $value->data;
-                array_push($xAris,substr($year,2,2).'Q'.$key);
-                array_push($data1,round(($value->TCA / $value->TAssets)*100,2));
-                array_push($data2,round((($value->TCA - $value->inventories) / $value->TAssets)*100,2));
+        $data1 = array();//流动比率
+        $data2 = array();//速动比率
+        $hideData1 = array();//流动资产
+        $hideData2 = array();//流动负债
+        $hideData3 = array();//流动资产-存货
+        if($graphType == 'season') {
+            $counter = 0;
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                foreach($seasonOrder as $season) {
+                    if(isset($seasons[$season])) {
+                        $value = $seasons[$season];
+                        array_push($data1,sprintf('%.1f',($value['TCA']/$value['TCL'])*100));
+                        array_push($data2,sprintf('%.1f',(($value['TCA']-$value['inventories'])/$value['TCL'])*100));
+                        array_push($hideData1,sprintf('%.1f',$value['TCA']/self::ONEMILLION));
+                        array_push($hideData2,sprintf('%.1f',$value['TCL']/self::ONEMILLION));
+                        array_push($hideData3,sprintf('%.1f',($value['TCL']-$value['inventories'])/self::ONEMILLION));
+                        array_push($xAris,substr($value['endDate'],2,2).$typeToSeason[$value['reportType']]);
+                        $counter++;
+                        if($counter==20) {
+                            $stopSign = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else if($graphType == 'year') {
+            $counter = 0;
+            //deal with first data
+            $firstCol = true;
+            foreach($sortData as $year => $seasons) {
+                if($firstCol) {
+                    foreach($seasonOrder as $season){
+                        if(isset($sortData[$year][$season])){
+                            $value = $seasons[$season];
+                            array_push($data1,sprintf('%.1f',($value['TCA']/$value['TCL'])*100));
+                            array_push($data2,sprintf('%.1f',(($value['TCA']-$value['inventories'])/$value['TCL'])*100));
+                            array_push($hideData1,sprintf('%.1f',$value['TCA']/self::ONEMILLION));
+                            array_push($hideData2,sprintf('%.1f',$value['TCL']/self::ONEMILLION));
+                            array_push($hideData3,sprintf('%.1f',($value['TCL']-$value['inventories'])/self::ONEMILLION));
+                            if($value['reportType'] != 'A') {
+                                array_push($xAris,substr($value['endDate'],2,2).$typeToSeason[$value['reportType']]);
+                            }
+                            else {
+                                array_push($xAris,substr($value['endDate'],0,4));
+                            }
+                            break;
+                            $counter++;
+                            $firstCol = false;
+                        }
+                    }
+                }
+                else {
+                    $value = $seasons['A'];
+                    array_push($data1,sprintf('%.1f',($value['TCA']/$value['TCL'])*100));
+                    array_push($data2,sprintf('%.1f',(($value['TCA']-$value['inventories'])/$value['TCL'])*100));
+                    array_push($hideData1,sprintf('%.1f',$value['TCA']/self::ONEMILLION));
+                    array_push($hideData2,sprintf('%.1f',$value['TCL']/self::ONEMILLION));
+                    array_push($hideData3,sprintf('%.1f',($value['TCL']-$value['inventories'])/self::ONEMILLION));
+                    array_push($xAris,substr($value['endDate'],0,4));
+                    $counter++;
+                    if($counter == 5){
+                        $stopSign = true;
+                        break;
+                    }
+                }
             }
         }
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId,
-                                             'xAris' => $xAris,
-                                             'data1' => $data1,
-                                             'data2' => $data2,
+                                             'graphType' => $graphType,
+                                             'xAris' => array_reverse($xAris),
+                                             'data1' => array_reverse($data1),
+                                             'data2' => array_reverse($data2),
+                                             'hideData1' => array_reverse($hideData1),
+                                             'hideData2' => array_reverse($hideData2),
+                                             'hideData3' => array_reverse($hideData3),
                                       ))
                         ->setTerminal(true);
         return $this->viewModel;
