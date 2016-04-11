@@ -1,37 +1,129 @@
-    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+<div>
+    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_loandepositrate_year">年度</span>
+    <span>&nbsp;|&nbsp;</span>
+    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_loandepositrate_season">季度</span>
+</div>
+<div class="chart-graph" id="chart_loandepositrate"></div>
+<div class="chart-div">
+    <table class="chart-table" id="chart_table_loandepositrate">
+        <tr>
+            <th></th>
+            <?php foreach($xAris as $value): ?>
+            <th>
+                <?php echo $value; ?>
+            </th>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line1">贷存比</th>
+            <?php foreach($data1 as $value): ?>
+            <td><?php echo $value.'%';?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line1">
+            <th>贷款</th>
+            <?php foreach($hideData1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line1">
+            <th>存款</th>
+            <?php foreach($hideData2 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line2">贷款/总资产</th>
+            <?php foreach($data2 as $value): ?>
+            <td><?php echo $value.'%'; ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>贷款</th>
+            <?php foreach($hideData1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>总资产</th>
+            <?php foreach($hideData3 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line3">存款/总资产</th>
+            <?php foreach($data2 as $value): ?>
+            <td><?php echo $value.'%'; ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line3">
+            <th>存款</th>
+            <?php foreach($hideData2 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line3">
+            <th>总资产</th>
+            <?php foreach($hideData3 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+    </table>
+</div>
+<script type='text/javascript'>
+    var loadGraph = function(graphType){
+        $("#chart_loandepositrate").html(CompanyDetail.ajaxLoader);
+        $.ajax({
+            type:"POST",
+            url: "../graph/loandepositrate",
+            data: {
+                "ticker":Global.ticker,
+                "graphType":graphType,
+                "divId":'<?php echo $divId;?>',
+            },
+            success: function(result) {
+                $('#<?php echo $divId;?>').html(result);
+            },
+        });
+    };
+    $('#chart_select_loandepositrate_year').click(function(){
+        loadGraph('year');
+    });
+    $('#chart_select_loandepositrate_season').click(function(){
+        loadGraph('season');
+    });
+
+    $('#chart_table_loandepositrate .chart-table-hide').hide();
+    $('#chart_table_loandepositrate th[toggle-tr="true"]').click(function(){
+        var toggleKey = $(this).attr('toggle-to');
+        $('#chart_table_loandepositrate .chart-table-hide[toggle-by="'+toggleKey+'"]').toggle();
+    });
+    var myCharts = echarts.init(document.getElementById('chart_loandepositrate'));
     var option = {
-        backgroundColor:'#353535',
+        backgroundColor:'#262626',
         textStyle: {
             color:'#ccc',
         },
-        color:["#349B2E","#FE7F0E","#1F78B4"],
+        color:["#FE7F0E","#1F78B4","#555"],
         title: {
-            text: '收入',
+            text: '贷存比率',
             textStyle: {
                 color:'#ccc',
             },
         },
         tooltip: {
-            formatter:function(obj) {
-                var result = obj.seriesName+"<br/>"+obj.name+": " +obj.value;
-                if(obj.seriesIndex != 2){
-                    result += "%";
-                }
-                return result;
-            },
+            formatter:"{a}<br/>{b}: {c}%",
         },
         grid: {
         },
         legend: {
-            data:['收入','收入-同比增长','收入-环比增长'],
+            data:['贷存比','贷款/总资产','存款/总资产'],
             textStyle: {
                 color:'#ccc',
             },
         },
         xAxis: {
-            data: ["13Q1","13Q2","13Q3","13Q4",
-                   "14Q1","14Q2","14Q3","14Q4",
-                   "14Q1","14Q2","14Q3","14Q4",],
+            data: <?php echo json_encode($xAris);?>,
             axisTick: {
                 lineStyle: {
                     color: '#555'
@@ -40,41 +132,26 @@
             axisLabel: {
                 textStyle: {
                     color: '#ccc'
-                }
+                },
+            },
+            axisLine: {
+                onZero:false,
             },
             splitLine: {
+                show:false,
                 lineStyle: {
                     color: ['#555']
-                }
+                },
             },
+            boundaryGap:false,
         },
         yAxis:[
         {
             type:'value',
-            name:'存货(CNY百万)',
+            name:'%',
             splitNumber:'5',
             splitLine: {
-                lineStyle: {
-                    color: ['#555']
-                }
-            },
-            axisTick: {
-                lineStyle: {
-                    color: '#555'
-                }
-            },
-            axisLabel: {
-                textStyle: {
-                    color: '#ccc'
-                }
-            },
-            scale:true,
-            boundaryGap: ['5%', '5%'],
-        },
-        {
-            type:'value',
-            name:'百分比',
-            splitLine: {
+                show:false,
                 lineStyle: {
                     color: ['#555']
                 }
@@ -90,60 +167,28 @@
                 },
                 formatter: '{value}%',
             },
-            splitLine:{
-                show:false,
-            },
             scale:true,
-            boundaryGap: ['5%', '5%'],
-        },
-        ],
+        }],
         series: [
         {
-            name: '收入-同比增长',
+            name: '贷存比',
             type: 'line',
-            yAxisIndex:'1',
-            data: [59, 42, 73, 71, 
-                   19,15, 120, 94,
-                   96,50, 62, 92,],
-            markLine : {
-                name :"平均值",
-                lineStyle: {
-                    normal:{
-                        color:'#777',
-                    },
-                },
-                data : [
-                    {type : 'average', name : '平均值'}
-                ]
-            },
+            showAllSymbol:true,
+            data: <?php echo json_encode($data1);?>,
         },
         {
-            name: '收入-环比增长',
+            name: '贷款/总资产',
             type: 'line',
-            yAxisIndex:'1',
-            data: [69, 22, 53, 91, 
-                   39,75, 10, 34,
-                   46,70, 72, 62,],
-            markLine : {
-                name :"平均值",
-                lineStyle: {
-                    normal:{
-                        color:'#777',
-                    },
-                },
-                data : [
-                    {type : 'average', name : '平均值'}
-                ]
-            },
+            showAllSymbol:true,
+            data: <?php echo json_encode($data2);?>,
         },
         {
-            name: '收入',
-            type: 'bar',
-            stack:'1',
-            data: [200, 300, 360, 500, 
-                   400,500, 280, 300,
-                   400,500, 280, 300],
+            name: '存款/总资产',
+            type: 'line',
+            showAllSymbol:true,
+            data: <?php echo json_encode($data3);?>,
         },
         ],
     };
-    myChart.setOption(option);
+    myCharts.setOption(option);
+</script>

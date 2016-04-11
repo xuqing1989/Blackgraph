@@ -567,8 +567,102 @@ class GraphController extends AbstractActionController
     {
         $request = $this -> getRequest();
         $divId = $request -> getPost('divId');
+        $graphType = $request -> getPost('graphType');
+        $ticker = $request -> getPost('ticker');
+        $rawData = $this->getTable('TlfdmtbsbankTable')->fetchForChart($ticker)->toArray();
+        $sortData = $this->sortData($rawData);
+        $typeToSeason = array(
+            'Q1' => 'Q1',
+            'S1' => 'Q2',
+            'Q3' => 'Q3',
+            'A' => 'Q4',
+        );
+        $seasonOrder = ['A','Q3','S1','Q1'];
+        $xAris = array();
+        $data1 = array();//贷存比
+        $data2 = array();//贷款/总资产
+        $data3 = array();//存款/总资产
+        $hideData1 = array();//贷款
+        $hideData2 = array();//存款
+        $hideData3 = array();//总资产
+        if($graphType == 'season') {
+            $counter = 0;
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                foreach($seasonOrder as $season) {
+                    if(isset($seasons[$season])) {
+                        $value = $seasons[$season];
+                        array_push($data1,sprintf('%.1f',($value['disburLA']/$value['depos'])*100));
+                        array_push($data2,sprintf('%.1f',($value['disburLA']/$value['TAssets'])*100));
+                        array_push($data3,sprintf('%.1f',($value['depos']/$value['TAssets'])*100));
+                        array_push($hideData1,sprintf('%.1f',$value['disburLA']/self::ONEMILLION));
+                        array_push($hideData2,sprintf('%.1f',$value['depos']/self::ONEMILLION));
+                        array_push($hideData3,sprintf('%.1f',$value['TAssets']/self::ONEMILLION));
+                        array_push($xAris,substr($value['endDate'],2,2).$typeToSeason[$value['reportType']]);
+                        $counter++;
+                        if($counter==20) {
+                            $stopSign = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else if($graphType == 'year') {
+            $counter = 0;
+            //deal with first data
+            $firstCol = true;
+            foreach($sortData as $year => $seasons) {
+                if($firstCol) {
+                    foreach($seasonOrder as $season){
+                        if(isset($sortData[$year][$season])){
+                            $value = $seasons[$season];
+                            array_push($data1,sprintf('%.1f',($value['disburLA']/$value['depos'])*100));
+                            array_push($data2,sprintf('%.1f',($value['disburLA']/$value['TAssets'])*100));
+                            array_push($data3,sprintf('%.1f',($value['depos']/$value['TAssets'])*100));
+                            array_push($hideData1,sprintf('%.1f',$value['disburLA']/self::ONEMILLION));
+                            array_push($hideData2,sprintf('%.1f',$value['depos']/self::ONEMILLION));
+                            array_push($hideData3,sprintf('%.1f',$value['TAssets']/self::ONEMILLION));
+                            if($value['reportType'] != 'A') {
+                                array_push($xAris,substr($value['endDate'],2,2).$typeToSeason[$value['reportType']]);
+                            }
+                            else {
+                                array_push($xAris,substr($value['endDate'],0,4));
+                            }
+                            break;
+                            $counter++;
+                            $firstCol = false;
+                        }
+                    }
+                }
+                else {
+                    $value = $seasons['A'];
+                    array_push($data1,sprintf('%.1f',($value['disburLA']/$value['depos'])*100));
+                    array_push($data2,sprintf('%.1f',($value['disburLA']/$value['TAssets'])*100));
+                    array_push($data3,sprintf('%.1f',($value['depos']/$value['TAssets'])*100));
+                    array_push($hideData1,sprintf('%.1f',$value['disburLA']/self::ONEMILLION));
+                    array_push($hideData2,sprintf('%.1f',$value['depos']/self::ONEMILLION));
+                    array_push($hideData3,sprintf('%.1f',$value['TAssets']/self::ONEMILLION));
+                    array_push($xAris,substr($value['endDate'],0,4));
+                    $counter++;
+                    if($counter == 5){
+                        $stopSign = true;
+                        break;
+                    }
+                }
+            }
+        }
         $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
+        $this->viewModel->setVariables(array('divId' => $divId,
+                                             'graphType' => $graphType,
+                                             'xAris' => array_reverse($xAris),
+                                             'data1' => array_reverse($data1),
+                                             'data2' => array_reverse($data2),
+                                             'data3' => array_reverse($data3),
+                                             'hideData1' => array_reverse($hideData1),
+                                             'hideData2' => array_reverse($hideData2),
+                                             'hideData3' => array_reverse($hideData3),
+                                      ))
                         ->setTerminal(true);
         return $this->viewModel;
     }
