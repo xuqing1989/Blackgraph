@@ -1,4 +1,88 @@
-    var myChart = echarts.init(document.getElementById('<?php echo $divId;?>'));
+<div>
+    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_assetsliabilityrate_year">年度</span>
+    <span>&nbsp;|&nbsp;</span>
+    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_assetsliabilityrate_season">季度</span>
+</div>
+<div class="chart-graph" id="chart_assetsliabilityrate"></div>
+<div class="chart-div">
+    <table class="chart-table" id="chart_table_assetsliabilityrate">
+        <tr>
+            <th></th>
+            <?php foreach($xAris as $value): ?>
+            <th>
+                <?php echo $value; ?>
+            </th>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line1">负债比率</th>
+            <?php foreach($data1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line1">
+            <th>总负债</th>
+            <?php foreach($hideData1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line1">
+            <th>总资产</th>
+            <?php foreach($hideData2 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <?php if(count($data2)): ?>
+        <tr>
+            <th toggle-tr="true" toggle-to="line2">长期负债比率</th>
+            <?php foreach($data2 as $value): ?>
+            <td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>非流动负债</th>
+            <?php foreach($hideData3 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr class="chart-table-hide" toggle-by="line2">
+            <th>总资产</th>
+            <?php foreach($hideData2 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<script type='text/javascript'>
+    var loadGraph = function(graphType){
+        $("#chart_assetsliabilityrate").html(CompanyDetail.ajaxLoader);
+        $.ajax({
+            type:"POST",
+            url: "../graph/assetsliabilityrate",
+            data: {
+                "ticker":Global.ticker,
+                "graphType":graphType,
+                "divId":'<?php echo $divId;?>',
+            },
+            success: function(result) {
+                $('#<?php echo $divId;?>').html(result);
+            },
+        });
+    };
+    $('#chart_select_assetsliabilityrate_year').click(function(){
+        loadGraph('year');
+    });
+    $('#chart_select_assetsliabilityrate_season').click(function(){
+        loadGraph('season');
+    });
+
+    $('#chart_table_assetsliabilityrate .chart-table-hide').hide();
+    $('#chart_table_assetsliabilityrate th[toggle-tr="true"]').click(function(){
+        var toggleKey = $(this).attr('toggle-to');
+        $('#chart_table_assetsliabilityrate .chart-table-hide[toggle-by="'+toggleKey+'"]').toggle();
+    });
+    var myChart = echarts.init(document.getElementById('chart_assetsliabilityrate'));
     var option = {
         backgroundColor:'#262626',
         textStyle: {
@@ -17,7 +101,11 @@
         grid: {
         },
         legend: {
+            <?php if(count($data2)): ?>
             data:['负债比率','长期负债比率'],
+            <?php else: ?>
+            data:['负债比率'],
+            <?php endif; ?>
             textStyle: {
                 color:'#ccc',
             },
@@ -85,3 +173,4 @@
         ],
     };
     myChart.setOption(option);
+</script>

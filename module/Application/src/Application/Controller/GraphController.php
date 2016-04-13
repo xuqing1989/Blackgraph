@@ -230,23 +230,115 @@ class GraphController extends AbstractActionController
     {
         $request = $this -> getRequest();
         $divId = $request -> getPost('divId');
-        $apiData = json_decode($request -> getPost('apiData'));
+        $graphType = $request -> getPost('graphType');
+        $ticker = $request -> getPost('ticker');
+        $subName = $this -> getSubindustryName($ticker);
+        switch($subName) {
+        case '银行':
+            $rawData = $this->getTable('TlfdmtbsbankTable')->fetchForChart($ticker)->toArray();
+            break;
+        case '证券':
+            $rawData = $this->getTable('TlfdmtbssecuTable')->fetchForChart($ticker)->toArray();
+            break;
+        case '保险':
+            $rawData = $this->getTable('TlfdmtbsinsuTable')->fetchForChart($ticker)->toArray();
+            break;
+        default:
+            $rawData = $this->getTable('TlfdmtbsTable')->fetchForChart($ticker)->toArray();
+        }
+        $sortData = $this->sortData($rawData);
+        $typeToSeason = array(
+            'Q1' => 'Q1',
+            'S1' => 'Q2',
+            'Q3' => 'Q3',
+            'A' => 'Q4',
+        );
+        $seasonOrder = ['A','Q3','S1','Q1'];
         $xAris = array();
-        $data1 = array();
-        $data2 = array();
-        foreach($apiData as $year => $season) {
-            foreach($season as $key => $value) {
-                $value = $value->data;
-                array_push($xAris,substr($year,2,2).'Q'.$key);
-                array_push($data1,round(($value->TLiab / $value->TAssets)*100,2));
-                array_push($data2,round(($value->TNCL / $value->TAssets)*100,2));
+        $data1 = array();//负债比率
+        $data2 = array();//长期负债比率
+        $hideData1 = array();//总负债
+        $hideData2 = array();//总资产
+        $hideData3 = array();//非流动负债
+        if($graphType == 'season') {
+            $counter = 0;
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                foreach($seasonOrder as $season) {
+                    if(isset($seasons[$season])) {
+                        $value = $seasons[$season];
+                        array_push($data1,sprintf('%.1f',($value['TLiab']/$value['TAssets'])*100));
+                        array_push($hideData1,sprintf('%.1f',$value['TLiab']/self::ONEMILLION));
+                        array_push($hideData2,sprintf('%.1f',$value['TAssets']/self::ONEMILLION));
+                        if($subName != '银行' && $subName != '保险' && $subName !='证券') {
+                            array_push($data2,sprintf('%.1f',($value['TNCL']/$value['TAssets'])*100));
+                            array_push($hideData3,sprintf('%.1f',$value['TNCL']/self::ONEMILLION));
+                        }
+                        array_push($xAris,substr($value['endDate'],2,2).$typeToSeason[$value['reportType']]);
+                        $counter++;
+                        if($counter==20) {
+                            $stopSign = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else if($graphType == 'year') {
+            $counter = 0;
+            //deal with first data
+            $firstCol = true;
+            foreach($sortData as $year => $seasons) {
+                if($firstCol) {
+                    foreach($seasonOrder as $season){
+                        if(isset($sortData[$year][$season])){
+                            $value = $seasons[$season];
+                            array_push($data1,sprintf('%.1f',($value['TLiab']/$value['TAssets'])*100));
+                            array_push($hideData1,sprintf('%.1f',$value['TLiab']/self::ONEMILLION));
+                            array_push($hideData2,sprintf('%.1f',$value['TAssets']/self::ONEMILLION));
+                            if($subName != '银行' && $subName != '保险' && $subName !='证券') {
+                                array_push($data2,sprintf('%.1f',($value['TNCL']/$value['TAssets'])*100));
+                                array_push($hideData3,sprintf('%.1f',$value['TNCL']/self::ONEMILLION));
+                            }
+                            if($value['reportType'] != 'A') {
+                                array_push($xAris,substr($value['endDate'],2,2).$typeToSeason[$value['reportType']]);
+                            }
+                            else {
+                                array_push($xAris,substr($value['endDate'],0,4));
+                            }
+                            break;
+                            $counter++;
+                            $firstCol = false;
+                        }
+                    }
+                }
+                else {
+                    $value = $seasons['A'];
+                    array_push($data1,sprintf('%.1f',($value['TLiab']/$value['TAssets'])*100));
+                    array_push($hideData1,sprintf('%.1f',$value['TLiab']/self::ONEMILLION));
+                    array_push($hideData2,sprintf('%.1f',$value['TAssets']/self::ONEMILLION));
+                    if($subName != '银行' && $subName != '保险' && $subName !='证券') {
+                        array_push($data2,sprintf('%.1f',($value['TNCL']/$value['TAssets'])*100));
+                        array_push($hideData3,sprintf('%.1f',$value['TNCL']/self::ONEMILLION));
+                    }
+                    array_push($xAris,substr($value['endDate'],0,4));
+                    $counter++;
+                    if($counter == 5){
+                        $stopSign = true;
+                        break;
+                    }
+                }
             }
         }
         $this->viewModel = new ViewModel();
         $this->viewModel->setVariables(array('divId' => $divId,
-                                             'xAris' => $xAris,
-                                             'data1' => $data1,
-                                             'data2' => $data2,
+                                             'xAris' => array_reverse($xAris),
+                                             'data1' => array_reverse($data1),
+                                             'data2' => array_reverse($data2),
+                                             'hideData1' => array_reverse($hideData1),
+                                             'hideData2' => array_reverse($hideData2),
+                                             'hideData3' => array_reverse($hideData3),
+                                             'graphType' => $graphType,
                                       ))
                         ->setTerminal(true);
         return $this->viewModel;
