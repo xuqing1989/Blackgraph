@@ -82,22 +82,22 @@ class CompanyController extends AbstractActionController
         switch($subName) {
         case '银行':
             $layout = array(
-                ['profitmargin','loandepositrate','assetsliabilityrate','cashflowrate'],
+                ['profitmargin','loandepositrate','assetsliabilityrate','operatecashflow'],
             );
             break;
         case '证券':
             $layout = array(
-                ['profitmargin','assetsliabilityrate','cashflowrate'],
+                ['profitmargin','assetsliabilityrate','operatecashflow'],
             );
             break;
         case '保险':
             $layout = array(
-                ['profitmargin','assetsliabilityrate','cashflowrate'],
+                ['profitmargin','assetsliabilityrate','operatecashflow'],
             );
             break;
         default:
             $layout = array(
-                ['profitmargin','turnoverdays','liquidity','assetsliabilityrate','cashflowrate'],
+                ['profitmargin','turnoverdays','liquidity','assetsliabilityrate','operatecashflow'],
             );
         }
         return new ViewModel(array('company_data'=>$company_data,

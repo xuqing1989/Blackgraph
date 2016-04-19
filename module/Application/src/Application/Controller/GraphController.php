@@ -759,13 +759,96 @@ class GraphController extends AbstractActionController
         return $this->viewModel;
     }
 
-    public function cashflowrateAction()
+    public function operatecashflowAction()
     {
         $request = $this -> getRequest();
         $divId = $request -> getPost('divId');
+        $graphType = $request -> getPost('graphType');
+        $ticker = $request -> getPost('ticker');
+
+        $rawData = $this->getTable('TlfdmtcfTable')->fetchForChart($ticker)->toArray();
+        $sortData = $this->sortData($rawData);
+        $xAris = array();
+        $data1 = array();//经营活动现金流入
+        $data2 = array();//经营活动现金流出
+        $data3 = array();//经营活动现金流量净额
+        $typeToSeason = array(
+            'Q1' => 'Q1',
+            'S1' => 'Q2',
+            'Q3' => 'Q3',
+            'A' => 'Q4',
+        );
+        $preSeason = array(
+            'Q1' => 'A',
+            'S1' => 'Q1',
+            'Q3' => 'S1',
+            'A' => 'Q3',
+        );
+        $seasonOrder = ['A','CQ3','S1','Q1'];
+        if($graphType == 'season') {
+            $counter = 0;
+            $cq3Value = array();
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                foreach($seasonOrder as $season) {
+                    if(isset($seasons[$season])) {
+                        if($season != 'CQ3') {
+                            //cf table doesn't have q3
+                            $value = $seasons[$season];
+                            $calValue = array();
+                            $calValue['endDate'] = $value['endDate'];
+                            $calValue['reportType'] = $value['reportType'];
+                        }
+                        else {
+                            $calValue['endDate'] = $seasons['CQ3']['endDate'];
+                            $calValue['reportType'] = 'Q3';
+                        }
+                        if($season == 'S1'){
+                            //S1: S1-Q1
+                            $calValue['CInfFrOperateA'] = $value['CInfFrOperateA'] - $seasons['Q1']['CInfFrOperateA'];
+                            $calValue['COutfOperateA'] = $value['COutfOperateA'] - $seasons['Q1']['COutfOperateA'];
+                            $calValue['NCFOperateA'] = $value['NCFOperateA'] - $seasons['Q1']['NCFOperateA'];
+                        }
+                        else if($season == 'A'){
+                            //A: A-CQ3
+                            $calValue['CInfFrOperateA'] = $value['CInfFrOperateA'] - $seasons['CQ3']['CInfFrOperateA'];
+                            $calValue['COutfOperateA'] = $value['COutfOperateA'] - $seasons['CQ3']['COutfOperateA'];
+                            $calValue['NCFOperateA'] = $value['NCFOperateA'] - $seasons['CQ3']['NCFOperateA'];
+                        }
+                        else if($season == 'CQ3'){
+                            $calValue['CInfFrOperateA'] = $seasons['CQ3']['CInfFrOperateA'] - $seasons['S1']['CInfFrOperateA'];
+                            $calValue['COutfOperateA'] = $seasons['CQ3']['COutfOperateA'] - $seasons['S1']['COutfOperateA'];
+                            $calValue['NCFOperateA'] = $seasons['CQ3']['NCFOperateA'] - $seasons['S1']['NCFOperateA'];
+                        }
+                        else {
+                            $calValue['CInfFrOperateA'] = $value['CInfFrOperateA'];
+                            $calValue['COutfOperateA'] = $value['COutfOperateA'];
+                            $calValue['NCFOperateA'] = $value['NCFOperateA'];
+                        }
+                        array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
+                        array_push($data1,sprintf('%.1f',$calValue['CInfFrOperateA']/self::ONEMILLION));
+                        array_push($data2,sprintf('%.1f',-$calValue['COutfOperateA']/self::ONEMILLION));
+                        array_push($data3,sprintf('%.1f',$calValue['NCFOperateA']/self::ONEMILLION));
+                        $counter++;
+                        if($counter==20) {
+                            $stopSign = true;
+                            break;
+                        }
+                    }
+                }
+                if($stopSign) break;
+            }
+        }
         $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
+        $this->viewModel->setVariables(array(
+            'divId' => $divId,
+            'graphType' => $graphType,
+            'xAris' => array_reverse($xAris),
+            'data1' => array_reverse($data1),
+            'data2' => array_reverse($data2),
+            'data3' => array_reverse($data3),
+        ))
+            ->setTerminal(true);
         return $this->viewModel;
     }
 
