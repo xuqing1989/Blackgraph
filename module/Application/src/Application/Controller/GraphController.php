@@ -775,7 +775,7 @@ class GraphController extends AbstractActionController
         $typeToSeason = array(
             'Q1' => 'Q1',
             'S1' => 'Q2',
-            'Q3' => 'Q3',
+            'CQ3' => 'Q3',
             'A' => 'Q4',
         );
         $preSeason = array(
@@ -834,6 +834,59 @@ class GraphController extends AbstractActionController
                             $stopSign = true;
                             break;
                         }
+                    }
+                }
+                if($stopSign) break;
+            }
+        }
+        else if($graphType == 'year') {
+            $counter = 0;
+            //deal with first data
+            $firstCol = true;
+            //count season num for the first data
+            $firstSeaNum = 4;
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                if($firstCol) {
+                    foreach($seasonOrder as $season){
+                        if(isset($sortData[$year][$season])){
+                            $calValue = array();
+                            $value = $sortData[$year][$season];
+                            $calValue['endDate'] = $seasons[$season]['endDate'];
+                            $calValue['reportType'] = $seasons[$season]['reportType'];
+                            if($season != 'A') {
+                                array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
+                            }
+                            else {
+                                array_push($xAris,substr($calValue['endDate'],0,4));
+                            }
+                            $calValue['CInfFrOperateA'] = $value['CInfFrOperateA'];
+                            $calValue['COutfOperateA'] = $value['COutfOperateA'];
+                            $calValue['NCFOperateA'] = $value['NCFOperateA'];
+                            array_push($data1,sprintf('%.1f',$calValue['CInfFrOperateA']/self::ONEMILLION));
+                            array_push($data2,sprintf('%.1f',-$calValue['COutfOperateA']/self::ONEMILLION));
+                            array_push($data3,sprintf('%.1f',$calValue['NCFOperateA']/self::ONEMILLION));
+                            $firstCol = false;
+                            $counter++;
+                            break;
+                        }
+                        $firstSeaNum --;
+                    }
+                }
+                else {
+                    $value = $sortData[$year]['A'];
+                    $calValue['endDate'] = $seasons['A']['endDate'];
+                    $calValue['CInfFrOperateA'] = $value['CInfFrOperateA'];
+                    $calValue['COutfOperateA'] = $value['COutfOperateA'];
+                    $calValue['NCFOperateA'] = $value['NCFOperateA'];
+                    array_push($data1,sprintf('%.1f',$calValue['CInfFrOperateA']/self::ONEMILLION));
+                    array_push($data2,sprintf('%.1f',-$calValue['COutfOperateA']/self::ONEMILLION));
+                    array_push($data3,sprintf('%.1f',$calValue['NCFOperateA']/self::ONEMILLION));
+                    array_push($xAris,substr($calValue['endDate'],0,4));
+                    $counter++;
+                    if($counter == 5){
+                        $stopSign = true;
+                        break;
                     }
                 }
                 if($stopSign) break;

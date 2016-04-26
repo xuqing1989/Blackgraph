@@ -35,6 +35,34 @@
     </table>
 </div>
 <script type="text/javascript">
+$(function(){
+    var loadGraph = function(graphType){
+        $("#chart_operatecashflow").html(CompanyDetail.ajaxLoader);
+        $.ajax({
+            type:"POST",
+            url: "../graph/operatecashflow",
+            data: {
+                "ticker":Global.ticker,
+                "graphType":graphType,
+                "divId":'<?php echo $divId;?>',
+            },
+            success: function(result) {
+                $('#<?php echo $divId;?>').html(result);
+            },
+        });
+    };
+    $('#chart_select_operatecashflow_year').click(function(){
+        loadGraph('year');
+    });
+    $('#chart_select_operatecashflow_season').click(function(){
+        loadGraph('season');
+    });
+
+    $('#chart_table_operatecashflow .chart-table-hide').hide();
+    $('#chart_table_operatecashflow th[toggle-tr="true"]').click(function(){
+        var toggleKey = $(this).attr('toggle-to');
+        $('#chart_table_operatecashflow .chart-table-hide[toggle-by="'+toggleKey+'"]').toggle();
+    });
     var myChart = echarts.init(document.getElementById('chart_operatecashflow'));
     var option = {
         backgroundColor:'#262626',
@@ -121,4 +149,5 @@
         ],
     };
     myChart.setOption(option);
+});
 </script>

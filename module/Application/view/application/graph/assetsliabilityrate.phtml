@@ -55,6 +55,7 @@
     </table>
 </div>
 <script type='text/javascript'>
+$(function(){
     var loadGraph = function(graphType){
         $("#chart_assetsliabilityrate").html(CompanyDetail.ajaxLoader);
         $.ajax({
@@ -173,4 +174,5 @@
         ],
     };
     myChart.setOption(option);
+});
 </script>

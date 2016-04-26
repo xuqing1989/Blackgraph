@@ -53,6 +53,7 @@
     </table>
 </div>
 <script type='text/javascript'>
+$(function(){
     var loadGraph = function(graphType){
         $("#chart_liquidity").html(CompanyDetail.ajaxLoader);
         $.ajax({
@@ -167,4 +168,5 @@
         ],
     };
     myCharts.setOption(option);
+});
 </script>
