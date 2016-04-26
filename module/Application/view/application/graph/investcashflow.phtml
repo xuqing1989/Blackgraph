@@ -1,0 +1,153 @@
+<div>
+    <span class="chart-type-select <?php echo $graphType=='year'?'actived':'';?>" id="chart_select_investcashflow_year">年度</span>
+    <span>&nbsp;|&nbsp;</span>
+    <span class="chart-type-select <?php echo $graphType=='season'?'actived':'';?>" id="chart_select_investcashflow_season">季度</span>
+</div>
+<div class="chart-graph" id="chart_investcashflow"></div>
+<div class="chart-div">
+    <table class="chart-table" id="chart_table_investcashflow">
+        <tr>
+            <th></th>
+            <?php foreach($xAris as $value): ?>
+            <th>
+                <?php echo $value; ?>
+            </th>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line1">投资活动现金流入</th>
+            <?php foreach($data1 as $value): ?>
+            <td><?php echo $value;?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line2">投资活动现金流出</th>
+            <?php foreach($data2 as $value): ?>
+            <td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <th toggle-tr="true" toggle-to="line2">投资活动现金流量净额</th>
+            <?php foreach($data3 as $value): ?>
+            <td><?php echo $value; ?></td>
+            <?php endforeach; ?>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+$(function(){
+    var loadGraph = function(graphType){
+        $("#chart_investcashflow").html(CompanyDetail.ajaxLoader);
+        $.ajax({
+            type:"POST",
+            url: "../graph/investcashflow",
+            data: {
+                "ticker":Global.ticker,
+                "graphType":graphType,
+                "divId":'<?php echo $divId;?>',
+            },
+            success: function(result) {
+                $('#<?php echo $divId;?>').html(result);
+            },
+        });
+    };
+    $('#chart_select_investcashflow_year').click(function(){
+        loadGraph('year');
+    });
+    $('#chart_select_investcashflow_season').click(function(){
+        loadGraph('season');
+    });
+
+    $('#chart_table_investcashflow .chart-table-hide').hide();
+    $('#chart_table_investcashflow th[toggle-tr="true"]').click(function(){
+        var toggleKey = $(this).attr('toggle-to');
+        $('#chart_table_investcashflow .chart-table-hide[toggle-by="'+toggleKey+'"]').toggle();
+    });
+    var myChart = echarts.init(document.getElementById('chart_investcashflow'));
+    var option = {
+        backgroundColor:'#262626',
+        textStyle: {
+            color:'#ccc',
+        },
+        color:["#349B2E","#FE7F0E","#1F78B4"],
+        title: {
+            text: '投资活动现金流量',
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        tooltip: {},
+        grid: {
+        },
+        legend: {
+            data:['投资活动现金流入','投资活动现金流出','投资活动现金流量净额'],
+            textStyle: {
+                color:'#ccc',
+            },
+        },
+        xAxis: {
+            data: <?php echo json_encode($xAris);?>,
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            splitLine: {
+                show:false,
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+        },
+        yAxis:[
+        {
+            type:'value',
+            name:'现金流(CNY百万)',
+            splitNumber:'5',
+            splitLine: {
+                lineStyle: {
+                    color: ['#555']
+                }
+            },
+            axisTick: {
+                lineStyle: {
+                    color: '#555'
+                }
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            scale:true,
+        },
+        ],
+        series: [
+        {
+            name: '投资活动现金流入',
+            type: 'bar',
+            stack:1,
+            data: <?php echo json_encode($data1);?>,
+        },
+        {
+            name: '投资活动现金流出',
+            type: 'bar',
+            stack:1,
+            data: <?php echo json_encode($data2);?>,
+        },
+        {
+            name: '投资活动现金流量净额',
+            type: 'line',
+            stack:1,
+            data: <?php echo json_encode($data3);?>,
+        },
+        ],
+    };
+    myChart.setOption(option);
+});
+</script>

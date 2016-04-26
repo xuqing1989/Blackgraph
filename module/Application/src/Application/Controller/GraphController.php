@@ -905,6 +905,298 @@ class GraphController extends AbstractActionController
         return $this->viewModel;
     }
 
+    public function investcashflowAction()
+    {
+        $request = $this -> getRequest();
+        $divId = $request -> getPost('divId');
+        $graphType = $request -> getPost('graphType');
+        $ticker = $request -> getPost('ticker');
+
+        $rawData = $this->getTable('TlfdmtcfTable')->fetchForChart($ticker)->toArray();
+        $sortData = $this->sortData($rawData);
+        $xAris = array();
+        $data1 = array();//投资活动现金流入
+        $data2 = array();//投资活动现金流出
+        $data3 = array();//投资活动现金流量净额
+        $typeToSeason = array(
+            'Q1' => 'Q1',
+            'S1' => 'Q2',
+            'CQ3' => 'Q3',
+            'A' => 'Q4',
+        );
+        $preSeason = array(
+            'Q1' => 'A',
+            'S1' => 'Q1',
+            'Q3' => 'S1',
+            'A' => 'Q3',
+        );
+        $seasonOrder = ['A','CQ3','S1','Q1'];
+        if($graphType == 'season') {
+            $counter = 0;
+            $cq3Value = array();
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                foreach($seasonOrder as $season) {
+                    if(isset($seasons[$season])) {
+                        if($season != 'CQ3') {
+                            //cf table doesn't have q3
+                            $value = $seasons[$season];
+                            $calValue = array();
+                            $calValue['endDate'] = $value['endDate'];
+                            $calValue['reportType'] = $value['reportType'];
+                        }
+                        else {
+                            $calValue['endDate'] = $seasons['CQ3']['endDate'];
+                            $calValue['reportType'] = 'Q3';
+                        }
+                        if($season == 'S1'){
+                            //S1: S1-Q1
+                            $calValue['CInfFrInvestA'] = $value['CInfFrInvestA'] - $seasons['Q1']['CInfFrInvestA'];
+                            $calValue['COutfFrInvestA'] = $value['COutfFrInvestA'] - $seasons['Q1']['COutfFrInvestA'];
+                            $calValue['NCFFrInvestA'] = $value['NCFFrInvestA'] - $seasons['Q1']['NCFFrInvestA'];
+                        }
+                        else if($season == 'A'){
+                            //A: A-CQ3
+                            $calValue['CInfFrInvestA'] = $value['CInfFrInvestA'] - $seasons['CQ3']['CInfFrInvestA'];
+                            $calValue['COutfFrInvestA'] = $value['COutfFrInvestA'] - $seasons['CQ3']['COutfFrInvestA'];
+                            $calValue['NCFFrInvestA'] = $value['NCFFrInvestA'] - $seasons['CQ3']['NCFFrInvestA'];
+                        }
+                        else if($season == 'CQ3'){
+                            $calValue['CInfFrInvestA'] = $seasons['CQ3']['CInfFrInvestA'] - $seasons['S1']['CInfFrInvestA'];
+                            $calValue['COutfFrInvestA'] = $seasons['CQ3']['COutfFrInvestA'] - $seasons['S1']['COutfFrInvestA'];
+                            $calValue['NCFFrInvestA'] = $seasons['CQ3']['NCFFrInvestA'] - $seasons['S1']['NCFFrInvestA'];
+                        }
+                        else {
+                            $calValue['CInfFrInvestA'] = $value['CInfFrInvestA'];
+                            $calValue['COutfFrInvestA'] = $value['COutfFrInvestA'];
+                            $calValue['NCFFrInvestA'] = $value['NCFFrInvestA'];
+                        }
+                        array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
+                        array_push($data1,sprintf('%.1f',$calValue['CInfFrInvestA']/self::ONEMILLION));
+                        array_push($data2,sprintf('%.1f',-$calValue['COutfFrInvestA']/self::ONEMILLION));
+                        array_push($data3,sprintf('%.1f',$calValue['NCFFrInvestA']/self::ONEMILLION));
+                        $counter++;
+                        if($counter==20) {
+                            $stopSign = true;
+                            break;
+                        }
+                    }
+                }
+                if($stopSign) break;
+            }
+        }
+        else if($graphType == 'year') {
+            $counter = 0;
+            //deal with first data
+            $firstCol = true;
+            //count season num for the first data
+            $firstSeaNum = 4;
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                if($firstCol) {
+                    foreach($seasonOrder as $season){
+                        if(isset($sortData[$year][$season])){
+                            $calValue = array();
+                            $value = $sortData[$year][$season];
+                            $calValue['endDate'] = $seasons[$season]['endDate'];
+                            $calValue['reportType'] = $seasons[$season]['reportType'];
+                            if($season != 'A') {
+                                array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
+                            }
+                            else {
+                                array_push($xAris,substr($calValue['endDate'],0,4));
+                            }
+                            $calValue['CInfFrInvestA'] = $value['CInfFrInvestA'];
+                            $calValue['COutfFrInvestA'] = $value['COutfFrInvestA'];
+                            $calValue['NCFFrInvestA'] = $value['NCFFrInvestA'];
+                            array_push($data1,sprintf('%.1f',$calValue['CInfFrInvestA']/self::ONEMILLION));
+                            array_push($data2,sprintf('%.1f',-$calValue['COutfFrInvestA']/self::ONEMILLION));
+                            array_push($data3,sprintf('%.1f',$calValue['NCFFrInvestA']/self::ONEMILLION));
+                            $firstCol = false;
+                            $counter++;
+                            break;
+                        }
+                        $firstSeaNum --;
+                    }
+                }
+                else {
+                    $value = $sortData[$year]['A'];
+                    $calValue['endDate'] = $seasons['A']['endDate'];
+                    $calValue['CInfFrInvestA'] = $value['CInfFrInvestA'];
+                    $calValue['COutfFrInvestA'] = $value['COutfFrInvestA'];
+                    $calValue['NCFFrInvestA'] = $value['NCFFrInvestA'];
+                    array_push($data1,sprintf('%.1f',$calValue['CInfFrInvestA']/self::ONEMILLION));
+                    array_push($data2,sprintf('%.1f',-$calValue['COutfFrInvestA']/self::ONEMILLION));
+                    array_push($data3,sprintf('%.1f',$calValue['NCFFrInvestA']/self::ONEMILLION));
+                    array_push($xAris,substr($calValue['endDate'],0,4));
+                    $counter++;
+                    if($counter == 5){
+                        $stopSign = true;
+                        break;
+                    }
+                }
+                if($stopSign) break;
+            }
+        }
+        $this->viewModel = new ViewModel();
+        $this->viewModel->setVariables(array(
+            'divId' => $divId,
+            'graphType' => $graphType,
+            'xAris' => array_reverse($xAris),
+            'data1' => array_reverse($data1),
+            'data2' => array_reverse($data2),
+            'data3' => array_reverse($data3),
+        ))
+            ->setTerminal(true);
+        return $this->viewModel;
+    }
+
+    public function financashflowAction()
+    {
+        $request = $this -> getRequest();
+        $divId = $request -> getPost('divId');
+        $graphType = $request -> getPost('graphType');
+        $ticker = $request -> getPost('ticker');
+
+        $rawData = $this->getTable('TlfdmtcfTable')->fetchForChart($ticker)->toArray();
+        $sortData = $this->sortData($rawData);
+        $xAris = array();
+        $data1 = array();//筹资活动现金流入
+        $data2 = array();//筹资活动现金流出
+        $data3 = array();//筹资活动现金流量净额
+        $typeToSeason = array(
+            'Q1' => 'Q1',
+            'S1' => 'Q2',
+            'CQ3' => 'Q3',
+            'A' => 'Q4',
+        );
+        $preSeason = array(
+            'Q1' => 'A',
+            'S1' => 'Q1',
+            'Q3' => 'S1',
+            'A' => 'Q3',
+        );
+        $seasonOrder = ['A','CQ3','S1','Q1'];
+        if($graphType == 'season') {
+            $counter = 0;
+            $cq3Value = array();
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                foreach($seasonOrder as $season) {
+                    if(isset($seasons[$season])) {
+                        if($season != 'CQ3') {
+                            //cf table doesn't have q3
+                            $value = $seasons[$season];
+                            $calValue = array();
+                            $calValue['endDate'] = $value['endDate'];
+                            $calValue['reportType'] = $value['reportType'];
+                        }
+                        else {
+                            $calValue['endDate'] = $seasons['CQ3']['endDate'];
+                            $calValue['reportType'] = 'Q3';
+                        }
+                        if($season == 'S1'){
+                            //S1: S1-Q1
+                            $calValue['CInfFrFinanA'] = $value['CInfFrFinanA'] - $seasons['Q1']['CInfFrFinanA'];
+                            $calValue['COutfFrFinanA'] = $value['COutfFrFinanA'] - $seasons['Q1']['COutfFrFinanA'];
+                            $calValue['NCFFrFinanA'] = $value['NCFFrFinanA'] - $seasons['Q1']['NCFFrFinanA'];
+                        }
+                        else if($season == 'A'){
+                            //A: A-CQ3
+                            $calValue['CInfFrFinanA'] = $value['CInfFrFinanA'] - $seasons['CQ3']['CInfFrFinanA'];
+                            $calValue['COutfFrFinanA'] = $value['COutfFrFinanA'] - $seasons['CQ3']['COutfFrFinanA'];
+                            $calValue['NCFFrFinanA'] = $value['NCFFrFinanA'] - $seasons['CQ3']['NCFFrFinanA'];
+                        }
+                        else if($season == 'CQ3'){
+                            $calValue['CInfFrFinanA'] = $seasons['CQ3']['CInfFrFinanA'] - $seasons['S1']['CInfFrFinanA'];
+                            $calValue['COutfFrFinanA'] = $seasons['CQ3']['COutfFrFinanA'] - $seasons['S1']['COutfFrFinanA'];
+                            $calValue['NCFFrFinanA'] = $seasons['CQ3']['NCFFrFinanA'] - $seasons['S1']['NCFFrFinanA'];
+                        }
+                        else {
+                            $calValue['CInfFrFinanA'] = $value['CInfFrFinanA'];
+                            $calValue['COutfFrFinanA'] = $value['COutfFrFinanA'];
+                            $calValue['NCFFrFinanA'] = $value['NCFFrFinanA'];
+                        }
+                        array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
+                        array_push($data1,sprintf('%.1f',$calValue['CInfFrFinanA']/self::ONEMILLION));
+                        array_push($data2,sprintf('%.1f',-$calValue['COutfFrFinanA']/self::ONEMILLION));
+                        array_push($data3,sprintf('%.1f',$calValue['NCFFrFinanA']/self::ONEMILLION));
+                        $counter++;
+                        if($counter==20) {
+                            $stopSign = true;
+                            break;
+                        }
+                    }
+                }
+                if($stopSign) break;
+            }
+        }
+        else if($graphType == 'year') {
+            $counter = 0;
+            //deal with first data
+            $firstCol = true;
+            //count season num for the first data
+            $firstSeaNum = 4;
+            foreach($sortData as $year => $seasons) {
+                $stopSign = false;
+                if($firstCol) {
+                    foreach($seasonOrder as $season){
+                        if(isset($sortData[$year][$season])){
+                            $calValue = array();
+                            $value = $sortData[$year][$season];
+                            $calValue['endDate'] = $seasons[$season]['endDate'];
+                            $calValue['reportType'] = $seasons[$season]['reportType'];
+                            if($season != 'A') {
+                                array_push($xAris,substr($calValue['endDate'],2,2).$typeToSeason[$calValue['reportType']]);
+                            }
+                            else {
+                                array_push($xAris,substr($calValue['endDate'],0,4));
+                            }
+                            $calValue['CInfFrFinanA'] = $value['CInfFrFinanA'];
+                            $calValue['COutfFrFinanA'] = $value['COutfFrFinanA'];
+                            $calValue['NCFFrFinanA'] = $value['NCFFrFinanA'];
+                            array_push($data1,sprintf('%.1f',$calValue['CInfFrFinanA']/self::ONEMILLION));
+                            array_push($data2,sprintf('%.1f',-$calValue['COutfFrFinanA']/self::ONEMILLION));
+                            array_push($data3,sprintf('%.1f',$calValue['NCFFrFinanA']/self::ONEMILLION));
+                            $firstCol = false;
+                            $counter++;
+                            break;
+                        }
+                        $firstSeaNum --;
+                    }
+                }
+                else {
+                    $value = $sortData[$year]['A'];
+                    $calValue['endDate'] = $seasons['A']['endDate'];
+                    $calValue['CInfFrFinanA'] = $value['CInfFrFinanA'];
+                    $calValue['COutfFrFinanA'] = $value['COutfFrFinanA'];
+                    $calValue['NCFFrFinanA'] = $value['NCFFrFinanA'];
+                    array_push($data1,sprintf('%.1f',$calValue['CInfFrFinanA']/self::ONEMILLION));
+                    array_push($data2,sprintf('%.1f',-$calValue['COutfFrFinanA']/self::ONEMILLION));
+                    array_push($data3,sprintf('%.1f',$calValue['NCFFrFinanA']/self::ONEMILLION));
+                    array_push($xAris,substr($calValue['endDate'],0,4));
+                    $counter++;
+                    if($counter == 5){
+                        $stopSign = true;
+                        break;
+                    }
+                }
+                if($stopSign) break;
+            }
+        }
+        $this->viewModel = new ViewModel();
+        $this->viewModel->setVariables(array(
+            'divId' => $divId,
+            'graphType' => $graphType,
+            'xAris' => array_reverse($xAris),
+            'data1' => array_reverse($data1),
+            'data2' => array_reverse($data2),
+            'data3' => array_reverse($data3),
+        ))
+            ->setTerminal(true);
+        return $this->viewModel;
+    }
+
     public function getTable($tableModelName)
     {
         if(!isset($this->tableArray[$tableModelName])) {
