@@ -23,26 +23,6 @@ class GraphController extends AbstractActionController
         return $this->viewModel;
     }
 
-    public function sankeyAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
-    public function coststructureAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
     public function turnoverdaysAction()
     {
         $request = $this -> getRequest();
@@ -206,26 +186,6 @@ class GraphController extends AbstractActionController
         return $this->viewModel;
     }
 
-    public function noncurrentliabilityAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
-    public function noncurrentassetsAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
     public function assetsliabilityrateAction()
     {
         $request = $this -> getRequest();
@@ -340,26 +300,6 @@ class GraphController extends AbstractActionController
                                              'hideData3' => array_reverse($hideData3),
                                              'graphType' => $graphType,
                                       ))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
-    public function earnedprofitAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
-    public function netmarginAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
         return $this->viewModel;
     }
@@ -516,16 +456,6 @@ class GraphController extends AbstractActionController
         return $this->viewModel;
     }
 
-    public function cashliabilityAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
     public function liquidityAction()
     {
         $request = $this -> getRequest();
@@ -621,36 +551,6 @@ class GraphController extends AbstractActionController
                                              'hideData2' => array_reverse($hideData2),
                                              'hideData3' => array_reverse($hideData3),
                                       ))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
-    public function currentassetsAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
-    public function incomeAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
-                        ->setTerminal(true);
-        return $this->viewModel;
-    }
-
-    public function assetsrateAction()
-    {
-        $request = $this -> getRequest();
-        $divId = $request -> getPost('divId');
-        $this->viewModel = new ViewModel();
-        $this->viewModel->setVariables(array('divId' => $divId))
                         ->setTerminal(true);
         return $this->viewModel;
     }
@@ -781,7 +681,7 @@ class GraphController extends AbstractActionController
         $preSeason = array(
             'Q1' => 'A',
             'S1' => 'Q1',
-            'Q3' => 'S1',
+            'CQ3' => 'S1',
             'A' => 'Q3',
         );
         $seasonOrder = ['A','CQ3','S1','Q1'];
@@ -801,7 +701,7 @@ class GraphController extends AbstractActionController
                         }
                         else {
                             $calValue['endDate'] = $seasons['CQ3']['endDate'];
-                            $calValue['reportType'] = 'Q3';
+                            $calValue['reportType'] = 'CQ3';
                         }
                         if($season == 'S1'){
                             //S1: S1-Q1
@@ -947,7 +847,7 @@ class GraphController extends AbstractActionController
                         }
                         else {
                             $calValue['endDate'] = $seasons['CQ3']['endDate'];
-                            $calValue['reportType'] = 'Q3';
+                            $calValue['reportType'] = 'CQ3';
                         }
                         if($season == 'S1'){
                             //S1: S1-Q1
@@ -1093,7 +993,7 @@ class GraphController extends AbstractActionController
                         }
                         else {
                             $calValue['endDate'] = $seasons['CQ3']['endDate'];
-                            $calValue['reportType'] = 'Q3';
+                            $calValue['reportType'] = 'CQ3';
                         }
                         if($season == 'S1'){
                             //S1: S1-Q1
